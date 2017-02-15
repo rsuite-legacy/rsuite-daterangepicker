@@ -1,0 +1,25 @@
+{
+  "name": "rsuite-daterangepicker",
+  "version": "0.1.0",
+  "description": "date range picker for react",
+  "main": "dist/rsuite-daterangepicker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsuite/rsuite-daterangepicker.git"
+  },
+  "keywords": [
+    "react-component",
+    "react",
+    "daterangepicker",
+    "datepicker"
+  ],
+  "author": "A2ZH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rsuite/rsuite-daterangepicker/issues"
+  },
+  "homepage": "https://github.com/rsuite/rsuite-daterangepicker#readme"
+}
