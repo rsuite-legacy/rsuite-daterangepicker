@@ -48,7 +48,9 @@ module.exports = (env = {}) => {
                 filename: config.filename + '.min.js'
             },
             plugins: [
-                new webpack.optimize.UglifyJsPlugin()
+                new webpack.optimize.UglifyJsPlugin({
+                    comments: false
+                })
             ]
         })
     }
