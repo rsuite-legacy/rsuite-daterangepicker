@@ -2,9 +2,16 @@
   "name": "rsuite-daterangepicker",
   "version": "0.1.0",
   "description": "date range picker for react",
-  "main": "dist/rsuite-daterangepicker.js",
+  "main": "lib/",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server --env.dev --profile",
+    "build": "npm run build:dist && npm run build:modules",
+    "build:dist": "webpack --env.prod",
+    "build:modules": "rm -rf ./lib && babel ./src --out-dir ./lib",
+    "lint": "eslint 'src/**/*.js'",
+    "pretest": "npm run lint",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build:modules"
   },
   "repository": {
     "type": "git",
@@ -21,5 +28,28 @@
   "bugs": {
     "url": "https://github.com/rsuite/rsuite-daterangepicker/issues"
   },
-  "homepage": "https://github.com/rsuite/rsuite-daterangepicker#readme"
+  "homepage": "https://github.com/rsuite/rsuite-daterangepicker#readme",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.3.0",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "eslint": "^3.15.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  },
+  "peerDependencies": {
+    "react": "15.4.2",
+    "react-dom": "15.4.2",
+    "rsuite": "0.0.24"
+  },
+  "standard": {
+    "ignore": [
+      "/lib/",
+      "/dist/"
+    ]
+  }
 }
