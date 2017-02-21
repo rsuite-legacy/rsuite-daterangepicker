@@ -45,7 +45,8 @@
   "peerDependencies": {
     "react": "15.4.2",
     "react-dom": "15.4.2",
-    "rsuite": "0.0.24"
+    "rsuite": "0.0.24",
+    "moment": "^2.17.1"
   },
   "standard": {
     "ignore": [
