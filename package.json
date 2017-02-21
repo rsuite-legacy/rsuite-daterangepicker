@@ -5,8 +5,9 @@
   "main": "lib/",
   "scripts": {
     "start": "webpack-dev-server --env.dev --profile",
-    "build": "npm run build:dist && npm run build:modules",
+    "build": "npm run build:dist && npm run build:dist:min && npm run build:modules",
     "build:dist": "webpack --env.prod",
+    "build:dist:min": "webpack --env.prod --env.min",
     "build:modules": "rm -rf ./lib && babel ./src --out-dir ./lib",
     "lint": "eslint 'src/**/*.js'",
     "pretest": "npm run lint",
@@ -48,10 +49,7 @@
     "rsuite": "0.0.24",
     "moment": "^2.17.1"
   },
-  "standard": {
-    "ignore": [
-      "/lib/",
-      "/dist/"
-    ]
+  "dependencies": {
+    "classnames": "^2.2.5"
   }
 }
