@@ -3,12 +3,13 @@ const webpack = require('webpack')
 
 const config = {
     src: path.resolve(__dirname, 'src/'),
+    devSrc: path.resolve(__dirname, 'src/index.dev.js'),
     dist: path.resolve(__dirname, 'dist'),
     filename: 'rsuite-daterangepicker'
 }
 
 const common = {
-    entry: path.resolve(__dirname, 'src/'),
+    entry: config.src,
     module: {
         rules: [
             {
@@ -53,6 +54,21 @@ module.exports = (env = {}) => {
                 })
             ]
         })
+    } else if (env.dev) {
+        let ret = Object.assign({}, common, {
+            entry: config.devSrc,
+            devtool: 'source-map',
+            externals: {}
+        });
+        ret.module.rules.push({
+            test: /\.less$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                'less-loader'
+            ]
+        })
+        return ret;
     }
 
     return Object.assign({}, common, {
