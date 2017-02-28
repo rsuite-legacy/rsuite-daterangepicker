@@ -27,6 +27,9 @@
 | ranges | array | [今日, 昨天, 本周, 本月] | 快捷选项 |
 
 
+> 依赖 rsuite & rsuite-theme
+
+
 ### License
 
 MIT
