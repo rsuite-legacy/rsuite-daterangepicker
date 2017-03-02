@@ -3,6 +3,8 @@
 > 依赖 rsuite & rsuite-theme
 
 
+Live demo: <https://rsuite.github.io/rsuite-daterangepicker/>
+
 ### Usage
 
 ```
