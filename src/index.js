@@ -353,7 +353,7 @@ export default React.createClass({
         if (attachTo) return null;
         const format = 'YYYY/MM/DD';
         return (
-            <div ref={ref => { this.container = ref; }}>
+            <div ref={ref => { this.container = ref; }} style={{ display: 'inline-block' }}>
                 <div className="DateRangeContainer" onClick={this.toggle} >
                     {Moment(startDate).format(format)}
                     <span className="text-muted"> - </span>
@@ -373,8 +373,7 @@ export default React.createClass({
                     rootClose={true}
                     onHide={this.discardChanges}
                     target={this.getContainerEl}
-                    containerPadding={40}
-                    placement="top"
+                    placement="bottom"
                 >
                     {this.renderDatePicker()}
                 </Overlay>
