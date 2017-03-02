@@ -9,11 +9,11 @@
     "build:dist": "webpack --env.prod",
     "build:dist:min": "webpack --env.prod --env.min",
     "build:modules": "rm -rf ./lib && babel ./src --out-dir ./lib",
-    "deploy": "npm run test && webpack --env.deploy && ./node_modules/gh-pages/bin/gh-pages -d deploy",
+    "deploy": "webpack --env.deploy && ./node_modules/gh-pages/bin/gh-pages -d deploy",
     "lint": "eslint 'src/**/*.js'",
     "pretest": "npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "npm run test && npm run build && git commit --allow-empty -am \"Update dist\"",
+    "preversion": "npm run test && npm run build && git commit --allow-empty -am \"Update dist\" && npm run deploy",
     "prepublish": "npm run build:modules"
   },
   "repository": {
