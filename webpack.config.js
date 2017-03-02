@@ -4,7 +4,9 @@ const webpack = require('webpack')
 const config = {
     src: path.resolve(__dirname, 'src/'),
     devSrc: path.resolve(__dirname, 'src/index.dev.js'),
+    deploySrc: path.resolve(__dirname, 'deploy/app.js'),
     dist: path.resolve(__dirname, 'dist'),
+    deploy: path.resolve(__dirname, 'deploy'),
     filename: 'rsuite-daterangepicker'
 }
 
@@ -18,25 +20,17 @@ const common = {
                     'babel-loader'
                 ],
                 exclude: /node_modules/
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'less-loader'
+                ]
             }
         ]
     },
-    externals: {
-        'react': {
-            root: 'React',
-            commonjs2: 'react',
-            commonjs: 'react',
-            amd: 'react'
-        },
-        'react-dom': {
-            root: 'ReactDOM',
-            commonjs2: 'react-dom',
-            commonjs: 'react-dom',
-            amd: 'react-dom'
-        },
-        'moment': 'moment',
-        'rsuite': 'rsuite'
-    }
 }
 
 module.exports = (env = {}) => {
@@ -54,21 +48,29 @@ module.exports = (env = {}) => {
                 })
             ]
         })
-    } else if (env.dev) {
-        let ret = Object.assign({}, common, {
+    }
+
+    if (env.dev) {
+        return Object.assign({}, common, {
             entry: config.devSrc,
             devtool: 'source-map',
-            externals: {}
+            devServer: {
+                contentBase: config.src
+            }
         });
-        ret.module.rules.push({
-            test: /\.less$/,
-            use: [
-                'style-loader',
-                'css-loader',
-                'less-loader'
-            ]
-        })
-        return ret;
+    }
+
+    if (env.deploy) {
+        return Object.assign({}, common, {
+            entry: config.deploySrc,
+            output: {
+                path: config.deploy,
+                filename: 'bundle.js'
+            },
+            devServer: {
+                contentBase: config.deploy
+            }
+        });
     }
 
     return Object.assign({}, common, {
@@ -77,6 +79,22 @@ module.exports = (env = {}) => {
             libraryTarget: 'umd',
             path: config.dist,
             filename: config.filename + '.js'
+        },
+        externals: {
+            'react': {
+                root: 'React',
+                commonjs2: 'react',
+                commonjs: 'react',
+                amd: 'react'
+            },
+            'react-dom': {
+                root: 'ReactDOM',
+                commonjs2: 'react-dom',
+                commonjs: 'react-dom',
+                amd: 'react-dom'
+            },
+            'moment': 'moment',
+            'rsuite': 'rsuite'
         }
     })
 }
