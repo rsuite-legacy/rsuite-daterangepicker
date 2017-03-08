@@ -128,7 +128,6 @@ const SingleDatePicker = React.createClass({
             </div>
         );
     }
-
 });
 
 export default React.createClass({
@@ -338,8 +337,6 @@ export default React.createClass({
         const styles = {
             marginLeft: placement === 'left' ? -offset : offset
         };
-
-        console.log(styles);
 
         return (
             <div

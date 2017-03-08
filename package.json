@@ -1,20 +1,17 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "date range picker for react",
   "main": "lib/",
   "scripts": {
-    "start": "webpack-dev-server --env.deploy",
-    "build": "npm run build:dist && npm run build:dist:min && npm run build:modules",
-    "build:dist": "webpack --env.prod",
-    "build:dist:min": "webpack --env.prod --env.min",
-    "build:modules": "rm -rf ./lib && babel ./src --out-dir ./lib",
-    "deploy": "webpack --env.deploy && ./node_modules/gh-pages/bin/gh-pages -d deploy",
+    "build-css": "node bin/css-build.js",
+    "build": "rm -rf ./lib && babel ./src --out-dir ./lib && cp -R src/less lib",
+    "dev": "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 ",
+    "docs": "rm -rf assets && npm run build-css &&  NODE_ENV=production webpack ",
+    "cp:docs": "cp -rf ./assets/* ../rsuite.github.io/rsuite-daterangepicker/",
     "lint": "eslint 'src/**/*.js'",
     "pretest": "npm run lint",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "npm run test && npm run build && git commit --allow-empty -am \"Update dist\" && npm run deploy",
-    "prepublish": "npm run build:modules"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -41,20 +38,34 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.22.0",
     "css-loader": "^0.26.2",
+    "dom-lib": "0.0.16",
     "eslint": "^3.15.0",
+    "extract-text-webpack-plugin": "^2.1.0",
     "gh-pages": "^0.12.0",
+    "highlight.js": "^9.10.0",
+    "html-loader": "^0.4.5",
+    "html-webpack-plugin": "^2.22.0",
     "less": "^2.7.2",
-    "less-loader": "^2.2.3",
-    "rsuite-theme": "^0.3.10",
+    "less-loader": "^3.0.0",
+    "markdown-loader": "2.0.0",
+    "markdownloader": "1.0.5",
+    "marked": "^0.3.6",
+    "moment": "^2.17.1",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "rsuite": "0.0.24",
+    "rsuite-theme": "^0.3.12",
     "style-loader": "^0.13.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   },
   "peerDependencies": {
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
     "rsuite": "0.0.24",
-    "moment": "^2.17.1"
+    "moment": "^2.17.1",
+    "dom-lib": "0.0.16"
   },
   "dependencies": {
     "classnames": "^2.2.5"

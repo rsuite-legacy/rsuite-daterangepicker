@@ -39,3 +39,8 @@ jspm_packages
 lib
 
 bundle.js
+
+assets
+.vscode
+
+.DS_Store

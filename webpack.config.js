@@ -1,17 +1,54 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 
-const config = {
-    src: path.resolve(__dirname, 'src/'),
-    devSrc: path.resolve(__dirname, 'src/index.dev.js'),
-    deploySrc: path.resolve(__dirname, 'deploy/app.js'),
-    dist: path.resolve(__dirname, 'dist'),
-    deploy: path.resolve(__dirname, 'deploy'),
-    filename: 'rsuite-daterangepicker'
-}
+const HtmlwebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const marked = require("marked");
+const hl = require('highlight.js');
+const renderer = new marked.Renderer();
+
+renderer.code = function (code, lang) {
+    lang = lang === 'js' ? 'javascript' : lang;
+    if (lang === 'html') {
+        lang = 'xml';
+    }
+    const hlCode = lang ? hl.highlight(lang, code).value : hl.highlightAuto(code).value;
+    return `<div class="doc-highlight"><pre><code class="${lang || ''}">${hlCode}</code></pre></div>`;
+};
+
+const extractLess = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: process.env.NODE_ENV === "development"
+});
+
 
 const common = {
-    entry: config.src,
+    entry: path.resolve(__dirname, 'src/'),
+    devServer: {
+        hot: true,
+        contentBase: path.resolve(__dirname, ''),
+        publicPath: './assets/'
+    },
+    output: {
+        path: path.resolve(__dirname, 'assets'),
+        filename: 'bundle.js',
+        publicPath: './'
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        }),
+        extractLess,
+        new HtmlwebpackPlugin({
+            title: 'RSUITE DateRangePicker',
+            filename: 'index.html',
+            template: 'docs/index.html',
+            inject: true,
+            hash: true
+        })
+    ],
     module: {
         rules: [
             {
@@ -23,10 +60,28 @@ const common = {
             },
             {
                 test: /\.less$/,
+                loader: extractLess.extract({
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "less-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
+            }, {
+                test: /\.md$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'less-loader'
+                    {
+                        loader: "html-loader"
+                    },
+                    {
+                        loader: 'markdown-loader',
+                        options: {
+                            pedantic: true,
+                            renderer
+                        }
+                    }
                 ]
             }
         ]
@@ -34,67 +89,24 @@ const common = {
 }
 
 module.exports = (env = {}) => {
-    if (env.min) {
+
+    if (process.env.NODE_ENV === 'development') {
         return Object.assign({}, common, {
-            output: {
-                library: 'RsuiteDaterangepicker',
-                libraryTarget: 'umd',
-                path: config.dist,
-                filename: config.filename + '.min.js'
-            },
-            plugins: [
-                new webpack.optimize.UglifyJsPlugin({
-                    comments: false
-                })
+            entry: [
+                'react-hot-loader/patch',
+                'webpack-dev-server/client?http://127.0.0.1:3100',
+                'webpack/hot/only-dev-server',
+                path.resolve(__dirname, 'docs/index')
+            ],
+            devtool: 'source-map'
+        });
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        return Object.assign({}, common, {
+            entry: [
+                path.resolve(__dirname, 'docs/index')
             ]
-        })
-    }
-
-    if (env.dev) {
-        return Object.assign({}, common, {
-            entry: config.devSrc,
-            devtool: 'source-map',
-            devServer: {
-                contentBase: config.src
-            }
         });
     }
-
-    if (env.deploy) {
-        return Object.assign({}, common, {
-            entry: config.deploySrc,
-            output: {
-                path: config.deploy,
-                filename: 'bundle.js'
-            },
-            devServer: {
-                contentBase: config.deploy
-            }
-        });
-    }
-
-    return Object.assign({}, common, {
-        output: {
-            library: 'RsuiteDaterangepicker',
-            libraryTarget: 'umd',
-            path: config.dist,
-            filename: config.filename + '.js'
-        },
-        externals: {
-            'react': {
-                root: 'React',
-                commonjs2: 'react',
-                commonjs: 'react',
-                amd: 'react'
-            },
-            'react-dom': {
-                root: 'ReactDOM',
-                commonjs2: 'react-dom',
-                commonjs: 'react-dom',
-                amd: 'react-dom'
-            },
-            'moment': 'moment',
-            'rsuite': 'rsuite'
-        }
-    })
 }
