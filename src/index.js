@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import ReactDom, {findDOMNode } from 'react-dom';
+import ReactDom, { findDOMNode } from 'react-dom';
 import Overlay from 'rsuite/lib/fixtures/Overlay';
 import Calendar from './Calendar.js';
 import Moment from 'moment';
 import classnames from 'classnames';
 import { Dropdown, Button } from 'rsuite';
-import { getWidth } from 'dom-lib';
+import { getWidth, getOffset, on } from 'dom-lib';
 
 
 const SLIDING_LEFT = 'SLIDING_L';
@@ -31,7 +31,7 @@ const ListButton = ({ className, label, onClick, disabled, ...rest }) => {
             title={label}
             onClick={!disabled && onClick}
             {...rest}
-            >
+        >
             {label}
         </Button>
     );
@@ -123,7 +123,7 @@ const SingleDatePicker = React.createClass({
                     onSelect={onSelect}
                     onClickTitle={this.toggleSwitchPanel}
                     onChangePageDate={this.setPageDate}
-                    refs={ref => { this.calendar = ref; } }
+                    refs={ref => { this.calendar = ref; }}
                 />
             </div>
         );
@@ -139,7 +139,8 @@ export default React.createClass({
         attachTo: PropTypes.element,
         ranges: PropTypes.array,
         onChange: PropTypes.func,
-        placement: PropTypes.oneOf(['left', 'right'])
+        dropup: PropTypes.bool,
+        placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight'])
     },
 
     getDefaultProps() {
@@ -152,6 +153,7 @@ export default React.createClass({
         function noop() { }
         return {
             ranges,
+            placement: 'bottomRight',
             onChange: noop
         };
     },
@@ -257,7 +259,7 @@ export default React.createClass({
                         maxDate={maxDate}
                         date={shownStartDate}
                         onSelect={this.handleStartDateChange}
-                        ref={ref => { this.startDatePicker = ref; } }
+                        ref={ref => { this.startDatePicker = ref; }}
                     />
                 </div>
             </div>
@@ -278,7 +280,7 @@ export default React.createClass({
                         maxDate={maxDate}
                         date={shownEndDate}
                         onSelect={this.handleEndDateChange}
-                        ref={ref => { this.endDatePicker = ref; } }
+                        ref={ref => { this.endDatePicker = ref; }}
                     />
                 </div>
             </div>
@@ -295,7 +297,7 @@ export default React.createClass({
                             key={i.label}
                             label={i.label}
                             eventKey={i.range}
-                            >
+                        >
                             {i.label}
                         </Dropdown.Item>
                     )}
@@ -334,14 +336,20 @@ export default React.createClass({
     renderDatePicker() {
         const { offset } = this.state;
         const { placement } = this.props;
-        const styles = {
-            marginLeft: placement === 'left' ? -offset : offset
-        };
+        const styles = {};
+
+        if (!!~placement.indexOf('Left')) {
+            styles.marginLeft = -offset;
+        }
+
+        if (!!~placement.indexOf('Right')) {
+            styles.marginLeft = offset;
+        }
 
         return (
             <div
                 className="DateRangePicker noselect"
-                ref={ref=>this.target = ref}
+                ref={ref => this.target = ref}
                 style={styles}
             >
                 <div className="DateRangePicker-controlPanel">
@@ -373,16 +381,33 @@ export default React.createClass({
             </div>
         );
     },
-    componentDidMount() {
-        const containerWidth = getWidth(findDOMNode(this.container));
+    setContainerOffset() {
+        const container = findDOMNode(this.container);
+        const containerWidth = getWidth(container);
+        const containerOffset = getOffset(container);
+
         const pickerWidth = 472;
         const offset = pickerWidth / 2 - containerWidth / 2;
+
         this.setState({
-            offset
+            offset: containerOffset.left < offset ? containerOffset.left : offset
         });
+    },
+    handleWindowResize() {
+        setTimeout(() => {
+            this.setContainerOffset();
+        }, 1);
+    },
+    componentDidMount() {
+        this._resizeListener = on(window, 'resize', this.handleWindowResize);
+        this.setContainerOffset();
+    },
+    componentWillUnmount() {
+        this._resizeListener && this._resizeListener.off();
     },
     render() {
         const { show } = this.state;
+
         return (
             <div className="DateRangeWrapper">
                 {this.renderContainer()}
@@ -391,7 +416,7 @@ export default React.createClass({
                     rootClose={true}
                     onHide={this.discardChanges}
                     target={this.getContainerEl}
-                    placement="bottom"
+                    placement={!!~this.props.placement.indexOf('top') ? 'top' : 'bottom'}
                 >
                     {this.renderDatePicker()}
                 </Overlay>

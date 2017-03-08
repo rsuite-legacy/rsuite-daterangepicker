@@ -22,12 +22,15 @@ const extractLess = new ExtractTextPlugin({
 });
 
 
+const docsPath = process.env.NODE_ENV === 'development' ? './assets' : './';
+
+
 const common = {
     entry: path.resolve(__dirname, 'src/'),
     devServer: {
         hot: true,
         contentBase: path.resolve(__dirname, ''),
-        publicPath: './assets/'
+        publicPath: '/'
     },
     output: {
         path: path.resolve(__dirname, 'assets'),
@@ -46,7 +49,8 @@ const common = {
             filename: 'index.html',
             template: 'docs/index.html',
             inject: true,
-            hash: true
+            hash: true,
+            path: docsPath
         })
     ],
     module: {
