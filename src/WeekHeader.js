@@ -1,14 +1,11 @@
 import React from 'react';
 
+const week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WeekHeader = () => (
     <div className="weekHeader">
-        <span className="weekHeader-day">Sun</span>
-        <span className="weekHeader-day">Mon</span>
-        <span className="weekHeader-day">Tue</span>
-        <span className="weekHeader-day">Wed</span>
-        <span className="weekHeader-day">Thu</span>
-        <span className="weekHeader-day">Fri</span>
-        <span className="weekHeader-day">Sat</span>
+        {
+            week.map((item, index) => <span key={index} className="weekHeader-day">{item}</span>)
+        }
     </div>
 );
 

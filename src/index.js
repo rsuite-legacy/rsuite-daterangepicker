@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import ReactDom from 'react-dom';
+import ReactDom, {findDOMNode } from 'react-dom';
 import Overlay from 'rsuite/lib/fixtures/Overlay';
 import Calendar from './Calendar.js';
 import Moment from 'moment';
 import classnames from 'classnames';
 import { Dropdown, Button } from 'rsuite';
+import { getWidth } from 'dom-lib';
 
 
 const SLIDING_LEFT = 'SLIDING_L';
@@ -18,7 +19,6 @@ const CalendarState = {
     EDITING,
     WAITING
 };
-
 
 const ListButton = ({ className, label, onClick, disabled, ...rest }) => {
     let btnClass = classnames({
@@ -140,6 +140,7 @@ export default React.createClass({
         attachTo: PropTypes.element,
         ranges: PropTypes.array,
         onChange: PropTypes.func,
+        placement: PropTypes.oneOf(['left', 'right'])
     },
 
     getDefaultProps() {
@@ -165,7 +166,8 @@ export default React.createClass({
             shownStartDate: startDate,
             endDate,
             shownEndDate: endDate,
-            show: false
+            show: false,
+            offset: null
         };
     },
 
@@ -331,8 +333,20 @@ export default React.createClass({
     },
 
     renderDatePicker() {
+        const { offset } = this.state;
+        const { placement } = this.props;
+        const styles = {
+            marginLeft: placement === 'left' ? -offset : offset
+        };
+
+        console.log(styles);
+
         return (
-            <div className="DateRangePicker noselect" ref={ref => { this.target = ref; }}>
+            <div
+                className="DateRangePicker noselect"
+                ref={ref=>this.target = ref}
+                style={styles}
+            >
                 <div className="DateRangePicker-controlPanel">
                     {this.renderRanges()}
                 </div>
@@ -362,7 +376,14 @@ export default React.createClass({
             </div>
         );
     },
-
+    componentDidMount() {
+        const containerWidth = getWidth(findDOMNode(this.container));
+        const pickerWidth = 472;
+        const offset = pickerWidth / 2 - containerWidth / 2;
+        this.setState({
+            offset
+        });
+    },
     render() {
         const { show } = this.state;
         return (
