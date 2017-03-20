@@ -5,7 +5,7 @@ export default () => {
     return (
         <div className="doc-example">
 
-            <DateRangePicker />
+            <DateRangePicker defaultEndDate={new Date} />
         </div>
     );
 };

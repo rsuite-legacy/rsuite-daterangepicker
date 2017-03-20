@@ -4,7 +4,7 @@ import Overlay from 'rsuite/lib/fixtures/Overlay';
 import Calendar from './Calendar.js';
 import Moment from 'moment';
 import classnames from 'classnames';
-import { Dropdown, Button } from 'rsuite';
+import { Dropdown, Button, ButtonToolbar } from 'rsuite';
 import { getWidth, getOffset, on } from 'dom-lib';
 
 
@@ -288,9 +288,11 @@ export default React.createClass({
     },
 
     renderRanges() {
-        const { ranges } = this.props;
+        const { ranges, defaultStartDate, defaultEndDate } = this.props;
+        const shouldRenderResetButton = defaultStartDate || defaultEndDate;
         return (
             <div className="DateRangePicker-ranges">
+
                 <Dropdown title={'预设'} shape='primary' onSelect={this.handleRangesClick}>
                     {ranges.map(i =>
                         <Dropdown.Item
@@ -303,6 +305,14 @@ export default React.createClass({
                     )}
                 </Dropdown>
 
+                {shouldRenderResetButton && (
+                    <ListButton
+                        shape='primary'
+                        label="重置"
+                        onClick={this.reset}
+                    />
+                )}
+
             </div>
         );
     },
@@ -314,13 +324,6 @@ export default React.createClass({
         const isValidRange = shownStartDate <= shownEndDate;
         return (
             <div className="DateRangePicker-actions">
-                {shouldRenderResetButton && (
-                    <ListButton
-                        shape='default'
-                        label="重置"
-                        onClick={this.reset}
-                    />
-                )}
                 <ListButton
                     shape='primary'
                     className="ml10"
@@ -328,6 +331,11 @@ export default React.createClass({
                     onClick={this.apply}
                     label="确定"
                 />
+                <ListButton
+                        shape='default'
+                        label="取消"
+                        onClick={this.hide}
+                    />
 
             </div>
         );
