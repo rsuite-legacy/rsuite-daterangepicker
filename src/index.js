@@ -174,8 +174,23 @@ export default React.createClass({
 
     reset() {
         const { defaultStartDate, defaultEndDate } = this.props;
-        if (defaultStartDate) this.setState({ shownStartDate: defaultStartDate });
-        if (defaultEndDate) this.setState({ shownEndDate: defaultEndDate });
+        if (defaultStartDate) {
+            this.setState({ shownStartDate: defaultStartDate });
+        }
+        if (defaultEndDate) {
+            this.setState({ shownEndDate: defaultEndDate });
+        }
+    },
+    handleCancel() {
+
+        const { startDate, endDate } = this.state;
+
+        this.setState({
+            shownStartDate: startDate,
+            shownEndDate: endDate
+        });
+
+        this.hide();
     },
 
     show() {
@@ -332,10 +347,10 @@ export default React.createClass({
                     label="确定"
                 />
                 <ListButton
-                        shape='default'
-                        label="取消"
-                        onClick={this.hide}
-                    />
+                    shape='default'
+                    label="取消"
+                    onClick={this.handleCancel}
+                />
 
             </div>
         );
