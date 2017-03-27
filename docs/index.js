@@ -23,6 +23,7 @@ const App = React.createClass({
                         </Navbar.Header>
                         <Navbar.Collapse>
                             <Nav pullRight>
+                                <Nav.Item href='https://rsuite.github.io'>RSuite</Nav.Item>
                                 <Nav.Item href='https://github.com/rsuite/rsuite-daterangepicker'>GitHub</Nav.Item>
                             </Nav>
                         </Navbar.Collapse>
