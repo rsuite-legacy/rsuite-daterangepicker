@@ -51,45 +51,45 @@ const common = {
             inject: true,
             hash: true,
             path: docsPath
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin()
     ],
     module: {
-        rules: [
-            {
-                test: /\.jsx?$/,
-                use: [
-                    'babel-loader'
-                ],
-                exclude: /node_modules/
-            },
-            {
-                test: /\.less$/,
-                loader: extractLess.extract({
-                    use: [{
-                        loader: "css-loader"
-                    }, {
-                        loader: "less-loader"
-                    }],
-                    // use style-loader in development
-                    fallback: "style-loader"
-                })
+        rules: [{
+            test: /\.jsx?$/,
+            use: [
+                'babel-loader'
+            ],
+            exclude: /node_modules/
+        }, {
+            test: /\.less$/,
+            loader: extractLess.extract({
+                use: [{
+                    loader: "css-loader"
+                }, {
+                    loader: "less-loader"
+                }],
+                // use style-loader in development
+                fallback: "style-loader"
+            })
+        }, {
+            test: /\.md$/,
+            use: [{
+                loader: "html-loader"
             }, {
-                test: /\.md$/,
-                use: [
-                    {
-                        loader: "html-loader"
-                    },
-                    {
-                        loader: 'markdown-loader',
-                        options: {
-                            pedantic: true,
-                            renderer
-                        }
-                    }
-                ]
-            }
-        ]
-    },
+                loader: 'markdown-loader',
+                options: {
+                    pedantic: true,
+                    renderer
+                }
+            }]
+        }, {
+            test: /\.(woff|woff2|eot|ttf|svg)($|\?)/,
+            use: [{
+                loader: 'url-loader?limit=1&hash=sha512&digest=hex&size=16&name=resources/[hash].[ext]'
+            }]
+        }]
+    }
 }
 
 module.exports = (env = {}) => {

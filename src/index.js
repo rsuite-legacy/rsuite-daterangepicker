@@ -139,7 +139,6 @@ export default React.createClass({
         attachTo: PropTypes.element,
         ranges: PropTypes.array,
         onChange: PropTypes.func,
-        dropup: PropTypes.bool,
         placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight'])
     },
 
