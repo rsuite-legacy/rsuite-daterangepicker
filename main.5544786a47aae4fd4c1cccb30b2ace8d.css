@@ -10368,6 +10368,12 @@ body {
   padding: 9px 12px;
   cursor: pointer;
 }
+.DateRangeContainer.disabled {
+  background-color: #eee;
+  border-color: #eee;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 .DateRangeContainer:hover {
   background-color: #e8e8e8;
 }
