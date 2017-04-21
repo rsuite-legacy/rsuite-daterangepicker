@@ -3,7 +3,7 @@ import ReactDom, { findDOMNode } from 'react-dom';
 import Overlay from 'rsuite/lib/fixtures/Overlay';
 import Calendar from './Calendar.js';
 import Moment from 'moment';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { Dropdown, Button, ButtonToolbar } from 'rsuite';
 import { getWidth, getOffset, on } from 'dom-lib';
 
@@ -21,7 +21,7 @@ const CalendarState = {
 };
 
 const ListButton = ({ className, label, onClick, disabled, ...rest }) => {
-  let btnClass = classnames({
+  let btnClass = classNames({
     'btn': true,
     'disabled': disabled
   }, className);
@@ -140,7 +140,8 @@ export default React.createClass({
     ranges: PropTypes.array,
     onChange: PropTypes.func,
     placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight']),
-    messages: PropTypes.object
+    messages: PropTypes.object,
+    disabled: PropTypes.bool
   },
   childContextTypes: {
     messages: PropTypes.object
@@ -211,6 +212,10 @@ export default React.createClass({
   },
 
   toggle() {
+    const { disabled } = this.props;
+    if (disabled) {
+      return;
+    }
     const { show } = this.state;
     if (show) this.hide();
     else this.show();
@@ -399,13 +404,18 @@ export default React.createClass({
   },
 
   renderContainer() {
-    const { attachTo } = this.props;
+    const { attachTo, disabled } = this.props;
     const { startDate, endDate } = this.state;
     if (attachTo) return null;
     const format = 'YYYY/MM/DD';
+
+    const classes = classNames('DateRangeContainer', {
+      disabled
+    });
+
     return (
       <div ref={ref => { this.container = ref; }} style={{ display: 'inline-block' }}>
-        <div className="DateRangeContainer" onClick={this.toggle} >
+        <div className={classes} onClick={this.toggle} >
           {Moment(startDate).format(format)}
           <span className="text-muted"> - </span>
           {Moment(endDate).format(format)}
