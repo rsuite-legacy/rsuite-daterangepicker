@@ -1,25 +1,29 @@
 import React, { PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import MonthHeader from './MonthHeader.js';
-import WeekHeader from './WeekHeader.js';
+import classNames from 'classnames';
+import MonthHeader from './MonthHeader';
+import WeekHeader from './WeekHeader';
 
-const Week = ({ weekendDate, selected = new Date(), onClick, dateFilter }) => (
+const Week = ({ weekendDate, selected, onClick, dateFilter }) => (
   <div className="week">
     {
+
       (() => {
+
+
         let days = [];
         for (let i = 0; i < 7; i++) {
           let thisDate = new Date(weekendDate);
           thisDate.setDate(weekendDate.getDate() + i);
-          let className = 'week-day';
-          className += dateFilter(thisDate) ? '' : ' disable';
-          className += thisDate.toDateString() === (new Date()).toDateString()
-            ? ' is-today' : '';
-          className += thisDate.toDateString() === selected.toDateString()
-            ? ' selected' : '';
+          let classes = classNames('week-day', {
+            disable: !dateFilter(thisDate),
+            'is-today': thisDate.toDateString() === (new Date()).toDateString(),
+            selected: selected && thisDate.toDateString() === selected.toDateString()
+          });
+
           days.push(
             <div
-              className={className}
+              className={classes}
               onClick={onClick && dateFilter(thisDate) && onClick.bind(null, thisDate)}
               key={i}
             >
@@ -222,6 +226,7 @@ const Calendar = React.createClass({
   },
 
   isDayChanged(dateA, dateB) {
+
     if (dateA && dateB) {
       return dateA.toDateString() !== dateB.toDateString();
     } else if (!dateA && !dateB) {
@@ -245,13 +250,13 @@ const Calendar = React.createClass({
 
   render() {
     const {
-            calendarState,
+      calendarState,
       selectedDate,
       pageDate,
       onSelect,
       onClickTitle,
       onChangePageDate
-        } = this.props;
+    } = this.props;
     const stateClassname = {
       'SLIDING_L': ' sliding-left',
       'SLIDING_R': ' sliding-right',
@@ -259,6 +264,7 @@ const Calendar = React.createClass({
     }[calendarState] || '';
 
     let isEditingPageDate = calendarState === 'EDITING';
+
     return (
       <div className={'calendar' + stateClassname}>
         <MonthHeader

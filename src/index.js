@@ -46,7 +46,7 @@ ListButton.propTypes = {
 
 const SingleDatePicker = React.createClass({
   propTypes: {
-    date: PropTypes.instanceOf(Date).isRequired,
+    date: PropTypes.instanceOf(Date),
     minDate: PropTypes.instanceOf(Date),
     maxDate: PropTypes.instanceOf(Date),
     onSelect: PropTypes.func,
@@ -55,7 +55,7 @@ const SingleDatePicker = React.createClass({
 
   getInitialState() {
     const { date } = this.props;
-    let pageDate = Moment(date).startOf('month').toDate();
+    let pageDate = Moment(date || new Date()).startOf('month').toDate();
     return {
       calendarState: CalendarState.WAITING,
       pageDate
@@ -139,6 +139,7 @@ export default React.createClass({
     attachTo: PropTypes.element,
     ranges: PropTypes.array,
     onChange: PropTypes.func,
+    onSelect: PropTypes.func,
     placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight']),
     messages: PropTypes.object,
     disabled: PropTypes.bool
@@ -170,8 +171,8 @@ export default React.createClass({
   },
   getInitialState() {
     const { defaultStartDate, defaultEndDate } = this.props;
-    let startDate = defaultStartDate || new Date();
-    let endDate = defaultEndDate || new Date(Moment(startDate).add(1, 'days'));
+    let startDate = defaultStartDate;
+    let endDate = defaultEndDate;
     return {
       startDate,
       shownStartDate: startDate,
@@ -182,14 +183,15 @@ export default React.createClass({
     };
   },
 
-  reset() {
-    const { defaultStartDate, defaultEndDate } = this.props;
-    if (defaultStartDate) {
-      this.setState({ shownStartDate: defaultStartDate });
-    }
-    if (defaultEndDate) {
-      this.setState({ shownEndDate: defaultEndDate });
-    }
+  handelClear() {
+    const { onClear } = this.props;
+
+    this.setState({
+      shownStartDate: null,
+      shownEndDate: null
+    });
+
+    onClear && onClear();
   },
   handleCancel() {
 
@@ -248,10 +250,15 @@ export default React.createClass({
   },
 
   handleStartDateChange(shownStartDate) {
+    const { onSelect } = this.props;
+    onSelect && onSelect(shownStartDate, 'start');
     this.setState({ shownStartDate });
+
   },
 
   handleEndDateChange(shownEndDate) {
+    const { onSelect } = this.props;
+    onSelect && onSelect(shownEndDate, 'end');
     this.setState({ shownEndDate });
   },
 
@@ -285,7 +292,6 @@ export default React.createClass({
         <div className="DateRangePicker-start-container">
           <SingleDatePicker
             minDate={minDate}
-            maxDate={maxDate}
             date={shownStartDate}
             onSelect={this.handleStartDateChange}
             ref={ref => { this.startDatePicker = ref; }}
@@ -305,7 +311,6 @@ export default React.createClass({
         </div>
         <div className="DateRangePicker-end-container">
           <SingleDatePicker
-            minDate={minDate}
             maxDate={maxDate}
             date={shownEndDate}
             onSelect={this.handleEndDateChange}
@@ -317,8 +322,7 @@ export default React.createClass({
   },
 
   renderRanges() {
-    const { ranges, defaultStartDate, defaultEndDate } = this.props;
-    const shouldRenderResetButton = defaultStartDate || defaultEndDate;
+    const { ranges, onClear } = this.props;
     return (
       <div className="DateRangePicker-ranges">
 
@@ -334,11 +338,11 @@ export default React.createClass({
           )}
         </Dropdown>
 
-        {shouldRenderResetButton && (
+        {onClear && (
           <ListButton
             shape='primary'
-            label="重置"
-            onClick={this.reset}
+            label="清空"
+            onClick={this.handelClear}
           />
         )}
 
@@ -413,12 +417,16 @@ export default React.createClass({
       disabled
     });
 
+    const defaultSpan = (
+      <span style={{ color: '#aaa' }}>{format}</span>
+    );
+
     return (
       <div ref={ref => { this.container = ref; }} style={{ display: 'inline-block' }}>
         <div className={classes} onClick={this.toggle} >
-          {Moment(startDate).format(format)}
+          {startDate ? Moment(startDate).format(format) : defaultSpan}
           <span className="text-muted"> - </span>
-          {Moment(endDate).format(format)}
+          {endDate ? Moment(endDate).format(format) : defaultSpan}
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const MonthHeader = ({ date, onMoveForword, onMoveBackward, onClickTitle }) => (
+const MonthHeader = ({ date , onMoveForword, onMoveBackward, onClickTitle }) => (
   <div className="monthHeader">
     <i className="monthHeader-backward icon icon-chevron-left"
       onClick={onMoveBackward}
