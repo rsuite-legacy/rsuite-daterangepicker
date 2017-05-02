@@ -25,8 +25,9 @@ export default React.createClass({
         <DateRangePicker
           defaultStartDate={startDate}
           defaultEndDate={endDate}
-          maxDate={maxDate}
-          minDate={minDate}
+          startMinDate={minDate}
+          startMaxDate={today}
+          endMaxDate={maxDate}
           placement="bottomRight"
           ranges={[
             { label: '最近一周', range: [moment().startOf('day').clone().subtract(7, 'd'), today] },
