@@ -134,8 +134,10 @@ export default React.createClass({
   propTypes: {
     defaultStartDate: PropTypes.instanceOf(Date),
     defaultEndDate: PropTypes.instanceOf(Date),
-    minDate: PropTypes.instanceOf(Date),
-    maxDate: PropTypes.instanceOf(Date),
+    startMinDate: PropTypes.instanceOf(Date),
+    startMaxDate: PropTypes.instanceOf(Date),
+    endMinDate: PropTypes.instanceOf(Date),
+    endMaxDate: PropTypes.instanceOf(Date),
     attachTo: PropTypes.element,
     ranges: PropTypes.array,
     onChange: PropTypes.func,
@@ -282,7 +284,7 @@ export default React.createClass({
   },
 
   renderStartDatePicker() {
-    const { minDate, maxDate } = this.props;
+    const { startMinDate, startMaxDate } = this.props;
     const { shownStartDate } = this.state;
     return (
       <div className="DateRangePicker-start">
@@ -291,7 +293,8 @@ export default React.createClass({
         </div>
         <div className="DateRangePicker-start-container">
           <SingleDatePicker
-            minDate={minDate}
+            minDate={startMinDate}
+            maxDate={startMaxDate}
             date={shownStartDate}
             onSelect={this.handleStartDateChange}
             ref={ref => { this.startDatePicker = ref; }}
@@ -302,7 +305,7 @@ export default React.createClass({
   },
 
   renderEndDatePicker() {
-    const { minDate, maxDate } = this.props;
+    const { endMinDate, endMaxDate } = this.props;
     const { shownEndDate } = this.state;
     return (
       <div className="DateRangePicker-end">
@@ -311,7 +314,8 @@ export default React.createClass({
         </div>
         <div className="DateRangePicker-end-container">
           <SingleDatePicker
-            maxDate={maxDate}
+            minDate={endMinDate}
+            maxDate={endMaxDate}
             date={shownEndDate}
             onSelect={this.handleEndDateChange}
             ref={ref => { this.endDatePicker = ref; }}
