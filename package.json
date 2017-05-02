@@ -1,6 +1,6 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "date range picker for react",
   "main": "lib/",
   "scripts": {
@@ -63,13 +63,13 @@
     "webpack-dev-server": "^2.3.0"
   },
   "peerDependencies": {
-    "react": "^0.14.2",
-    "react-dom": "^0.14.2",
-    "rsuite": "0.0.24",
-    "moment": "^2.17.1",
-    "dom-lib": "0.0.16"
+    "react": ">=0.14.0",
+    "react-dom": ">=0.14.0",
+    "rsuite": ">=1.0.0",
+    "dom-lib": ">=0.2.0"
   },
   "dependencies": {
+    "moment": "^2.17.1",
     "classnames": "^2.2.5"
   }
 }
