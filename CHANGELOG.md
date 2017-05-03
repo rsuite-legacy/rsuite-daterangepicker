@@ -1,3 +1,6 @@
+# 0.2.4
+- Update @cell-hover-bg: @H050;
+
 # 0.2.3
 - Added support `startMinDate` , `startMaxDate`, `endMinDate`, `endMaxDate`
 - Deleted support for `minDate` and ` maxDate`
