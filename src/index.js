@@ -6,6 +6,7 @@ import Moment from 'moment';
 import classNames from 'classnames';
 import { Dropdown, Button, ButtonToolbar } from 'rsuite';
 import { getWidth, getOffset, on } from 'dom-lib';
+import debounce from './utils/debounce';
 
 
 const SLIDING_LEFT = 'SLIDING_L';
@@ -181,7 +182,9 @@ export default React.createClass({
       endDate,
       shownEndDate: endDate,
       show: false,
-      offset: null
+      width: 472,
+      offsetLeft: null,
+      offsetRight: null
     };
   },
 
@@ -379,16 +382,17 @@ export default React.createClass({
   },
 
   renderDatePicker() {
-    const { offset } = this.state;
+    const { offsetLeft, offsetRight, width, containerWidth } = this.state;
     const { placement } = this.props;
     const styles = {};
 
+
     if (!!~placement.indexOf('Left')) {
-      styles.marginLeft = -offset;
+      styles.marginLeft = (offsetRight < (width / 2 - containerWidth / 2)) ? -offsetRight : -offsetLeft;
     }
 
     if (!!~placement.indexOf('Right')) {
-      styles.marginLeft = offset;
+      styles.marginLeft = offsetLeft;
     }
 
     return (
@@ -437,23 +441,26 @@ export default React.createClass({
   },
   setContainerOffset() {
     const container = findDOMNode(this.container);
+    const windowWidth = getWidth(window);
     const containerWidth = getWidth(container);
     const containerOffset = getOffset(container);
+    const { width } = this.state;
 
-    const pickerWidth = 472;
-    const offset = pickerWidth / 2 - containerWidth / 2;
+    const offset = width / 2 - containerWidth / 2;
+    const offsetRight = windowWidth - containerOffset.left - containerWidth;
+    const offsetLeft = containerOffset.left < offset ? containerOffset.left : offset;
 
     this.setState({
-      offset: containerOffset.left < offset ? containerOffset.left : offset
+      offsetLeft,
+      offsetRight,
+      containerWidth
     });
   },
   handleWindowResize() {
-    setTimeout(() => {
-      this.setContainerOffset();
-    }, 1);
+    this.setContainerOffset();
   },
   componentDidMount() {
-    this._resizeListener = on(window, 'resize', this.handleWindowResize);
+    this._resizeListener = on(window, 'resize', debounce(this.handleWindowResize, 200));
     this.setContainerOffset();
   },
   componentWillUnmount() {
