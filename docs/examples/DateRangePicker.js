@@ -28,7 +28,6 @@ export default React.createClass({
           startMinDate={minDate}
           startMaxDate={today}
           endMaxDate={maxDate}
-          placement="bottomRight"
           ranges={[
             { label: '最近一周', range: [moment().startOf('day').clone().subtract(7, 'd'), today] },
             { label: '最近 30 天', range: [moment().startOf('day').clone().subtract(30, 'd'), today] }
