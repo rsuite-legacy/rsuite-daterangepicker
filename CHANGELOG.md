@@ -1,3 +1,6 @@
+# 0.2.5
+- Fixes for picker position
+
 # 0.2.4
 - Update @cell-hover-bg: @H050;
 

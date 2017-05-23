@@ -8,109 +8,113 @@ const hl = require('highlight.js');
 const renderer = new marked.Renderer();
 
 renderer.code = function (code, lang) {
-    lang = lang === 'js' ? 'javascript' : lang;
-    if (lang === 'html') {
-        lang = 'xml';
-    }
-    const hlCode = lang ? hl.highlight(lang, code).value : hl.highlightAuto(code).value;
-    return `<div class="doc-highlight"><pre><code class="${lang || ''}">${hlCode}</code></pre></div>`;
+  lang = lang === 'js' ? 'javascript' : lang;
+  if (lang === 'html') {
+    lang = 'xml';
+  }
+  const hlCode = lang ? hl.highlight(lang, code).value : hl.highlightAuto(code).value;
+  return `<div class="doc-highlight"><pre><code class="${lang || ''}">${hlCode}</code></pre></div>`;
 };
 
 const extractLess = new ExtractTextPlugin({
-    filename: "[name].[contenthash].css",
-    disable: process.env.NODE_ENV === "development"
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
 });
 
 
 const docsPath = process.env.NODE_ENV === 'development' ? './assets' : './';
 
+const plugins = [
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.NamedModulesPlugin(),
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+  }),
+  extractLess,
+  new HtmlwebpackPlugin({
+    title: 'RSUITE DateRangePicker',
+    filename: 'index.html',
+    template: 'docs/index.html',
+    inject: true,
+    hash: true,
+    path: docsPath
+  })
+];
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
 
 const common = {
-    entry: path.resolve(__dirname, 'src/'),
-    devServer: {
-        hot: true,
-        contentBase: path.resolve(__dirname, ''),
-        publicPath: '/'
-    },
-    output: {
-        path: path.resolve(__dirname, 'assets'),
-        filename: 'bundle.js',
-        publicPath: './'
-    },
-    plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        extractLess,
-        new HtmlwebpackPlugin({
-            title: 'RSUITE DateRangePicker',
-            filename: 'index.html',
-            template: 'docs/index.html',
-            inject: true,
-            hash: true,
-            path: docsPath
-        }),
-        new webpack.optimize.UglifyJsPlugin()
-    ],
-    module: {
-        rules: [{
-            test: /\.jsx?$/,
-            use: [
-                'babel-loader'
-            ],
-            exclude: /node_modules/
+  entry: path.resolve(__dirname, 'src/'),
+  devServer: {
+    hot: true,
+    contentBase: path.resolve(__dirname, ''),
+    publicPath: '/'
+  },
+  output: {
+    path: path.resolve(__dirname, 'assets'),
+    filename: 'bundle.js',
+    publicPath: './'
+  },
+  plugins,
+  module: {
+    rules: [{
+      test: /\.jsx?$/,
+      use: [
+        'babel-loader'
+      ],
+      exclude: /node_modules/
+    }, {
+      test: /\.less$/,
+      loader: extractLess.extract({
+        use: [{
+          loader: "css-loader"
         }, {
-            test: /\.less$/,
-            loader: extractLess.extract({
-                use: [{
-                    loader: "css-loader"
-                }, {
-                    loader: "less-loader"
-                }],
-                // use style-loader in development
-                fallback: "style-loader"
-            })
-        }, {
-            test: /\.md$/,
-            use: [{
-                loader: "html-loader"
-            }, {
-                loader: 'markdown-loader',
-                options: {
-                    pedantic: true,
-                    renderer
-                }
-            }]
-        }, {
-            test: /\.(woff|woff2|eot|ttf|svg)($|\?)/,
-            use: [{
-                loader: 'url-loader?limit=1&hash=sha512&digest=hex&size=16&name=resources/[hash].[ext]'
-            }]
-        }]
-    }
+          loader: "less-loader"
+        }],
+        // use style-loader in development
+        fallback: "style-loader"
+      })
+    }, {
+      test: /\.md$/,
+      use: [{
+        loader: "html-loader"
+      }, {
+        loader: 'markdown-loader',
+        options: {
+          pedantic: true,
+          renderer
+        }
+      }]
+    }, {
+      test: /\.(woff|woff2|eot|ttf|svg)($|\?)/,
+      use: [{
+        loader: 'url-loader?limit=1&hash=sha512&digest=hex&size=16&name=resources/[hash].[ext]'
+      }]
+    }]
+  }
 }
 
 module.exports = (env = {}) => {
 
-    if (process.env.NODE_ENV === 'development') {
-        return Object.assign({}, common, {
-            entry: [
-                'react-hot-loader/patch',
-                'webpack-dev-server/client?http://127.0.0.1:3100',
-                'webpack/hot/only-dev-server',
-                path.resolve(__dirname, 'docs/index')
-            ],
-            devtool: 'source-map'
-        });
-    }
+  if (process.env.NODE_ENV === 'development') {
+    return Object.assign({}, common, {
+      entry: [
+        'react-hot-loader/patch',
+        'webpack-dev-server/client?http://127.0.0.1:3100',
+        'webpack/hot/only-dev-server',
+        path.resolve(__dirname, 'docs/index')
+      ],
+      devtool: 'source-map'
+    });
+  }
 
-    if (process.env.NODE_ENV === 'production') {
-        return Object.assign({}, common, {
-            entry: [
-                path.resolve(__dirname, 'docs/index')
-            ]
-        });
-    }
+  if (process.env.NODE_ENV === 'production') {
+    return Object.assign({}, common, {
+      entry: [
+        path.resolve(__dirname, 'docs/index')
+      ]
+    });
+  }
 }
