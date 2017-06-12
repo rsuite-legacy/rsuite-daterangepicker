@@ -10433,7 +10433,7 @@ body {
 }
 .calendar .monthHeader-forward:hover,
 .calendar .monthHeader-backward:hover {
-  background-color: #f5e9f7;
+  background-color: #f4e6e6;
   color: #4d4d4d;
 }
 .calendar .monthHeader-forward {
@@ -10451,7 +10451,7 @@ body {
 }
 .calendar .monthHeader .monthHeader-title:hover {
   color: #900005;
-  background-color: #f5e9f7;
+  background-color: #f4e6e6;
 }
 .calendar .monthHeader .monthHeader-title:active {
   background-color: #900005;
@@ -10502,7 +10502,7 @@ body {
   cursor: pointer;
 }
 .calendar .weeks .week-day:hover {
-  background-color: #f5e9f7;
+  background-color: #f4e6e6;
 }
 .calendar .weeks .week-day.disable {
   opacity: .2;
@@ -10570,7 +10570,7 @@ body {
   cursor: pointer;
 }
 .calendar .editPanel-monthCell:hover {
-  background-color: #f5e9f7;
+  background-color: #f4e6e6;
 }
 .calendar .editPanel-monthCell.selected {
   color: #EFEFEF;
