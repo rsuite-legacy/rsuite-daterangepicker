@@ -41,13 +41,8 @@ export default React.createClass({
           defaultStartDate={startDate}
           defaultEndDate={endDate}
           startMinDate={minDate}
-          startMaxDate={today}
+          startMaxDate={today.toDate()}
           endMaxDate={maxDate}
-          placement="bottomRight"
-          ranges={[
-            { label: '最近一周', range: [moment().startOf('day').clone().subtract(7, 'd'), today] },
-            { label: '最近 30 天', range: [moment().startOf('day').clone().subtract(30, 'd'), today] }
-          ]}
           onSelect={(date, type) => {
             this.setState({
               [`${type}Date`]: date
@@ -65,8 +60,18 @@ export default React.createClass({
               endDate: null
             });
           }}
-          messages={{
-            week: ['日', '一', '二', '三', '四', '五', '六']
+          ranges={[
+            { label: '最近一周', range: [moment().startOf('day').clone().subtract(7, 'd'), today] },
+            { label: '最近 30 天', range: [moment().startOf('day').clone().subtract(30, 'd'), today] }
+          ]}
+          locale={{
+            week: ['日', '一', '二', '三', '四', '五', '六'],
+            startDate: '开始时间',
+            endDate: '结束时间',
+            defaultRanges: '预设',
+            clearAll: '清空',
+            apply: '确定',
+            cancel: '取消'
           }}
         />
       </div>
