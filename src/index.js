@@ -144,32 +144,38 @@ export default React.createClass({
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
     placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight']),
-    messages: PropTypes.object,
+    locale: PropTypes.object,
     disabled: PropTypes.bool
   },
   childContextTypes: {
-    messages: PropTypes.object
+    locale: PropTypes.object
   },
   getDefaultProps() {
     const ranges = [
-      { label: '今天', range: [Moment(), Moment()] },
-      { label: '昨天', range: [Moment().subtract(1, 'd'), Moment()] },
-      { label: '本周', range: [Moment().startOf('week'), Moment()] },
-      { label: '本月', range: [Moment().startOf('month'), Moment()] }
+      { label: 'Today', range: [Moment(), Moment()] },
+      { label: 'Yesterday', range: [Moment().subtract(1, 'd'), Moment()] },
+      { label: 'Last 7 Days', range: [Moment().startOf('week'), Moment()] },
+      { label: 'This Month', range: [Moment().startOf('month'), Moment()] }
     ];
     function noop() { }
     return {
       ranges,
+      locale: {
+        week: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        startDate: 'Start Date',
+        endDate: 'End Date',
+        defaultRanges: 'Default',
+        clearAll: 'Clear',
+        apply: 'Apply',
+        cancel: 'Cancel'
+      },
       placement: 'bottomRight',
-      onChange: noop,
-      messages: {
-        week: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-      }
+      onChange: noop
     };
   },
   getChildContext() {
     return {
-      messages: this.props.messages
+      locale: this.props.locale
     };
   },
   getInitialState() {
@@ -272,6 +278,7 @@ export default React.createClass({
 
     if (range.length !== 2) return;
 
+
     const startMoment = range[0].clone();
     const endMoment = range[1].clone();
 
@@ -287,12 +294,14 @@ export default React.createClass({
   },
 
   renderStartDatePicker() {
-    const { startMinDate, startMaxDate } = this.props;
+    const { startMinDate, startMaxDate, locale } = this.props;
     const { shownStartDate } = this.state;
+
+
     return (
       <div className="DateRangePicker-start">
         <div className="DateRangePicker-start-title">
-          <p className="">开始时间</p>
+          <p className="">{locale.startDate}</p>
         </div>
         <div className="DateRangePicker-start-container">
           <SingleDatePicker
@@ -308,12 +317,12 @@ export default React.createClass({
   },
 
   renderEndDatePicker() {
-    const { endMinDate, endMaxDate } = this.props;
+    const { endMinDate, endMaxDate, locale } = this.props;
     const { shownEndDate } = this.state;
     return (
       <div className="DateRangePicker-end">
         <div className="DateRangePicker-end-title">
-          <p className="">结束时间</p>
+          <p className="">{locale.endDate}</p>
         </div>
         <div className="DateRangePicker-end-container">
           <SingleDatePicker
@@ -329,11 +338,11 @@ export default React.createClass({
   },
 
   renderRanges() {
-    const { ranges, onClear } = this.props;
+    const { ranges, onClear, locale } = this.props;
     return (
       <div className="DateRangePicker-ranges">
 
-        <Dropdown title={'预设'} shape='primary' onSelect={this.handleRangesClick}>
+        <Dropdown title={locale.defaultRanges} shape='primary' onSelect={this.handleRangesClick}>
           {ranges.map(i =>
             <Dropdown.Item
               key={i.label}
@@ -348,7 +357,7 @@ export default React.createClass({
         {onClear && (
           <ListButton
             shape='primary'
-            label="清空"
+            label={locale.clearAll}
             onClick={this.handelClear}
           />
         )}
@@ -358,10 +367,11 @@ export default React.createClass({
   },
 
   renderActions() {
-    const { defaultStartDate, defaultEndDate } = this.props;
+    const { defaultStartDate, defaultEndDate, locale } = this.props;
     const { shownStartDate, shownEndDate } = this.state;
     const shouldRenderResetButton = defaultStartDate || defaultEndDate;
     const isValidRange = shownStartDate <= shownEndDate;
+
     return (
       <div className="DateRangePicker-actions">
         <ListButton
@@ -369,11 +379,11 @@ export default React.createClass({
           className="ml10"
           disabled={!isValidRange}
           onClick={this.apply}
-          label="确定"
+          label={locale.apply}
         />
         <ListButton
           shape='default'
-          label="取消"
+          label={locale.cancel}
           onClick={this.handleCancel}
         />
 

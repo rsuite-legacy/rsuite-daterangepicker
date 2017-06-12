@@ -1,14 +1,14 @@
 import React from 'react';
 const WeekHeader = React.createClass({
   contextTypes: {
-    messages: React.PropTypes.object
+    locale: React.PropTypes.object
   },
   render() {
-    const { messages } = this.context;
+    const { locale } = this.context;
     return (
       <div className="weekHeader">
         {
-          messages.week.map((item, index) => <span key={index} className="weekHeader-day">{item}</span>)
+          locale.week.map((item, index) => <span key={index} className="weekHeader-day">{item}</span>)
         }
       </div>
     );
