@@ -10377,7 +10377,7 @@ body {
 .DateRangeContainer:hover {
   background-color: #e8e8e8;
 }
-.calendar {
+.DateRangePicker .calendar {
   /* settings */
   position: relative;
   background-color: #FFF;
@@ -10388,42 +10388,42 @@ body {
   margin-top: -1px;
   z-index: 1000;
 }
-.calendar .monthView-weeksWrapper {
+.DateRangePicker .calendar .monthView-weeksWrapper {
   left: 0;
   transition: left 0.15s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
-.calendar.sliding-left .monthView-weeksWrapper {
+.DateRangePicker .calendar.sliding-left .monthView-weeksWrapper {
   left: 231px;
   transition: none;
 }
-.calendar.sliding-right .monthView-weeksWrapper {
+.DateRangePicker .calendar.sliding-right .monthView-weeksWrapper {
   left: -231px;
   transition: none;
 }
-.calendar.is-editing .monthHeader i {
+.DateRangePicker .calendar.is-editing .monthHeader i {
   visibility: hidden;
   opacity: 0;
 }
-.calendar.is-editing .monthHeader-title {
+.DateRangePicker .calendar.is-editing .monthHeader-title {
   color: #EFEFEF;
   background-color: #900005;
 }
-.calendar.is-editing .editPanel {
+.DateRangePicker .calendar.is-editing .editPanel {
   opacity: 1;
   height: 240px;
 }
-.calendar .monthHeader {
+.DateRangePicker .calendar .monthHeader {
   width: 100%;
   text-align: center;
   z-index: 1002;
   padding: 8px 4px 4px 4px;
 }
-.calendar .monthHeader i {
+.DateRangePicker .calendar .monthHeader i {
   font-style: normal;
   transition: visibility .1s, opacity .1s linear;
 }
-.calendar .monthHeader-forward,
-.calendar .monthHeader-backward {
+.DateRangePicker .calendar .monthHeader-forward,
+.DateRangePicker .calendar .monthHeader-backward {
   position: relative;
   display: block;
   padding: 6px;
@@ -10431,45 +10431,45 @@ body {
   color: #999;
   font-size: 12px;
 }
-.calendar .monthHeader-forward:hover,
-.calendar .monthHeader-backward:hover {
+.DateRangePicker .calendar .monthHeader-forward:hover,
+.DateRangePicker .calendar .monthHeader-backward:hover {
   background-color: #f4e6e6;
   color: #4d4d4d;
 }
-.calendar .monthHeader-forward {
+.DateRangePicker .calendar .monthHeader-forward {
   float: right;
 }
-.calendar .monthHeader-backward {
+.DateRangePicker .calendar .monthHeader-backward {
   float: left;
 }
-.calendar .monthHeader .monthHeader-title {
+.DateRangePicker .calendar .monthHeader .monthHeader-title {
   line-height: 20px;
   font-size: 18px;
   padding: 0 8px;
   cursor: pointer;
   transition: background-color 0.2s linear;
 }
-.calendar .monthHeader .monthHeader-title:hover {
+.DateRangePicker .calendar .monthHeader .monthHeader-title:hover {
   color: #900005;
   background-color: #f4e6e6;
 }
-.calendar .monthHeader .monthHeader-title:active {
+.DateRangePicker .calendar .monthHeader .monthHeader-title:active {
   background-color: #900005;
 }
-.calendar .monthView {
+.DateRangePicker .calendar .monthView {
   position: relative;
   overflow: hidden;
   width: 231px;
   height: 210px;
   padding: 4px;
 }
-.calendar .monthView-weeksWrapper {
+.DateRangePicker .calendar .monthView-weeksWrapper {
   position: absolute;
 }
-.calendar .weekHeader {
+.DateRangePicker .calendar .weekHeader {
   padding: 4px 0;
 }
-.calendar .weekHeader-day {
+.DateRangePicker .calendar .weekHeader-day {
   display: inline-block;
   height: 26px;
   width: 33px;
@@ -10478,21 +10478,21 @@ body {
   text-transform: uppercase;
   font-size: .8em;
 }
-.calendar .weekHeader-day:first-child,
-.calendar .weekHeader-day:last-child {
+.DateRangePicker .calendar .weekHeader-day:first-child,
+.DateRangePicker .calendar .weekHeader-day:last-child {
   color: #999;
 }
-.calendar .weeks {
+.DateRangePicker .calendar .weeks {
   position: absolute;
   width: 231px;
 }
-.calendar .weeks:first-child {
+.DateRangePicker .calendar .weeks:first-child {
   left: -231px;
 }
-.calendar .weeks:last-child {
+.DateRangePicker .calendar .weeks:last-child {
   left: 231px;
 }
-.calendar .weeks .week-day {
+.DateRangePicker .calendar .weeks .week-day {
   display: inline-block;
   width: 29px;
   padding: 6px;
@@ -10501,28 +10501,28 @@ body {
   font-size: .9em;
   cursor: pointer;
 }
-.calendar .weeks .week-day:hover {
+.DateRangePicker .calendar .weeks .week-day:hover {
   background-color: #f4e6e6;
 }
-.calendar .weeks .week-day.disable {
+.DateRangePicker .calendar .weeks .week-day.disable {
   opacity: .2;
   cursor: default;
 }
-.calendar .weeks .week-day.disable:hover {
+.DateRangePicker .calendar .weeks .week-day.disable:hover {
   background-color: transparent;
 }
-.calendar .weeks .week-day.is-today {
+.DateRangePicker .calendar .weeks .week-day.is-today {
   border: 1px solid #900005;
   color: #900005;
 }
-.calendar .weeks .week-day.selected {
+.DateRangePicker .calendar .weeks .week-day.selected {
   background: #900005;
   color: #EFEFEF;
 }
-.calendar .weeks .week-day.selected:hover {
+.DateRangePicker .calendar .weeks .week-day.selected:hover {
   background-color: #900005;
 }
-.calendar .editPanel {
+.DateRangePicker .calendar .editPanel {
   position: absolute;
   width: 100%;
   background-color: #fff;
@@ -10532,7 +10532,7 @@ body {
   opacity: 0;
   transition: height 0.2s ease-out, opacity 0.15s ease-out;
 }
-.calendar .editPanel-content {
+.DateRangePicker .calendar .editPanel-content {
   width: 120%;
   height: 240px;
   padding: 10px 0;
@@ -10540,14 +10540,14 @@ body {
   overflow: auto;
   border-top: 1px solid #eee;
 }
-.calendar .editPanel-yearBlock {
+.DateRangePicker .calendar .editPanel-yearBlock {
   padding: 2px 0;
   width: 231px;
 }
-.calendar .editPanel-yearBlock:nth-child(odd) {
+.DateRangePicker .calendar .editPanel-yearBlock:nth-child(odd) {
   background-color: #f5f5f5;
 }
-.calendar .editPanel-yearTitle {
+.DateRangePicker .calendar .editPanel-yearTitle {
   display: inline-block;
   height: 100%;
   width: 30%;
@@ -10555,24 +10555,24 @@ body {
   text-align: center;
   font-weight: bold;
 }
-.calendar .editPanel-yearTitle.selected {
+.DateRangePicker .calendar .editPanel-yearTitle.selected {
   color: #900005;
 }
-.calendar .editPanel-monthBlock {
+.DateRangePicker .calendar .editPanel-monthBlock {
   display: inline-block;
   height: 100%;
   width: 70%;
 }
-.calendar .editPanel-monthCell {
+.DateRangePicker .calendar .editPanel-monthCell {
   display: inline-block;
   width: calc(25%);
   text-align: center;
   cursor: pointer;
 }
-.calendar .editPanel-monthCell:hover {
+.DateRangePicker .calendar .editPanel-monthCell:hover {
   background-color: #f4e6e6;
 }
-.calendar .editPanel-monthCell.selected {
+.DateRangePicker .calendar .editPanel-monthCell.selected {
   color: #EFEFEF;
   background-color: #900005;
 }
