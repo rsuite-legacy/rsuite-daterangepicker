@@ -1,6 +1,6 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "date range picker for react",
   "main": "lib/",
   "scripts": {
