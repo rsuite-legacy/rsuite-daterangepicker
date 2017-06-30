@@ -12,3 +12,4 @@ placement | string|  `bottomRight` | 日历弹出位置: `bottomLeft` `bottomCen
 onChange| function | | 日期改变后的回调函数，返回 `beginDate` `endDate` 两个值
 onSelect | function | | 在日历面板上选择后的回调函数，返回 `date`, `type` 两个值
 locale | object |  | 国际化对应的语言描述
+format | string or array | `YYYY/MM/DD` | 日期格式化, 可以设置数组  `['YYYY-MM-DD',' - ', 'YYYY-MM-DD']`
