@@ -145,7 +145,11 @@ export default React.createClass({
     onSelect: PropTypes.func,
     placement: PropTypes.oneOf(['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight']),
     locale: PropTypes.object,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    format: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ])
   },
   childContextTypes: {
     locale: PropTypes.object
@@ -169,6 +173,7 @@ export default React.createClass({
         apply: 'Apply',
         cancel: 'Cancel'
       },
+      format: 'YYYY/MM/DD',
       placement: 'bottomRight',
       onChange: noop
     };
@@ -426,25 +431,36 @@ export default React.createClass({
   },
 
   renderContainer() {
-    const { attachTo, disabled } = this.props;
+    const { attachTo, disabled, format } = this.props;
     const { startDate, endDate } = this.state;
     if (attachTo) return null;
-    const format = 'YYYY/MM/DD';
+
+    let formatLeft, formatSplit, formatRight;
+
+    if (typeof format === 'string') {
+      formatLeft = format;
+      formatRight = format;
+      formatSplit = ' - ';
+    } else {
+      formatLeft = format[0];
+      formatSplit = format[1] || ' - ';
+      formatRight = format[2] || format[0];
+    }
 
     const classes = classNames('DateRangeContainer', {
       disabled
     });
 
-    const defaultSpan = (
-      <span style={{ color: '#aaa' }}>{format}</span>
+    const DefaultSpan = (props) => (
+      <span style={{ color: '#aaa' }}>{props.format}</span>
     );
 
     return (
       <div ref={ref => { this.container = ref; }} style={{ display: 'inline-block' }}>
         <div className={classes} onClick={this.toggle} >
-          {startDate ? Moment(startDate).format(format) : defaultSpan}
-          <span className="text-muted"> - </span>
-          {endDate ? Moment(endDate).format(format) : defaultSpan}
+          {startDate ? Moment(startDate).format(formatLeft) : <DefaultSpan format={formatLeft} />}
+          <span className="text-muted"> {formatSplit} </span>
+          {endDate ? Moment(endDate).format(formatRight) : <DefaultSpan format={formatRight} />}
         </div>
       </div>
     );
