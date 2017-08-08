@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import ReactDom, { findDOMNode } from 'react-dom';
 import Overlay from 'rsuite/lib/fixtures/Overlay';
-import Calendar from './Calendar.js';
+import Calendar from './Calendar';
 import Moment from 'moment';
 import classNames from 'classnames';
 import { Dropdown, Button, ButtonToolbar } from 'rsuite';
@@ -135,6 +135,8 @@ export default React.createClass({
   propTypes: {
     defaultStartDate: PropTypes.instanceOf(Date),
     defaultEndDate: PropTypes.instanceOf(Date),
+    startDate: PropTypes.instanceOf(Date),
+    endDate: PropTypes.instanceOf(Date),
     startMinDate: PropTypes.instanceOf(Date),
     startMaxDate: PropTypes.instanceOf(Date),
     endMinDate: PropTypes.instanceOf(Date),
@@ -184,19 +186,32 @@ export default React.createClass({
     };
   },
   getInitialState() {
-    const { defaultStartDate, defaultEndDate } = this.props;
-    let startDate = defaultStartDate;
-    let endDate = defaultEndDate;
+    const { startDate, endDate, defaultStartDate, defaultEndDate } = this.props;
+    const nextStartDate = startDate || defaultStartDate;
+    const nextEndDate = endDate || defaultEndDate;
+
     return {
-      startDate,
-      shownStartDate: startDate,
-      endDate,
-      shownEndDate: endDate,
+      startDate: nextStartDate,
+      shownStartDate: nextStartDate,
+      endDate: nextEndDate,
+      shownEndDate: nextEndDate,
       show: false,
       width: 472,
       offsetLeft: null,
       offsetRight: null
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    const { startDate, endDate } = nextProps
+
+    if (startDate !== this.props.startDate) {
+      this.setState({ startDate });
+    }
+
+    if (endDate !== this.props.endDate) {
+      this.setState({ endDate });
+    }
   },
 
   handelClear() {
