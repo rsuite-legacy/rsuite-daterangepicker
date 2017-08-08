@@ -1,6 +1,6 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "date range picker for react",
   "main": "lib/",
   "scripts": {
@@ -29,6 +29,16 @@
     "url": "https://github.com/rsuite/rsuite-daterangepicker/issues"
   },
   "homepage": "https://github.com/rsuite/rsuite-daterangepicker#readme",
+  "dependencies": {
+    "moment": "^2.17.1",
+    "classnames": "^2.2.5"
+  },
+  "peerDependencies": {
+    "react": "^0.14.9 || >=15.3.0",
+    "react-dom": "^0.14.9 || >=15.3.0",
+    "rsuite": ">=1.0.0",
+    "dom-lib": ">=0.2.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
@@ -51,8 +61,8 @@
     "markdownloader": "1.0.5",
     "marked": "^0.3.6",
     "moment": "^2.17.1",
-    "react": "^0.14.2",
-    "react-dom": "^0.14.2",
+    "react": "^0.14.9",
+    "react-dom": "^0.14.9",
     "react-hot-loader": "^3.0.0-beta.6",
     "rsuite": "0.0.24",
     "rsuite-theme": "0.3.24",
@@ -61,15 +71,5 @@
     "file-loader": "^0.10.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
-  },
-  "peerDependencies": {
-    "react": ">=0.14.0",
-    "react-dom": ">=0.14.0",
-    "rsuite": ">=1.0.0",
-    "dom-lib": ">=0.2.0"
-  },
-  "dependencies": {
-    "moment": "^2.17.1",
-    "classnames": "^2.2.5"
   }
 }
