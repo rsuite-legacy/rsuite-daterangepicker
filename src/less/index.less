@@ -174,7 +174,6 @@
         width: 20px;
         height: 20px;
         cursor: pointer;
-        color: #999;
         outline: none;
         top: 4px;
         &:after {
@@ -186,6 +185,11 @@
         &:hover {
           background-color: @cell-hover-bg;
           color: darken(#999, 30%)
+        }
+        &.disabled{
+          opacity: 0.2;
+          cursor: not-allowed;
+
         }
       }
       .calendar-header-backward {
@@ -365,9 +369,9 @@
         }
         &.disabled {
           opacity: .4;
-          background: none;
           color: @B500;
           cursor: not-allowed;
+          background: none;
         }
       }
     }

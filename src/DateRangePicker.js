@@ -167,11 +167,8 @@ class DateRangePicker extends Component {
   }
 
   handleChangeCalendarDate = (index, date) => {
-
     const { calendarDate } = this.state;
     calendarDate[index] = date;
-
-    console.log(index, date.format('YYYY-MM-DD'), '---');
     this.setState({ calendarDate });
   }
 
@@ -233,18 +230,19 @@ class DateRangePicker extends Component {
       <div>
         <DatePicker
           index={0}
+          value={[moment(), moment().add(1, 'month')]}
           calendarDate={calendarDate}
           onChangeCalendarDate={this.handleChangeCalendarDate}
         />
         <DatePicker
           index={1}
           calendarDate={calendarDate}
+          value={[moment(), moment().add(1, 'month')]}
           onChangeCalendarDate={this.handleChangeCalendarDate}
         />
       </div>
     );
 
-    console.log(calendarDate[0].format('YYYY-MM-DD'), calendarDate[1].format('YYYY-MM-DD'), '----')
 
     const classes = classNames(defaultClassName, this.prefix('dropdown'), className);
     return (

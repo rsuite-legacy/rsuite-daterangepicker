@@ -88,13 +88,19 @@ class MonthHeader extends Component {
     });
 
     const dateContainer = [
-      !disabledBackward ? <i
+      <i
         key="btn-backward"
-        className={this.prefix('backward')}
+        className={
+          classNames(this.prefix('backward'), { disabled: disabledBackward })
+        }
         role="button"
         tabIndex="-1"
-        onClick={onMoveBackward && _.debounce(onMoveBackward, 200)}
-      /> : null,
+        onClick={
+          !disabledBackward &&
+          onMoveBackward &&
+          _.debounce(onMoveBackward, 200)
+        }
+      />,
       <span
         key="title-date"
         role="button"
@@ -104,13 +110,19 @@ class MonthHeader extends Component {
       >
         {date && date.format('YYYY-MM')}
       </span>,
-      !disabledForword ? <i
+      <i
         key="btn-forward"
-        className={this.prefix('forward')}
+        className={
+          classNames(this.prefix('forward'), { disabled: disabledForword })
+        }
         role="button"
         tabIndex="-1"
-        onClick={onMoveForword && _.debounce(onMoveForword, 200)}
-      /> : null
+        onClick={
+          !disabledForword &&
+          onMoveForword &&
+          _.debounce(onMoveForword, 200)
+        }
+      />
     ];
 
     const classes = classNames(defaultClassName, className);

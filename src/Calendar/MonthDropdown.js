@@ -18,6 +18,8 @@ const defaultProps = {
   date: moment()
 };
 
+function noop() { }
+
 const startYear = 1950;
 const blockHeight = 84;
 
@@ -70,7 +72,7 @@ class MonthDropdown extends React.Component {
               /* eslint-disable */
               [...Array(12).keys()].map((month) => {
 
-                let disabled = disabledMonth(moment().year(nextYear).month(month + 1));
+                let disabled = disabledMonth(moment().year(nextYear).month(month));
                 let cellCalsses = classNames(this.prefix('month-cell'), {
                   selected: isSelectedYear && month === selectedMonth,
                   disabled
@@ -80,7 +82,7 @@ class MonthDropdown extends React.Component {
                   <MonthDropdownItem
                     date={date}
                     className={cellCalsses}
-                    onClick={!disabled ? onClick : () => { }}
+                    onClick={!disabled ? onClick : noop}
                     key={month}
                     month={month + 1}
                     year={nextYear}

@@ -4,7 +4,6 @@ import moment from 'moment';
 import classNames from 'classnames';
 import _ from 'lodash';
 import MonthDropdown from './MonthDropdown';
-import TimeDropdown from './TimeDropdown';
 import MonthView from './MonthView';
 import MonthHeader from './MonthHeader';
 import WeekHeader from './WeekHeader';
@@ -32,48 +31,11 @@ const propTypes = {
 
 class Calendar extends React.Component {
 
-  disabledDate = (date) => {
-    const { disabledDate } = this.props;
-    if (disabledDate && disabledDate(date)) {
-      return true;
-    }
-    return false;
-  }
-  disabledTime = (date) => {
-
-    if (!date) {
-      return false;
-    }
-
-    const calendarProps = _.pick(this.props, Object.keys(calendarPropTypes));
-    return Object.keys(calendarProps).some((key) => {
-      if (/(Hours)/.test(key)) {
-        return calendarProps[key](date.hours(), date);
-      }
-      if (/(Minutes)/.test(key)) {
-        return calendarProps[key](date.minutes(), date);
-      }
-      if (/(Seconds)/.test(key)) {
-        return calendarProps[key](date.seconds(), date);
-      }
-      return false;
-    });
-  };
-
-  shouldMountTime(props) {
-    const { format } = props || this.props;
-    return /(H|h|m|s)/.test(format);
+  getPageDate() {
+    const { calendarDate, index } = this.props;
+    return calendarDate[index];
   }
 
-  shouldMountMonth(props) {
-    const { format } = props || this.props;
-    return /Y/.test(format) && /M/.test(format);
-  }
-
-  shouldMountDate(props) {
-    const { format } = props || this.props;
-    return /Y/.test(format) && /M/.test(format) && /D/.test(format);
-  }
 
   handleMoveForword = () => {
     const { onMoveForword } = this.props;
@@ -120,17 +82,25 @@ class Calendar extends React.Component {
     let isAfter = true;
 
     if (index === 1) {
-      isAfter = date.isAfter(calendarDate[0].clone().add(1, 'month'), 'month');
+      isAfter = date.isAfter(calendarDate[0], 'month');
       return !isAfter;
     }
 
-    isAfter = calendarDate[1].isAfter(date.clone().add(1, 'month'), 'month');
+    isAfter = calendarDate[1].isAfter(date, 'month');
     return !isAfter;
   }
 
-  getPageDate() {
-    const { calendarDate, index } = this.props;
-    return calendarDate[index];
+
+  shouldMountDate(props) {
+    const { format } = props || this.props;
+    return /Y/.test(format) && /M/.test(format) && /D/.test(format);
+  }
+  disabledDate = (date) => {
+    const { disabledDate } = this.props;
+    if (disabledDate && disabledDate(date)) {
+      return true;
+    }
+    return false;
   }
 
   render() {
@@ -153,19 +123,8 @@ class Calendar extends React.Component {
     } = this.props;
 
     const pageDate = this.getPageDate();
-
-
-    const showDate = this.shouldMountDate();
-    const showTime = this.shouldMountTime();
-    const showMonth = this.shouldMountMonth();
-
-    const onlyShowTime = showTime && !showDate && !showMonth;
-    const onlyShowMonth = showMonth && !showDate && !showTime;
-    const dropTime = calendarState === 'DROP_TIME' || onlyShowTime;
-    const dropMonth = calendarState === 'DROP_MONTH' || onlyShowMonth;
-
+    const dropMonth = calendarState === 'DROP_MONTH';
     const calendarClasses = classNames(this.prefix('calendar'), {
-      'drop-time': dropTime,
       'drop-month': dropMonth,
       'sliding-left': calendarState === 'SLIDING_L',
       'sliding-right': calendarState === 'SLIDING_R'
@@ -184,8 +143,6 @@ class Calendar extends React.Component {
       />
     ];
 
-    const timeDropdownProps = _.pick(props, Object.keys(calendarPropTypes));
-
     return (
       <div
         {...elementProps}
@@ -195,40 +152,23 @@ class Calendar extends React.Component {
         <MonthHeader
           date={pageDate}
           format={format}
-          showMonth={showMonth}
-          showDate={showDate}
-          showTime={showTime}
+          showDate={true}
           disabledBackward={this.disabledBackward()}
           disabledForword={this.disabledForword()}
           disabledDate={this.disabledDate}
-          disabledTime={this.disabledTime}
           onMoveForword={this.handleMoveForword}
           onMoveBackward={this.handleMoveBackward}
           onToggleMonthDropdown={onToggleMonthDropdown}
           onToggleTimeDropdown={onToggleTimeDropdown}
         />
-        {showDate && calendar}
-        {
-          showMonth ? (
-            <MonthDropdown
-              date={pageDate}
-              show={dropMonth}
-              disabledMonth={this.disabledMonth}
-              onClick={onChangePageDate}
-            />
-          ) : null
-        }
-        {
-          showTime ? (
-            <TimeDropdown
-              {...timeDropdownProps}
-              date={pageDate}
-              format={format}
-              show={dropTime}
-              onClick={onChangePageTime}
-            />
-          ) : null
-        }
+        {calendar}
+        <MonthDropdown
+          date={pageDate}
+          show={dropMonth}
+          disabledMonth={this.disabledMonth}
+          onClick={onChangePageDate}
+        />
+
 
       </div>
     );

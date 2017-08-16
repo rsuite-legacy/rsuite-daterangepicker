@@ -29,11 +29,6 @@ class Week extends React.Component {
       onMouseMove
     } = this.props;
 
-    if (selected.length) {
-      console.log(selected[0].format('YYYY-MM-DD'), selected[1].format('YYYY-MM-DD'), '------');
-    }
-
-
     let days = [];
     for (let i = 0; i < 7; i += 1) {
 
@@ -41,11 +36,12 @@ class Week extends React.Component {
       let disabled = disabledDate && disabledDate(thisDate);
       let isToday = thisDate.isSame(moment(), 'date');
       let inRange = thisDate.isBefore(selected[1], 'date') && thisDate.isAfter(selected[0], 'date');
+      let unSameMonth = !(inSameMonth && inSameMonth(thisDate));
       let classes = classNames('week-day', {
-        'un-same-month': !(inSameMonth && inSameMonth(thisDate)),
+        'un-same-month': unSameMonth,
         'is-today': isToday,
         selected: thisDate.isSame(selected[0], 'date') || thisDate.isSame(selected[1], 'date'),
-        'in-range': inRange,
+        'in-range': !unSameMonth && inRange,
         disabled
       });
 

@@ -30,10 +30,8 @@ class DatePicker extends Component {
   constructor(props) {
     super(props);
     const ret = transitionEndDetect();
-    const { calendarDate, index } = props;
-
     this.state = {
-      pageDate: calendarDate[index] || moment(),  // display calendar date
+      calendarState: null,
       transitionSupport: ret
     };
   }
@@ -62,8 +60,8 @@ class DatePicker extends Component {
   }
 
   onMoveDone() {
-    const { calendarState, pageDate } = this.state;
-    const { onChangeCalendarDate, index } = this.props;
+    const { calendarState } = this.state;
+    const { onChangeCalendarDate, calendarDate, index } = this.props;
     let pageChanges = 0;
 
     if (calendarState === 'SLIDING_L') {
@@ -73,24 +71,23 @@ class DatePicker extends Component {
       pageChanges = -1;
     }
 
-    pageDate.add(pageChanges, 'month');
+    calendarDate[index].add(pageChanges, 'month');
 
     this.setState({
-      pageDate,
       calendarState: null
     });
 
-    onChangeCalendarDate(index, pageDate);
+    onChangeCalendarDate(index, calendarDate[index]);
   }
 
   handleChangePageDate = (nextPageDate) => {
-    const { onSelect } = this.props;
+    const { onChangeCalendarDate, index } = this.props;
+    onChangeCalendarDate(index, nextPageDate);
     this.setState({
-      pageDate: nextPageDate,
       calendarState: null
     });
-    onSelect && onSelect(nextPageDate);
   }
+
   handleShortcutPageDate = (pageDate, unclosed) => {
     const { onSelect } = this.props;
     this.updateValue(pageDate, unclosed);
@@ -113,11 +110,6 @@ class DatePicker extends Component {
     } else {
       this.showMonthDropdown();
     }
-  }
-
-  reset = () => {
-    this.setState({ pageDate: moment() });
-    this.updateValue(null);
   }
 
   handleSelect = (nextValue) => {
@@ -145,11 +137,7 @@ class DatePicker extends Component {
       calendarDate
     } = this.props;
 
-    const {
-      calendarState,
-      pageDate
-    } = this.state;
-
+    const { calendarState } = this.state;
     const calendarProps = _.pick(this.props, Object.keys(calendarPropTypes));
 
     return (
@@ -160,7 +148,6 @@ class DatePicker extends Component {
         calendarState={calendarState}
         calendarDate={calendarDate}
         index={index}
-        pageDate={pageDate}
         onMoveForword={this.onMoveForword}
         onMoveBackward={this.onMoveBackward}
         onSelect={this.handleSelect}
