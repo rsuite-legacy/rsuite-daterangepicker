@@ -1,0 +1,94 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import moment from 'moment';
+import _ from 'lodash';
+
+const propTypes = {
+  weekendDate: PropTypes.instanceOf(moment),
+  selected: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  onClick: PropTypes.func,
+  disabledDate: PropTypes.func,
+  inSameMonth: PropTypes.func,
+  onMouseMove: PropTypes.func
+};
+
+const defaultProps = {
+  selected: []
+};
+
+class Week extends React.Component {
+
+  renderDays() {
+    const {
+      weekendDate,
+      disabledDate,
+      inSameMonth,
+      selected,
+      onClick,
+      onMouseMove
+    } = this.props;
+
+    if (selected.length) {
+      console.log(selected[0].format('YYYY-MM-DD'), selected[1].format('YYYY-MM-DD'), '------');
+    }
+
+
+    let days = [];
+    for (let i = 0; i < 7; i += 1) {
+
+      let thisDate = moment(weekendDate).add(i, 'd');
+      let disabled = disabledDate && disabledDate(thisDate);
+      let isToday = thisDate.isSame(moment(), 'date');
+      let inRange = thisDate.isBefore(selected[1], 'date') && thisDate.isAfter(selected[0], 'date');
+      let classes = classNames('week-day', {
+        'un-same-month': !(inSameMonth && inSameMonth(thisDate)),
+        'is-today': isToday,
+        selected: thisDate.isSame(selected[0], 'date') || thisDate.isSame(selected[1], 'date'),
+        'in-range': inRange,
+        disabled
+      });
+
+      let title = thisDate.format('YYYY-MM-DD');
+
+      days.push(
+        <div
+          className={classes}
+          role="menu"
+          tabIndex="-1"
+          title={isToday ? `${title} (Today)` : title}
+          onMouseMove={!disabled && onMouseMove && onMouseMove.bind(null, thisDate)}
+          onClick={!disabled && onClick && onClick.bind(null, thisDate)}
+          key={i}
+        >
+          <span className="date-item">{thisDate.date()}</span>
+        </div>
+      );
+    }
+    return days;
+  }
+
+  render() {
+    const {
+      className,
+      ...props
+     } = this.props;
+
+    const classes = classNames('week', className);
+    const elementProps = _.omit(props, Object.keys(propTypes));
+
+    return (
+      <div
+        {...elementProps}
+        className={classes}
+      >
+        {this.renderDays()}
+      </div>
+    );
+  }
+}
+
+Week.propTypes = propTypes;
+Week.defaultProps = defaultProps;
+
+export default Week;
