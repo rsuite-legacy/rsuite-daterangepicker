@@ -23,7 +23,6 @@ const propTypes = {
   format: PropTypes.string,
   disabled: PropTypes.bool,
   locale: PropTypes.object,
-  inline: PropTypes.bool,
   onChange: PropTypes.func,
   onToggle: PropTypes.func,
   onOk: PropTypes.func
@@ -35,10 +34,12 @@ const defaultProps = {
   locale: defaultLocale
 };
 
+
 function getCalendarDate(value = []) {
 
   let calendarDate = [moment(), moment().add(1, 'month')];
 
+  // Update calendarDate if the value is not null
   if (value[0] && value[1]) {
     let isSameMonth = value[0].clone().isSame(value[1], 'month');
     calendarDate = [
@@ -61,10 +62,15 @@ class DateRangePicker extends Component {
     this.state = {
       value: activeValue,
       selectValue: activeValue,
+
+      // Call `hide()` and `show()` externally
       force: false,
+
+      // Two clicks, the second click ends
       doneSelected: true,
       calendarState: 'HIDE',
-      calendarDate // display calendar date
+      // display calendar date
+      calendarDate
     };
   }
 
@@ -117,6 +123,9 @@ class DateRangePicker extends Component {
 
   }
 
+  /**
+   * Toolbar operation callback function
+   */
   handleShortcutPageDate = (selectValue, unclosed) => {
     this.updateValue(selectValue, unclosed);
   }
@@ -217,7 +226,7 @@ class DateRangePicker extends Component {
     let nextValue = selectValue;
     nextValue[1] = date;
 
-
+    // If `nextValue[0]` is greater than `nextValue[1]` then reverse order
     if (nextValue[0].isAfter(nextValue[1])) {
       nextValue.reverse();
     }
@@ -241,9 +250,27 @@ class DateRangePicker extends Component {
     this.updateValue([]);
   }
 
-  disabledOkButton = (date) => {
+  disabledOkButton = () => {
+    const { disabledDate } = this.props;
+    const { selectValue, doneSelected } = this.state;
 
-    return false;
+    if (!selectValue[0] || !selectValue[0] || !doneSelected) {
+      return true;
+    }
+
+    let start = selectValue[0].clone();
+    let end = selectValue[1].clone();
+    let check = false;
+
+    // If the date is between the start and the end
+    // the button is disabled
+    while (start.isBefore(end)) {
+      if (disabledDate && disabledDate(start)) {
+        check = true;
+      }
+      start.add(1, 'd');
+    }
+    return check;
   }
 
   render() {
