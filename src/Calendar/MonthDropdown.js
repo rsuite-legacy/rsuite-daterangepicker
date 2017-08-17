@@ -72,7 +72,7 @@ class MonthDropdown extends React.Component {
               /* eslint-disable */
               [...Array(12).keys()].map((month) => {
 
-                let disabled = disabledMonth(moment().year(nextYear).month(month));
+                let disabled = disabledMonth && disabledMonth(moment().year(nextYear).month(month));
                 let cellCalsses = classNames(this.prefix('month-cell'), {
                   selected: isSelectedYear && month === selectedMonth,
                   disabled

@@ -4,24 +4,22 @@ import moment from 'moment';
 import _ from 'lodash';
 import Calendar from './Calendar';
 import { transitionEndDetect } from './utils/eventDetect';
-import calendarPropTypes from './calendarPropTypes';
 import decorate from './utils/decorate';
-import Toolbar from './Toolbar';
 
 const propTypes = {
-  ...calendarPropTypes,
-  ranges: Toolbar.propTypes.ranges,
+  disabledDate: PropTypes.func,
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   index: PropTypes.number,
   format: PropTypes.string,
   onSelect: PropTypes.func,
+  onMouseMove: PropTypes.func,
   onChangeCalendarDate: PropTypes.func
 };
 
 const defaultProps = {
   value: [],
-  calendarDate: [],
+  calendarDate: [moment(), moment().add(1, 'month')],
   format: 'YYYY-MM-DD',
   index: 0
 };
@@ -45,6 +43,12 @@ class DatePicker extends Component {
         }
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return !_.isEqual(nextProps, this.props) ||
+      !_.isEqual(nextState, this.state) ||
+      !moment(nextProps.value[0]).isSame(moment(nextProps.value[1]), 'date') ||
+      !moment(nextProps.value[1]).isSame(moment(nextProps.value[1]), 'date');
   }
 
   onMoveForword = () => {
@@ -88,11 +92,6 @@ class DatePicker extends Component {
     });
   }
 
-  handleShortcutPageDate = (pageDate, unclosed) => {
-    const { onSelect } = this.props;
-    this.updateValue(pageDate, unclosed);
-    onSelect && onSelect(pageDate);
-  }
 
   showMonthDropdown() {
     this.setState({ calendarState: 'DROP_MONTH' });
@@ -111,38 +110,22 @@ class DatePicker extends Component {
       this.showMonthDropdown();
     }
   }
-
-  handleSelect = (nextValue) => {
-
-    const { onSelect, index } = this.props;
-
-    if (index === 0) {
-      nextValue.hours(0).minutes(0).seconds(0);
-    } else {
-      nextValue.hours(23).minutes(59).seconds(59);
-    }
-
-    this.setState({
-      pageDate: nextValue
-    });
-
-    onSelect && onSelect(nextValue);
-  }
-
   render() {
     const {
       format,
       value,
       index,
-      calendarDate
+      calendarDate,
+      onSelect,
+      onMouseMove,
+      disabledDate
     } = this.props;
 
     const { calendarState } = this.state;
-    const calendarProps = _.pick(this.props, Object.keys(calendarPropTypes));
 
     return (
       <Calendar
-        {...calendarProps}
+        disabledDate={disabledDate}
         format={format}
         value={value}
         calendarState={calendarState}
@@ -150,10 +133,8 @@ class DatePicker extends Component {
         index={index}
         onMoveForword={this.onMoveForword}
         onMoveBackward={this.onMoveBackward}
-        onSelect={this.handleSelect}
-        onMouseMove={(date) => {
-          //console.log(date.format('YYYY-MM-DD'));
-        }}
+        onSelect={onSelect}
+        onMouseMove={onMouseMove}
         onToggleMonthDropdown={this.toggleMonthDropdown}
         onChangePageDate={this.handleChangePageDate}
         onChangePageTime={this.handleChangePageTime}

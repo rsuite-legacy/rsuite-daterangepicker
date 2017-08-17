@@ -13,7 +13,7 @@ const propTypes = {
   disabled: PropTypes.bool,
   showCleanButton: PropTypes.bool,
   renderPlaceholder: PropTypes.func,
-  value: PropTypes.instanceOf(moment),
+  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
 };
 
 class DateContainer extends React.Component {
@@ -28,7 +28,7 @@ class DateContainer extends React.Component {
         role="button"
         tabIndex="-1"
         onClick={(e) => {
-          !disabled && onClean();
+          !disabled && onClean && onClean();
           e.stopPropagation();
         }}
       >

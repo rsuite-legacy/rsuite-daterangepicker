@@ -35,12 +35,22 @@ class Week extends React.Component {
       let thisDate = moment(weekendDate).add(i, 'd');
       let disabled = disabledDate && disabledDate(thisDate);
       let isToday = thisDate.isSame(moment(), 'date');
-      let inRange = thisDate.isBefore(selected[1], 'date') && thisDate.isAfter(selected[0], 'date');
+      let inRange = false;
+
+      if (selected[1] && selected[0]) {
+        if (thisDate.isBefore(selected[1], 'date') && thisDate.isAfter(selected[0], 'date')) {
+          inRange = true;
+        }
+        if (thisDate.isBefore(selected[0], 'date') && thisDate.isAfter(selected[1], 'date')) {
+          inRange = true;
+        }
+      }
+
       let unSameMonth = !(inSameMonth && inSameMonth(thisDate));
       let classes = classNames('week-day', {
         'un-same-month': unSameMonth,
         'is-today': isToday,
-        selected: thisDate.isSame(selected[0], 'date') || thisDate.isSame(selected[1], 'date'),
+        selected: !unSameMonth && ((selected[0] && thisDate.isSame(selected[0], 'date')) || (selected[1] && thisDate.isSame(selected[1], 'date'))),
         'in-range': !unSameMonth && inRange,
         disabled
       });
@@ -55,7 +65,7 @@ class Week extends React.Component {
           title={isToday ? `${title} (Today)` : title}
           onMouseMove={!disabled && onMouseMove && onMouseMove.bind(null, thisDate)}
           onClick={!disabled && onClick && onClick.bind(null, thisDate)}
-          key={i}
+          key={title}
         >
           <span className="date-item">{thisDate.date()}</span>
         </div>

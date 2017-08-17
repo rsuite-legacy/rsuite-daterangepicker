@@ -5,15 +5,18 @@ import moment from 'moment';
 import _ from 'lodash';
 import decorate from './utils/decorate';
 import { FormattedMessage } from './intl';
+import setTimingMargin from './utils/setTimingMargin';
 
 const propTypes = {
   ranges: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.node,
     unclosed: PropTypes.bool,
-    value: PropTypes.oneOfType([
-      PropTypes.instanceOf(moment),
-      PropTypes.func
-    ])
+    value: PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.instanceOf(moment),
+        PropTypes.func
+      ])
+    )
   })),
   pageDate: PropTypes.instanceOf(moment),
   onShortcut: PropTypes.func,
@@ -24,10 +27,13 @@ const propTypes = {
 const defaultProps = {
   ranges: [{
     label: 'today',
-    value: moment()
+    value: [setTimingMargin(moment()), setTimingMargin(moment(), 'right')]
   }, {
     label: 'yesterday',
-    value: moment().add(-1, 'd')
+    value: [setTimingMargin(moment().add(-1, 'd')), setTimingMargin(moment().add(-1, 'd'), 'right')]
+  }, {
+    label: 'last7Days',
+    value: [setTimingMargin(moment().subtract(6, 'days')), setTimingMargin(moment(), 'right')]
   }]
 };
 
@@ -54,6 +60,7 @@ class Toolbar extends Component {
     );
   }
   render() {
+
     const {
       ranges,
       onShortcut,
@@ -94,6 +101,7 @@ class Toolbar extends Component {
               );
             })
           }
+
         </div>
         {this.renderOkButton()}
       </div>

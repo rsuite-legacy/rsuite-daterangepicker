@@ -41,6 +41,11 @@
       opacity: 0;
     }
   }
+  &-header{
+    padding: 10px;
+    background: #f5f5f5;
+    text-align: center;
+  }
   &-toggle {
     position: relative;
     overflow: hidden;
@@ -282,16 +287,9 @@
           &.un-same-month {
             opacity: .5;
           }
-          &.disabled {
-            opacity: .4;
-            background: none;
-            color: @B500;
-            cursor: not-allowed;
-            border-left: 1px solid #eee;
-          }
+
           &.is-today {
-            background: #fcf8e3;
-            border: 1px solid #faebcc;
+            background: #faebcc;
           }
           &.selected {
             background: @color-active;
@@ -305,6 +303,14 @@
           }
           &:first-child {
             border-left: none;
+          }
+          &.disabled {
+            opacity: .4;
+            background: none;
+            color: @B500;
+            cursor: not-allowed;
+            border-left: 1px solid #eee;
+            text-decoration:line-through;
           }
         }
       }

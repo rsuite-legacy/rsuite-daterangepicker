@@ -3,6 +3,7 @@ export default {
   ok: 'OK',
   today: 'Today',
   yesterday: 'Yesterday',
+  last7Days: 'Last 7 Days',
   hours: 'Hours',
   minutes: 'Minutes',
   seconds: 'Seconds'

@@ -7,11 +7,10 @@ import MonthDropdown from './MonthDropdown';
 import MonthView from './MonthView';
 import MonthHeader from './MonthHeader';
 import WeekHeader from './WeekHeader';
-import calendarPropTypes from '../calendarPropTypes';
 import decorate from '../utils/decorate';
 
 const propTypes = {
-  ...calendarPropTypes,
+  disabledDate: PropTypes.func,
   calendarState: PropTypes.string,
   index: PropTypes.number,
   calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
@@ -28,6 +27,10 @@ const propTypes = {
   format: PropTypes.string
 };
 
+const defaultProps = {
+  calendarDate: [moment(), moment().add(1, 'month')],
+  index: 0
+};
 
 class Calendar extends React.Component {
 
@@ -35,7 +38,6 @@ class Calendar extends React.Component {
     const { calendarDate, index } = this.props;
     return calendarDate[index];
   }
-
 
   handleMoveForword = () => {
     const { onMoveForword } = this.props;
@@ -95,14 +97,6 @@ class Calendar extends React.Component {
     const { format } = props || this.props;
     return /Y/.test(format) && /M/.test(format) && /D/.test(format);
   }
-  disabledDate = (date) => {
-    const { disabledDate } = this.props;
-    if (disabledDate && disabledDate(date)) {
-      return true;
-    }
-    return false;
-  }
-
   render() {
 
     const {
@@ -114,8 +108,8 @@ class Calendar extends React.Component {
       onToggleTimeDropdown,
       onChangePageDate,
       onChangePageTime,
-      inline,
       format,
+      disabledDate,
       calendarRef,
       className,
       value,
@@ -139,7 +133,7 @@ class Calendar extends React.Component {
         value={value}
         onClick={onSelect}
         onMouseMove={onMouseMove}
-        disabledDate={this.disabledDate}
+        disabledDate={disabledDate}
       />
     ];
 
@@ -155,7 +149,7 @@ class Calendar extends React.Component {
           showDate={true}
           disabledBackward={this.disabledBackward()}
           disabledForword={this.disabledForword()}
-          disabledDate={this.disabledDate}
+          disabledDate={disabledDate}
           onMoveForword={this.handleMoveForword}
           onMoveBackward={this.handleMoveBackward}
           onToggleMonthDropdown={onToggleMonthDropdown}
@@ -168,13 +162,12 @@ class Calendar extends React.Component {
           disabledMonth={this.disabledMonth}
           onClick={onChangePageDate}
         />
-
-
       </div>
     );
   }
 }
 
 Calendar.propTypes = propTypes;
+Calendar.defaultProps = defaultProps;
 
 export default decorate()(Calendar);
