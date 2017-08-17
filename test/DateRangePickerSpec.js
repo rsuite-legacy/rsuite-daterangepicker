@@ -29,11 +29,11 @@ describe('DateRangePicker', () => {
     const doneOp = () => {
       done();
     };
+    let demo;
     const instance = ReactTestUtils.renderIntoDocument(
-      <DateRangePicker onChange={doneOp} />
+      <DateRangePicker onChange={doneOp} ref={(ref) => demo = ref} />
     );
-    const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toolbar-right-btn-ok'));
+    demo.updateValue([moment(), moment()]);
   });
 
   it('Should call `onToggle` callback', (done) => {
@@ -49,16 +49,6 @@ describe('DateRangePicker', () => {
     ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toggle'));
   });
 
-  it('Should call `onSelect` callback', (done) => {
-    const doneOp = () => {
-      done();
-    };
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DateRangePicker onSelect={doneOp} />
-    );
-    const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.is-today'));
-  });
 
 
   it('Should have a custom className', () => {

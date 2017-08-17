@@ -24,21 +24,4 @@ describe('DatePicker', () => {
     assert.equal(findDOMNode(instance).querySelector('.calendar-header-title ').innerText, '2017-08');
   });
 
-  it('Should have a custom className', () => {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker className="custom" />
-    );
-    assert.ok(findDOMNode(instance).className.match(/\bcustom\b/));
-  });
-
-
-  it('Should have a custom style', () => {
-    const fontSize = '12px';
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker style={{ fontSize }} />
-    );
-    assert.equal(findDOMNode(instance).style.fontSize, fontSize);
-  });
-
-
 });

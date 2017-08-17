@@ -37,22 +37,6 @@ describe('MonthHeader', () => {
     assert.equal(instanceDOM.querySelector('.title-time').innerText, date.format(format));
   });
 
-  it('Should output a date for `YYYY-MM-DD`', () => {
-
-    const date = moment();
-    const format = 'YYYY-MM-DD';
-    const instance = ReactTestUtils.renderIntoDocument(
-      <MonthHeader
-        showDate
-        date={date}
-        format={format}
-      />
-    );
-
-    const instanceDOM = findDOMNode(instance);
-    assert.equal(instanceDOM.querySelector('.title-date').innerText, date.format(format));
-  });
-
   it('Should output a date for `YYYY-MM`', () => {
 
     const date = moment();
