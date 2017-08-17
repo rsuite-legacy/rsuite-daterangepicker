@@ -18,7 +18,7 @@
   </Button>
 </ButtonToolbar>
 
-<DatePicker
+<DateRangePicker
   ref={ref => this.picker = ref}
   toggle={this.state.toggle}
 />

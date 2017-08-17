@@ -1,5 +1,5 @@
 ```html
-<DatePicker
+<DateRangePicker
   format="YYYY-MM-DD HH:mm:ss"
   locale={{
     week: ['日', '一', '二', '三', '四', '五', '六'],

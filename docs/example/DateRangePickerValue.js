@@ -1,19 +1,19 @@
 import React from 'react';
-import DatePicker from '../../src';
+import DateRangePicker from '../../src';
 import moment from 'moment';
 
-class DatePickerValue extends React.Component {
+class DateRangePickerValue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: moment()
+      value: []
     };
   }
   render() {
     return (
       <div className="field">
-        <DatePicker defaultValue={moment()} />
-        <DatePicker
+        <DateRangePicker defaultValue={[]} />
+        <DateRangePicker
           value={this.state.value}
           onChange={(value) => {
             this.setState({ value });
@@ -24,5 +24,5 @@ class DatePickerValue extends React.Component {
   }
 }
 
-export default DatePickerValue;
+export default DateRangePickerValue;
 

@@ -1,5 +1,5 @@
 ```html
- <DatePicker
+ <DateRangePicker
   ranges={[{
     label: '昨天',
     value: moment().add(-1, 'd')

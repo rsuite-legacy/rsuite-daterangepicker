@@ -6,12 +6,12 @@ import Affix from 'rsuite-affix';
 
 
 import './less/index.less';
-import DatePickerDefault from './example/DatePickerDefault';
-import DatePickerDisabled from './example/DatePickerDisabled';
-import DatePickerCustomToolbar from './example/DatePickerCustomToolbar';
-import DatePickerIntl from './example/DatePickerIntl';
-import DatePickerValue from './example/DatePickerValue';
-import DatePickerToggle from './example/DatePickerToggle';
+import DateRangePickerDefault from './example/DateRangePickerDefault';
+import DateRangePickerDisabled from './example/DateRangePickerDisabled';
+import DateRangePickerCustomToolbar from './example/DateRangePickerCustomToolbar';
+import DateRangePickerIntl from './example/DateRangePickerIntl';
+import DateRangePickerValue from './example/DateRangePickerValue';
+import DateRangePickerToggle from './example/DateRangePickerToggle';
 
 class App extends Component {
   render() {
@@ -21,7 +21,7 @@ class App extends Component {
           <div className="container">
             <Navbar.Header>
               <Navbar.Brand>
-                <a href="#">RSUITE DatePicker</a>
+                <a href="#">RSUITE DateRangePicker</a>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
@@ -51,7 +51,7 @@ class App extends Component {
               </Affix>
             </Col>
             <Col md={10}>
-              {/**
+
               <hr id="readme" className="target-fix" />
               <Markdown>
                 {require('../README.md')}
@@ -60,47 +60,47 @@ class App extends Component {
               <hr id="default" className="target-fix" />
               <h2>示例</h2>
               <h3>默认</h3>
-              **/}
-              <DatePickerDefault />
-               {/**
+
+              <DateRangePickerDefault />
+
               <Markdown>
-                {require('./md/DatePickerDefault.md')}
+                {require('./md/DateRangePickerDefault.md')}
               </Markdown>
 
 
               <hr id="disabled" className="target-fix" />
               <h3>禁用与隐藏</h3>
-              <DatePickerDisabled />
+              <DateRangePickerDisabled />
               <Markdown>
-                {require('./md/DatePickerDisabled.md')}
+                {require('./md/DateRangePickerDisabled.md')}
               </Markdown>
 
               <hr id="custom-toolbar" className="target-fix" />
               <h3>自定义快捷项</h3>
-              <DatePickerCustomToolbar />
+              <DateRangePickerCustomToolbar />
               <Markdown>
-                {require('./md/DatePickerCustomToolbar.md')}
+                {require('./md/DateRangePickerCustomToolbar.md')}
               </Markdown>
 
               <hr id="locale" className="target-fix" />
               <h3>本地化</h3>
-              <DatePickerIntl />
+              <DateRangePickerIntl />
               <Markdown>
-                {require('./md/DatePickerIntl.md')}
+                {require('./md/DateRangePickerIntl.md')}
               </Markdown>
 
               <hr id="controlled" className="target-fix" />
               <h3>非受控与受控</h3>
-              <DatePickerValue />
+              <DateRangePickerValue />
               <Markdown>
-                {require('./md/DatePickerValue.md')}
+                {require('./md/DateRangePickerValue.md')}
               </Markdown>
 
               <hr id="toggle" className="target-fix" />
               <h3>控制展开与关闭</h3>
-              <DatePickerToggle />
+              <DateRangePickerToggle />
               <Markdown>
-                {require('./md/DatePickerToggle.md')}
+                {require('./md/DateRangePickerToggle.md')}
               </Markdown>
 
               <hr id="api" className="target-fix" />
@@ -108,9 +108,6 @@ class App extends Component {
               <Markdown>
                 {require('./md/props.md')}
               </Markdown>
-
-              **/}
-
 
             </Col>
           </Row>

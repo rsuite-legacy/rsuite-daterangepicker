@@ -1,9 +1,9 @@
 ```html
-<DatePicker disabled />
-<DatePicker
+<DateRangePicker disabled />
+<DateRangePicker
   disabledDate={(date) => date.isAfter(moment())}
 />
-<DatePicker
+<DateRangePicker
   format="HH:mm:ss"
   ranges={[]}
   defaultValue={moment('2017-12-12 09:15:30')}
@@ -11,7 +11,7 @@
   disabledMinutes={(minute) => minute % 15 !== 0}
   disabledSeconds={(second) => second % 30 !== 0}
 />
-<DatePicker
+<DateRangePicker
   format="HH:mm:ss"
   ranges={[]}
   defaultValue={moment('2017-12-12 09:15:30')}

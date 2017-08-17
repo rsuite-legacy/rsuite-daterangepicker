@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { Button, ButtonToolbar } from 'rsuite';
-import DatePicker from '../../src';
+import DateRangePicker from '../../src';
 
 
-class DatePickerToggle extends React.Component {
+class DateRangePickerToggle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +33,7 @@ class DatePickerToggle extends React.Component {
           </Button>
         </ButtonToolbar>
 
-        <DatePicker
+        <DateRangePicker
           ref={ref => this.picker = ref}
           toggle={this.state.toggle}
         />
@@ -43,5 +43,5 @@ class DatePickerToggle extends React.Component {
   }
 }
 
-export default DatePickerToggle;
+export default DateRangePickerToggle;
 
