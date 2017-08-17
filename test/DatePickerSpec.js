@@ -7,81 +7,22 @@ import DatePicker from '../src/DatePicker';
 
 describe('DatePicker', () => {
 
-  it('Should render a div with "rsuite-datepicker" class', () => {
+  it('Should render a div with "rsuite-daterangepicker-calendar" class', () => {
 
     const instance = ReactTestUtils.renderIntoDocument(
       <DatePicker />
     );
 
     assert.equal(findDOMNode(instance).nodeName, 'DIV');
-    assert.ok(findDOMNode(instance).className.match(/\brsuite-datepicker\b/));
-  });
-
-  it('Should be disabled', () => {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker disabled />
-    );
-
-    assert.ok(findDOMNode(instance).querySelector('.rsuite-datepicker-toggle').className.match(/\bdisabled\b/));
-  });
-
-  it('Should be inline', () => {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker inline />
-    );
-
-    assert.ok(!findDOMNode(instance).querySelector('.rsuite-datepicker-toggle'));
+    assert.ok(findDOMNode(instance).className.match(/\brsuite-daterangepicker-calendar\b/));
   });
 
   it('Should output a date', () => {
     const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker defaultValue={moment('2017-08-14')} />
+      <DatePicker calendarDate={[moment('2017-08'), moment('2017-09')]} index={0} />
     );
-    assert.equal(findDOMNode(instance).querySelector('.rsuite-datepicker-toggle-placeholder').innerText, '2017-08-14');
+    assert.equal(findDOMNode(instance).querySelector('.calendar-header-title ').innerText, '2017-08');
   });
-
-  it('Should output a date', () => {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker value={moment('2017-08-14')} />
-    );
-    assert.equal(findDOMNode(instance).querySelector('.rsuite-datepicker-toggle-placeholder').innerText, '2017-08-14');
-  });
-
-  it('Should call `onChange` callback', (done) => {
-    const doneOp = () => {
-      done();
-    };
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker onChange={doneOp} />
-    );
-    const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-datepicker-toolbar-right-btn-ok'));
-  });
-
-  it('Should call `onToggle` callback', (done) => {
-    const doneOp = (show) => {
-      if (show) {
-        done();
-      }
-    };
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker onToggle={doneOp} />
-    );
-    const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-datepicker-toggle'));
-  });
-
-  it('Should call `onSelect` callback', (done) => {
-    const doneOp = () => {
-      done();
-    };
-    const instance = ReactTestUtils.renderIntoDocument(
-      <DatePicker onSelect={doneOp} />
-    );
-    const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.is-today'));
-  });
-
 
   it('Should have a custom className', () => {
     const instance = ReactTestUtils.renderIntoDocument(

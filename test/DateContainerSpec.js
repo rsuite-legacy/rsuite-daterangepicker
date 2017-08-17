@@ -17,7 +17,7 @@ describe('DateContainer', () => {
 
     const instanceDOM = findDOMNode(instance);
     assert.equal(instanceDOM.nodeName, 'DIV');
-    assert.ok(instanceDOM.className.match(/\brsuite-datepicker-toggle\b/));
+    assert.ok(instanceDOM.className.match(/\brsuite-daterangepicker-toggle\b/));
 
   });
 
@@ -26,7 +26,7 @@ describe('DateContainer', () => {
       <DateContainer placeholder="Placeholder Text" />
     );
     const instanceDOM = findDOMNode(instance);
-    assert.equal(instanceDOM.querySelector('.rsuite-datepicker-toggle-placeholder').innerText, 'Placeholder Text');
+    assert.equal(instanceDOM.querySelector('.rsuite-daterangepicker-toggle-placeholder').innerText, 'Placeholder Text');
   });
 
   it('Should be disabled', () => {
@@ -42,7 +42,7 @@ describe('DateContainer', () => {
       <DateContainer showCleanButton />
     );
     const instanceDOM = findDOMNode(instance);
-    assert.ok(instanceDOM.querySelector('.rsuite-datepicker-toggle-clean'));
+    assert.ok(instanceDOM.querySelector('.rsuite-daterangepicker-toggle-clean'));
   });
 
   it('Should render a custom placeholder', () => {
@@ -82,7 +82,7 @@ describe('DateContainer', () => {
       />
     );
     const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-datepicker-toggle-clean'));
+    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toggle-clean'));
   });
 
   it('Should have a custom className', () => {

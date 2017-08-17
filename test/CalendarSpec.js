@@ -13,6 +13,7 @@ describe('Calendar', () => {
       <Calendar />
     );
 
+    const instanceDOM = findDOMNode(instance);
     assert.equal(findDOMNode(instance).nodeName, 'DIV');
     assert.ok(findDOMNode(instance).className.match(/\bcalendar\b/));
   });
@@ -27,7 +28,7 @@ describe('Calendar', () => {
       <Calendar
         format="YYYY-MM-DD"
         calendarState="SHOW"
-        pageDate={moment()}
+        calendarDate={[moment(), moment()]}
         onSelect={doneOp}
       />
     );
