@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import RootCloseWrapper from 'rsuite-utils/lib/Overlay/RootCloseWrapper';
+import { on } from 'dom-lib';
 import _ from 'lodash';
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
@@ -59,6 +59,7 @@ class DateRangePicker extends Component {
     const activeValue = value || defaultValue || [];
     const calendarDate = getCalendarDate(activeValue);
 
+
     this.state = {
       value: activeValue,
       selectValue: activeValue,
@@ -72,6 +73,12 @@ class DateRangePicker extends Component {
       // display calendar date
       calendarDate
     };
+
+
+  }
+
+  componentDidMount() {
+    this.isMounted = true;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,6 +86,18 @@ class DateRangePicker extends Component {
     if (nextProps.value !== value) {
       this.setState({ value: nextProps.value });
     }
+  }
+
+  componentWillUnmount() {
+    this.unbindEvent();
+    this.isMounted = false;
+  }
+
+  get isMounted() {
+    return this.mounted;
+  }
+  set isMounted(isMounted) {
+    this.mounted = isMounted;
   }
 
   getValue = () => (this.props.value || this.state.value || [])
@@ -96,6 +115,20 @@ class DateRangePicker extends Component {
       );
   }
 
+  bindEvent() {
+    this.docClickListener = on(document, 'click', this.handleDocumentClick);
+  }
+  unbindEvent() {
+    this.docClickListener && this.docClickListener.off();
+  }
+  /**
+   * Close menu when click document
+   */
+  handleDocumentClick = (event) => {
+    if (this.isMounted && !this.container.contains(event.target)) {
+      this.handleClose();
+    }
+  }
 
   handleOK = (event) => {
     const { onOk } = this.props;
@@ -131,8 +164,11 @@ class DateRangePicker extends Component {
   }
 
   resetPageDate() {
+    const selectValue = this.getValue();
+    const calendarDate = getCalendarDate(selectValue);
     this.setState({
-      selectValue: this.getValue()
+      selectValue,
+      calendarDate
     });
   }
 
@@ -157,10 +193,12 @@ class DateRangePicker extends Component {
 
     onToggle && onToggle(true);
     force && this.cleanForce();
+    this.bindEvent();
   }
 
   handleClose = (force) => {
     const { onToggle } = this.props;
+
     this.setState({
       calendarState: 'HIDE',
       force
@@ -168,6 +206,7 @@ class DateRangePicker extends Component {
 
     onToggle && onToggle(false);
     force && this.cleanForce();
+    this.unbindEvent();
   }
 
   cleanForce() {
@@ -206,6 +245,7 @@ class DateRangePicker extends Component {
 
       nextValue[0] = setTimingMargin(nextValue[0]);
       nextValue[1] = setTimingMargin(nextValue[1]);
+
     }
 
     this.setState({
@@ -250,16 +290,9 @@ class DateRangePicker extends Component {
     this.updateValue([]);
   }
 
-  disabledOkButton = () => {
+  disabledByBetween(start, end) {
     const { disabledDate } = this.props;
-    const { selectValue, doneSelected } = this.state;
 
-    if (!selectValue[0] || !selectValue[0] || !doneSelected) {
-      return true;
-    }
-
-    let start = selectValue[0].clone();
-    let end = selectValue[1].clone();
     let check = false;
 
     // If the date is between the start and the end
@@ -270,7 +303,25 @@ class DateRangePicker extends Component {
       }
       start.add(1, 'd');
     }
+
     return check;
+  }
+
+  disabledOkButton = () => {
+    const { selectValue, doneSelected } = this.state;
+
+    if (!selectValue[0] || !selectValue[0] || !doneSelected) {
+      return true;
+    }
+
+    return this.disabledByBetween(selectValue[0].clone(), selectValue[1].clone());
+  }
+
+  disabledShortcutButton = (value = []) => {
+    if (!value[0] || !value[0]) {
+      return true;
+    }
+    return this.disabledByBetween(value[0].clone(), value[1].clone());
   }
 
   render() {
@@ -326,37 +377,37 @@ class DateRangePicker extends Component {
 
     const classes = classNames(defaultClassName, this.prefix('dropdown'), className);
     return (
-      <RootCloseWrapper onRootClose={this.handleDocumentClose}>
+      <IntlProvider locale={locale}>
         <div
           {...elementProps}
           className={classes}
+          ref={(ref) => {
+            this.container = ref;
+          }}
         >
-          <IntlProvider locale={locale}>
-            <div>
-              <DateContainer
-                disabled={disabled}
-                placeholder={this.getDateString()}
-                onClick={this.handleToggle}
-                showCleanButton={!!value[0] && !!value[1]}
-                onClean={value[0] && value[1] && this.reset}
-                value={value}
-                renderPlaceholder={renderPlaceholder}
-              />
-              <div
-                className={paneClasses}
-              >
-                {calendar}
-                <Toolbar
-                  ranges={ranges}
-                  disabledOkButton={this.disabledOkButton}
-                  onShortcut={this.handleShortcutPageDate}
-                  onOk={this.handleOK}
-                />
-              </div>
-            </div>
-          </IntlProvider>
+          <DateContainer
+            disabled={disabled}
+            placeholder={this.getDateString()}
+            onClick={this.handleToggle}
+            showCleanButton={!!value[0] && !!value[1]}
+            onClean={value[0] && value[1] && this.reset}
+            value={value}
+            renderPlaceholder={renderPlaceholder}
+          />
+          <div
+            className={paneClasses}
+          >
+            {calendar}
+            <Toolbar
+              ranges={ranges}
+              disabledOkButton={this.disabledOkButton}
+              disabledShortcutButton={this.disabledShortcutButton}
+              onShortcut={this.handleShortcutPageDate}
+              onOk={this.handleOK}
+            />
+          </div>
         </div>
-      </RootCloseWrapper>
+      </IntlProvider>
     );
   }
 }

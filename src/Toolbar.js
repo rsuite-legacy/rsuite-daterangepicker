@@ -21,7 +21,8 @@ const propTypes = {
   pageDate: PropTypes.instanceOf(moment),
   onShortcut: PropTypes.func,
   onOk: PropTypes.func,
-  disabledOkButton: PropTypes.func
+  disabledOkButton: PropTypes.func,
+  disabledShortcutButton: PropTypes.func
 };
 
 const defaultProps = {
@@ -64,7 +65,7 @@ class Toolbar extends Component {
     const {
       ranges,
       onShortcut,
-      disabledOkButton,
+      disabledShortcutButton,
       className,
       pageDate,
       ...props
@@ -83,7 +84,7 @@ class Toolbar extends Component {
           {
             ranges.map((item, index) => {
               let value = _.isFunction(item.value) ? item.value(pageDate) : item.value;
-              let disabled = disabledOkButton && disabledOkButton(value);
+              let disabled = disabledShortcutButton && disabledShortcutButton(value);
               let itemClassName = classNames({ disabled });
               return (
                 <a
