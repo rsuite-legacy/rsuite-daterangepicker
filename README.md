@@ -1,20 +1,20 @@
-# rsuite-datepicker
+# rsuite-daterangepicker
 
 
 
 
-`rsuite-datepicker` 是一个日期选择器组件
+`rsuite-daterangepicker` 是一个日期范围选择器组件
 
-> 如果需要选择日期范围，可以使用 [`rsuite-daterangepicker`](https://rsuitejs.com/rsuite-daterangepicker)
+> 如果需要单个选择日期或者时间，可以使用 [`rsuite-datepicker`](https://rsuitejs.com/rsuite-datepicker)
 
 
 版本与状态
 
-`稳定版` [![npm](https://img.shields.io/npm/v/rsuite-datepicker.svg)](https://www.npmjs.com/package/rsuite-datepicker)
+`稳定版` [![npm](https://img.shields.io/npm/v/rsuite-daterangepicker.svg)](https://www.npmjs.com/package/rsuite-daterangepicker)
 
-`测试版` [![npm](https://cnpmjs.org/badge/v/rsuite-datepicker.svg?&tag=beta&subject=npm)](https://www.npmjs.com/package/rsuite-datepicker)
+`测试版` [![npm](https://cnpmjs.org/badge/v/rsuite-daterangepicker.svg?&tag=beta&subject=npm)](https://www.npmjs.com/package/rsuite-daterangepicker)
 
-[![Travis][build-badge]][build]  [![Coverage Status](https://coveralls.io/repos/github/rsuite/rsuite-datepicker/badge.svg?branch=next)](https://coveralls.io/github/rsuite/rsuite-datepicker?branch=next)
+[![Travis][build-badge]][build]  [![Coverage Status](https://coveralls.io/repos/github/rsuite/rsuite-daterangepicker/badge.svg?branch=next)](https://coveralls.io/github/rsuite/rsuite-daterangepicker?branch=next)
 
 
 
@@ -23,21 +23,21 @@
 ### 安装
 
 ```
-npm i rsuite-datepicker --save
+npm i rsuite-daterangepicker --save
 ```
 ### 样式
 
 在 `less` 文件中引入:
 
 ```css
-@import '~rsuite-datepicker/lib/less/index.less';
+@import '~rsuite-daterangepicker/lib/less/index.less';
 ```
 
 
 ### 示例
 
 ```jsx
-import DatePicker from 'rsuite-datepicker';
+import DatePicker from 'rsuite-daterangepicker';
 
 ...
 render(){
@@ -48,10 +48,10 @@ render(){
 ```
 
 
-[build-badge]: https://travis-ci.org/rsuite/rsuite-datepicker.svg?branch=master
-[build]: https://travis-ci.org/rsuite/rsuite-datepicker
+[build-badge]: https://travis-ci.org/rsuite/rsuite-daterangepicker.svg?branch=master
+[build]: https://travis-ci.org/rsuite/rsuite-daterangepicker
 
 
-[npm-badge]: https://badge.fury.io/js/rsuite-datepicker.svg
-[npm]: http://badge.fury.io/js/rsuite-datepicker
+[npm-badge]: https://badge.fury.io/js/rsuite-daterangepicker.svg
+[npm]: http://badge.fury.io/js/rsuite-daterangepicker
 

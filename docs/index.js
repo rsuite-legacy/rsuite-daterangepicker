@@ -27,7 +27,8 @@ class App extends Component {
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>
-                <Nav.Item href="https://github.com/rsuite/rsuite-datepicker">GitHub</Nav.Item>
+                <Nav.Item href="https://rsuite.github.io">RSUITE</Nav.Item>
+                <Nav.Item href="https://github.com/rsuite/rsuite-daterangepicker">GitHub</Nav.Item>
               </Nav>
             </Navbar.Collapse>
           </div>
@@ -41,7 +42,7 @@ class App extends Component {
                   <Nav.Item href="#readme">概述</Nav.Item>
                   <Nav.Item href="#default">示例</Nav.Item>
                   <Nav.Item href="#default">&nbsp;&nbsp;- 默认</Nav.Item>
-                  <Nav.Item href="#disabled">&nbsp;&nbsp;- 禁用与隐藏</Nav.Item>
+                  <Nav.Item href="#disabled">&nbsp;&nbsp;- 禁用</Nav.Item>
                   <Nav.Item href="#custom-toolbar">&nbsp;&nbsp;- 自定义快捷项</Nav.Item>
                   <Nav.Item href="#locale">&nbsp;&nbsp;- 本地化</Nav.Item>
                   <Nav.Item href="#controlled">&nbsp;&nbsp;- 非受控与受控</Nav.Item>
@@ -67,9 +68,8 @@ class App extends Component {
                 {require('./md/DateRangePickerDefault.md')}
               </Markdown>
 
-
               <hr id="disabled" className="target-fix" />
-              <h3>禁用与隐藏</h3>
+              <h3>禁用</h3>
               <DateRangePickerDisabled />
               <Markdown>
                 {require('./md/DateRangePickerDisabled.md')}
