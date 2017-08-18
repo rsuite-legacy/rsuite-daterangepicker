@@ -6,13 +6,13 @@ class DateRangePickerValue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: []
+      value: [moment('2017-02-01'), moment('2017-05-20')]
     };
   }
   render() {
     return (
       <div className="field">
-        <DateRangePicker defaultValue={[]} />
+        <DateRangePicker defaultValue={[moment('2017-02-01'), moment('2017-05-20')]} />
         <DateRangePicker
           value={this.state.value}
           onChange={(value) => {

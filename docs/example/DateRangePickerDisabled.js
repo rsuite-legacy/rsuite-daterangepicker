@@ -4,6 +4,8 @@ import DateRangePicker from '../../src';
 
 const DateRangePickerDefault = props => (
   <div className="field">
+    <p>- 禁用组件: <code>disabled</code></p>
+    <DateRangePicker disabled />
     <p>- 禁用日期: <code>disabledDate</code></p>
     <DateRangePicker
       defaultValue={[moment(), moment().add(10, 'd')]}
