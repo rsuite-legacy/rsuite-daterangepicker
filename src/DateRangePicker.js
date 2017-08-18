@@ -17,7 +17,6 @@ const propTypes = {
   ranges: Toolbar.propTypes.ranges,
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   defaultValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  calendarDefaultDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   placeholder: PropTypes.string,
   renderPlaceholder: PropTypes.func,
   format: PropTypes.string,
@@ -65,7 +64,7 @@ class DateRangePicker extends Component {
       selectValue: activeValue,
 
       // Call `hide()` and `show()` externally
-      force: false,
+      forceOpen: false,
 
       // Two clicks, the second click ends
       doneSelected: true,
@@ -73,7 +72,6 @@ class DateRangePicker extends Component {
       // display calendar date
       calendarDate
     };
-
 
   }
 
@@ -118,14 +116,16 @@ class DateRangePicker extends Component {
   bindEvent() {
     this.docClickListener = on(document, 'click', this.handleDocumentClick);
   }
+
   unbindEvent() {
     this.docClickListener && this.docClickListener.off();
   }
+
   /**
    * Close menu when click document
    */
   handleDocumentClick = (event) => {
-    if (this.isMounted && !this.container.contains(event.target)) {
+    if (this.isMounted && !this.container.contains(event.target) && !this.state.forceOpen) {
       this.handleClose();
     }
   }
@@ -182,43 +182,37 @@ class DateRangePicker extends Component {
     !disabled && this.handleClose(true);
   }
 
-  handleOpen = (force) => {
+  handleOpen = (forceOpen) => {
 
     const { onToggle } = this.props;
     this.resetPageDate();
     this.setState({
       calendarState: 'SHOW',
-      force
+      forceOpen
     });
 
     onToggle && onToggle(true);
-    force && this.cleanForce();
+    forceOpen && this.cleanForce();
     this.bindEvent();
   }
 
-  handleClose = (force) => {
+  handleClose = (forceOpen) => {
     const { onToggle } = this.props;
 
     this.setState({
       calendarState: 'HIDE',
-      force
+      forceOpen
     });
 
     onToggle && onToggle(false);
-    force && this.cleanForce();
+    forceOpen && this.cleanForce();
     this.unbindEvent();
   }
 
   cleanForce() {
     setTimeout(() => {
-      this.setState({ force: false });
+      this.setState({ forceOpen: false });
     }, 1000);
-  }
-
-  handleDocumentClose = () => {
-    if (!this.state.force) {
-      this.handleClose();
-    }
   }
 
   handleChangeCalendarDate = (index, date) => {
@@ -246,6 +240,12 @@ class DateRangePicker extends Component {
       nextValue[0] = setTimingMargin(nextValue[0]);
       nextValue[1] = setTimingMargin(nextValue[1]);
 
+      this.setState({
+        forceOpen: true,
+        calendarDate: getCalendarDate(nextValue)
+      });
+
+      this.cleanForce();
     }
 
     this.setState({
@@ -298,7 +298,7 @@ class DateRangePicker extends Component {
     // If the date is between the start and the end
     // the button is disabled
     while (start.isBefore(end)) {
-      if (disabledDate && disabledDate(start)) {
+      if (disabledDate && disabledDate(start, this.getValue())) {
         check = true;
       }
       start.add(1, 'd');
