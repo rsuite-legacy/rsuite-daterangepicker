@@ -10894,6 +10894,9 @@ h3 {
 blockquote {
   font-size: 14px;
 }
+.rsuite-affix {
+  background: #fff;
+}
 .sidebar {
   border-right: 1px solid #f1f1f1;
 }
