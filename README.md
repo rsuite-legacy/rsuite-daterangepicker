@@ -14,7 +14,7 @@
 
 `测试版` [![npm](https://cnpmjs.org/badge/v/rsuite-daterangepicker.svg?&tag=beta&subject=npm)](https://www.npmjs.com/package/rsuite-daterangepicker)
 
-[![Travis][build-badge]][build]  [![Coverage Status](https://coveralls.io/repos/github/rsuite/rsuite-daterangepicker/badge.svg?branch=next)](https://coveralls.io/github/rsuite/rsuite-daterangepicker?branch=next)
+[![Travis][build-badge]][build]  [![Coverage Status](https://coveralls.io/repos/github/rsuite/rsuite-daterangepicker/badge.svg)](https://coveralls.io/github/rsuite/rsuite-daterangepicker)
 
 
 
@@ -48,7 +48,7 @@ render(){
 ```
 
 
-[build-badge]: https://travis-ci.org/rsuite/rsuite-daterangepicker.svg?branch=master
+[build-badge]: https://travis-ci.org/rsuite/rsuite-daterangepicker.svg
 [build]: https://travis-ci.org/rsuite/rsuite-daterangepicker
 
 
