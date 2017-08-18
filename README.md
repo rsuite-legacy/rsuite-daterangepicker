@@ -10,11 +10,9 @@
 
 版本与状态
 
-`稳定版` [![npm](https://img.shields.io/npm/v/rsuite-daterangepicker.svg)](https://www.npmjs.com/package/rsuite-daterangepicker)
-
-`测试版` [![npm](https://cnpmjs.org/badge/v/rsuite-daterangepicker.svg?&tag=beta&subject=npm)](https://www.npmjs.com/package/rsuite-daterangepicker)
-
-[![Travis][build-badge]][build]  [![Coverage Status](https://coveralls.io/repos/github/rsuite/rsuite-daterangepicker/badge.svg)](https://coveralls.io/github/rsuite/rsuite-daterangepicker)
+- [![npm][npm-badge]][npm] `Stable`
+- [![npm][npm-beta-badge]][npm-beta] `Beta`
+- [![Travis][build-badge]][build] [![Coverage Status][coverage-badge]][coverage]
 
 
 
@@ -37,21 +35,26 @@ npm i rsuite-daterangepicker --save
 ### 示例
 
 ```jsx
-import DatePicker from 'rsuite-daterangepicker';
+import DateRangePicker from 'rsuite-daterangepicker';
 
 ...
 render(){
-  return <DatePicker />
+  return <DateRangePicker />
 }
 ...
 
 ```
 
+[npm-badge]: https://img.shields.io/npm/v/rsuite-daterangepicker.svg
+[npm]: https://www.npmjs.com/package/rsuite-daterangepicker
+
+
+[npm-beta-badge]: https://cnpmjs.org/badge/v/rsuite-daterangepicker.svg?&tag=beta&subject=npm
+[npm-beta]: https://www.npmjs.com/package/rsuite-daterangepicker
+
 
 [build-badge]: https://travis-ci.org/rsuite/rsuite-daterangepicker.svg
 [build]: https://travis-ci.org/rsuite/rsuite-daterangepicker
 
-
-[npm-badge]: https://badge.fury.io/js/rsuite-daterangepicker.svg
-[npm]: http://badge.fury.io/js/rsuite-daterangepicker
-
+[coverage-badge]: https://coveralls.io/repos/github/rsuite/rsuite-daterangepicker/badge.svg?branch=next
+[coverage]: https://coveralls.io/github/rsuite/rsuite-daterangepicker?branch=next
