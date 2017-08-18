@@ -2,7 +2,6 @@
 |---------------------|------------------------------------------------------------|-----------------|------------------|
 | value               | array(moment, moment)                                      |                 | 值  `受控`          |
 | defaultValue        | array(moment, moment)                                      |                 | 默认值              |
-| calendarDefaultDate | array(moment, moment)                                      |                 | 日历面板默认呈现的日期时间    |
 | onChange            | function(`value`:array(moment, moment))                    |                 | 值改变后的回调函数        |
 | onToggle            | function(`show`:boolean)                                   |                 | 打开或者关闭日历版本的回调函数  |
 | onOk                | function(`value`:array(moment, moment))                    |                 | 点击 `Ok` 按钮后的回调函数 |

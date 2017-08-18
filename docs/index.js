@@ -37,7 +37,12 @@ class App extends Component {
         <div className="container">
           <Row>
             <Col md={2} xsHidden smHidden>
-              <Affix offsetTop={70}>
+              <Affix
+                offsetTop={70}
+                ref={(ref)=>{
+                  this.affix=ref;
+                }}
+              >
                 <Nav className="sidebar">
                   <Nav.Item href="#readme">概述</Nav.Item>
                   <Nav.Item href="#default">示例</Nav.Item>
