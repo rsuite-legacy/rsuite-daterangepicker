@@ -66,6 +66,7 @@ class DatePicker extends Component {
   onMoveDone() {
     const { calendarState } = this.state;
     const { onChangeCalendarDate, calendarDate, index } = this.props;
+    const date = calendarDate[index].clone();
     let pageChanges = 0;
 
     if (calendarState === 'SLIDING_L') {
@@ -75,13 +76,14 @@ class DatePicker extends Component {
       pageChanges = -1;
     }
 
-    calendarDate[index].add(pageChanges, 'month');
+    date.add(pageChanges, 'month');
 
     this.setState({
       calendarState: null
     });
 
-    onChangeCalendarDate(index, calendarDate[index]);
+    onChangeCalendarDate(index, date);
+
   }
 
   handleChangePageDate = (nextPageDate) => {

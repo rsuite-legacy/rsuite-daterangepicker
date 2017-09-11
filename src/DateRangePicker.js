@@ -258,7 +258,6 @@ class DateRangePicker extends Component {
   handleMouseMoveSelectValue = (date) => {
     const { doneSelected, selectValue } = this.state;
 
-
     if (doneSelected) {
       return;
     }
@@ -310,7 +309,7 @@ class DateRangePicker extends Component {
   disabledOkButton = () => {
     const { selectValue, doneSelected } = this.state;
 
-    if (!selectValue[0] || !selectValue[0] || !doneSelected) {
+    if (!selectValue[0] || !selectValue[1] || !doneSelected) {
       return true;
     }
 
@@ -318,7 +317,7 @@ class DateRangePicker extends Component {
   }
 
   disabledShortcutButton = (value = []) => {
-    if (!value[0] || !value[0]) {
+    if (!value[0] || !value[1]) {
       return true;
     }
     return this.disabledByBetween(value[0].clone(), value[1].clone());
