@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import { on } from 'dom-lib';
+import { on, getWidth } from 'dom-lib';
 import _ from 'lodash';
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
@@ -13,6 +13,7 @@ import DatePicker from './DatePicker';
 import setTimingMargin from './utils/setTimingMargin';
 
 const propTypes = {
+  align: PropTypes.oneOf(['right', 'left']),
   disabledDate: PropTypes.func,
   ranges: Toolbar.propTypes.ranges,
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
@@ -28,11 +29,11 @@ const propTypes = {
 };
 
 const defaultProps = {
+  align: 'left',
   format: 'YYYY-MM-DD',
   placeholder: '',
   locale: defaultLocale
 };
-
 
 function getCalendarDate(value = []) {
 
@@ -277,10 +278,14 @@ class DateRangePicker extends Component {
 
   handleToggle = () => {
     const { calendarState } = this.state;
+
     if (calendarState === 'SHOW') {
       this.handleClose();
     } else if (calendarState === 'HIDE') {
       this.handleOpen();
+      this.setState({
+        toggleWidth: this.toggle ? getWidth(this.toggle) : 0
+      });
     }
   }
 
@@ -332,19 +337,26 @@ class DateRangePicker extends Component {
       renderPlaceholder,
       disabled,
       ranges,
+      align,
       disabledDate
     } = this.props;
 
     const {
       calendarState,
       calendarDate,
-      selectValue
+      selectValue,
+      toggleWidth
     } = this.state;
 
     const value = this.getValue();
     const paneClasses = classNames(this.prefix('pane'), {
       hide: calendarState === 'HIDE'
     });
+
+    // pane width is 538px
+    const paneStyles = {
+      marginLeft: align === 'right' ? toggleWidth - 538 : 0
+    };
 
     const elementProps = _.omit(this.props, Object.keys(propTypes));
     const calendar = (
@@ -392,9 +404,13 @@ class DateRangePicker extends Component {
             onClean={value[0] && value[1] && this.reset}
             value={value}
             renderPlaceholder={renderPlaceholder}
+            toggleRef={(ref) => {
+              this.toggle = ref;
+            }}
           />
           <div
             className={paneClasses}
+            style={paneStyles}
           >
             {calendar}
             <Toolbar
