@@ -63,6 +63,7 @@ class DateRangePicker extends Component {
     this.state = {
       value: activeValue,
       selectValue: activeValue,
+      toggleWidth: 0,
 
       // Call `hide()` and `show()` externally
       forceOpen: false,
