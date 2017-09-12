@@ -89,7 +89,7 @@
     "react": "^0.14.9",
     "react-dom": "^0.14.9",
     "react-hot-loader": "^3.0.0-beta.6",
-    "rsuite": "1.0.14",
+    "rsuite": "2.0.0",
     "rsuite-affix": "^1.0.3",
     "rsuite-theme": "^2.0.0-beta.1-1",
     "sinon": "^1.17.4",

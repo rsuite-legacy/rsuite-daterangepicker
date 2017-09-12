@@ -12,6 +12,7 @@ import DateRangePickerCustomToolbar from './example/DateRangePickerCustomToolbar
 import DateRangePickerIntl from './example/DateRangePickerIntl';
 import DateRangePickerValue from './example/DateRangePickerValue';
 import DateRangePickerToggle from './example/DateRangePickerToggle';
+import DateRangePickerInModal from './example/DateRangePickerInModal';
 
 class App extends Component {
   render() {
@@ -107,6 +108,10 @@ class App extends Component {
               <Markdown>
                 {require('./md/DateRangePickerToggle.md')}
               </Markdown>
+
+              <hr id="inmodal" className="target-fix" />
+              <h3>在 Modal 中</h3>
+              <DateRangePickerInModal />
 
               <hr id="api" className="target-fix" />
               <h3>属性</h3>
