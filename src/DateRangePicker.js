@@ -22,6 +22,7 @@ const propTypes = {
   renderPlaceholder: PropTypes.func,
   format: PropTypes.string,
   disabled: PropTypes.bool,
+  /* eslint-disable */
   locale: PropTypes.object,
   onChange: PropTypes.func,
   onToggle: PropTypes.func,
