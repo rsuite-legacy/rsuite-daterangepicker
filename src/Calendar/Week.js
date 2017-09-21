@@ -33,7 +33,10 @@ class Week extends React.Component {
     for (let i = 0; i < 7; i += 1) {
 
       let thisDate = moment(weekendDate).add(i, 'd');
-      let disabled = disabledDate && disabledDate(thisDate, selected);
+      let disabled = disabledDate && disabledDate(thisDate.clone(), [
+        selected && selected[0] ? selected[0].clone() : null,
+        selected && selected[1] ? selected[1].clone() : null
+      ]);
       let isToday = thisDate.isSame(moment(), 'date');
       let inRange = false;
 

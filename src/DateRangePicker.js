@@ -298,13 +298,17 @@ class DateRangePicker extends Component {
 
   disabledByBetween(start, end) {
     const { disabledDate } = this.props;
+    const { selectValue } = this.state;
 
     let check = false;
 
     // If the date is between the start and the end
     // the button is disabled
     while (start.isBefore(end)) {
-      if (disabledDate && disabledDate(start, this.getValue())) {
+      if (disabledDate && disabledDate(start.clone(), [
+        selectValue && selectValue[0] ? selectValue[0].clone() : null,
+        selectValue && selectValue[1] ? selectValue[1].clone() : null,
+      ])) {
         check = true;
       }
       start.add(1, 'd');
@@ -347,6 +351,7 @@ class DateRangePicker extends Component {
       calendarState,
       calendarDate,
       selectValue,
+      doneSelected,
       toggleWidth
     } = this.state;
 
@@ -368,8 +373,9 @@ class DateRangePicker extends Component {
         </div>
         <DatePicker
           index={0}
+          doneSelected={doneSelected}
           value={selectValue}
-          disabledDate={disabledDate}
+          disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
           calendarDate={calendarDate}
           onSelect={this.handleChangeSelectValue}
           onMouseMove={this.handleMouseMoveSelectValue}
@@ -377,9 +383,10 @@ class DateRangePicker extends Component {
         />
         <DatePicker
           index={1}
+          doneSelected={doneSelected}
           calendarDate={calendarDate}
           value={selectValue}
-          disabledDate={disabledDate}
+          disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
           onSelect={this.handleChangeSelectValue}
           onMouseMove={this.handleMouseMoveSelectValue}
           onChangeCalendarDate={this.handleChangeCalendarDate}
