@@ -204,6 +204,7 @@ class DateRangePicker extends Component {
 
     this.setState({
       calendarState: 'HIDE',
+      doneSelected: true,
       forceOpen
     });
 
