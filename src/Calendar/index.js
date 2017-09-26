@@ -158,7 +158,6 @@ class Calendar extends React.Component {
         {calendar}
         <MonthDropdown
           date={pageDate}
-          show={dropMonth}
           disabledMonth={this.disabledMonth}
           onClick={onChangePageDate}
         />
