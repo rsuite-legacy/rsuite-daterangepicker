@@ -1,16 +1,10 @@
 import React from 'react';
-import moment from 'moment';
 import { Button, ButtonToolbar } from 'rsuite';
 import DateRangePicker from '../../src';
 
 
 class DateRangePickerToggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggle: false
-    };
-  }
+
   render() {
     return (
       <div className="field">
@@ -35,7 +29,6 @@ class DateRangePickerToggle extends React.Component {
 
         <DateRangePicker
           ref={ref => this.picker = ref}
-          toggle={this.state.toggle}
         />
 
       </div>
