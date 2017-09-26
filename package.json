@@ -1,6 +1,6 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.11",
   "description": "React Daterangepicker Component",
   "main": "lib/index.js",
   "scripts": {
@@ -86,8 +86,8 @@
     "markdown-loader": "2.0.0",
     "markdownloader": "1.0.5",
     "mocha": "^3.1.0",
-    "react": "^0.14.9",
-    "react-dom": "^0.14.9",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "rsuite": "2.0.0",
     "rsuite-affix": "^1.0.3",
