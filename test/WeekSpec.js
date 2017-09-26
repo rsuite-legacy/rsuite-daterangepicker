@@ -1,7 +1,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
-import ReactTestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-dom/lib/ReactTestUtils';
 
 import Week from '../src/Calendar/Week';
 
