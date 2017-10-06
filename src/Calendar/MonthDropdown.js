@@ -70,7 +70,7 @@ class MonthDropdown extends React.Component {
           <div className={this.prefix('month-block')}>
             {
               /* eslint-disable */
-              [...Array(12).keys()].map((month) => {
+              [...Array(12)].map((i, month) => {
 
                 let disabled = disabledMonth && disabledMonth(moment().year(nextYear).month(month));
                 let cellCalsses = classNames(this.prefix('month-cell'), {

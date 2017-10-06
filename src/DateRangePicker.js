@@ -84,7 +84,7 @@ class DateRangePicker extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { value } = this.props;
-    if (nextProps.value !== value) {
+    if (!_.isEqual(nextProps.value, value)) {
       this.setState({ value: nextProps.value });
     }
   }

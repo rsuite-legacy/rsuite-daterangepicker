@@ -41,12 +41,12 @@ class Calendar extends React.Component {
 
   handleMoveForword = () => {
     const { onMoveForword } = this.props;
-    onMoveForword && onMoveForword(this.getPageDate());
+    onMoveForword && onMoveForword(this.getPageDate().clone().add(1, 'month'));
   }
 
   handleMoveBackward = () => {
     const { onMoveBackward } = this.props;
-    onMoveBackward && onMoveBackward(this.getPageDate());
+    onMoveBackward && onMoveBackward(this.getPageDate().clone().add(-1, 'month'));
   }
 
   disabledBackward = () => {

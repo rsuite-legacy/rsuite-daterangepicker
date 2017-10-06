@@ -44,20 +44,30 @@ class DatePicker extends Component {
       });
     }
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return !_.isEqual(nextProps, this.props) ||
-      !_.isEqual(nextState, this.state) ||
-      !moment(nextProps.value[0]).isSame(moment(nextProps.value[1]), 'date') ||
-      !moment(nextProps.value[1]).isSame(moment(nextProps.value[1]), 'date');
-  }
 
-  onMoveForword = () => {
+  onMoveForword = (nextPageDate) => {
+    const { transitionSupport } = this.state;
+    const { onChangeCalendarDate, index } = this.props;
+
+    if (!transitionSupport.supported) {
+      onChangeCalendarDate(index, nextPageDate);
+      return;
+    }
+
     this.setState({
       calendarState: 'SLIDING_L'
     });
   }
 
-  onMoveBackward = () => {
+  onMoveBackward = (nextPageDate) => {
+    const { transitionSupport } = this.state;
+    const { onChangeCalendarDate, index } = this.props;
+
+    if (!transitionSupport.supported) {
+      onChangeCalendarDate(index, nextPageDate);
+      return;
+    }
+
     this.setState({
       calendarState: 'SLIDING_R'
     });
@@ -78,10 +88,7 @@ class DatePicker extends Component {
 
     date.add(pageChanges, 'month');
 
-    this.setState({
-      calendarState: null
-    });
-
+    this.setState({ calendarState: null });
     onChangeCalendarDate(index, date);
 
   }
