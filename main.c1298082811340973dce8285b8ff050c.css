@@ -249,12 +249,6 @@
   width: 268px;
   display: table;
 }
-.rsuite-daterangepicker-calendar .weeks:first-child {
-  left: -268px;
-}
-.rsuite-daterangepicker-calendar .weeks:last-child {
-  left: 268px;
-}
 .rsuite-daterangepicker-calendar .weeks .week {
   display: table-row;
 }
