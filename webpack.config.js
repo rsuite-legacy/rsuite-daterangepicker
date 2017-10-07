@@ -19,7 +19,7 @@ const plugins = [
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NamedModulesPlugin(),
   new HtmlwebpackPlugin({
-    title: 'RSUITE DatePicker',
+    title: 'RSUITE DateRangePicker',
     filename: 'index.html',
     template: 'docs/index.html',
     inject: true,
