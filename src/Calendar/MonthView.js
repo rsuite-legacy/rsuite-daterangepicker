@@ -61,9 +61,6 @@ class MonthView extends React.Component {
     } = this.props;
 
     const thisMonthDate = activeDate.clone().date(1);
-    const prevMonthDate = activeDate.clone().date(1).add(-1, 'month');
-    const nextMonthDate = activeDate.clone().date(1).add(1, 'month');
-
     const classes = classNames('month-view', className);
     const elementProps = _.omit(props, Object.keys(propTypes));
 
@@ -73,11 +70,7 @@ class MonthView extends React.Component {
         className={classes}
       >
         <div className="month-view-weeks-wrapper">
-          <Weeks
-            inSameMonth={date => inSameMonth(date, prevMonthDate)}
-            disabledDate={disabledDate}
-            weeks={getMonthView(prevMonthDate)}
-          />
+
           <Weeks
             weeks={getMonthView(thisMonthDate)}
             selected={value}
@@ -86,11 +79,7 @@ class MonthView extends React.Component {
             inSameMonth={date => inSameMonth(date, thisMonthDate)}
             disabledDate={disabledDate}
           />
-          <Weeks
-            inSameMonth={date => inSameMonth(date, nextMonthDate)}
-            disabledDate={disabledDate}
-            weeks={getMonthView(nextMonthDate)}
-          />
+
         </div>
       </div>
     );
