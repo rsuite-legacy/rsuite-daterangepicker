@@ -160,6 +160,7 @@ class Calendar extends React.Component {
           date={pageDate}
           disabledMonth={this.disabledMonth}
           onClick={onChangePageDate}
+          dropMonth={dropMonth}
         />
       </div>
     );

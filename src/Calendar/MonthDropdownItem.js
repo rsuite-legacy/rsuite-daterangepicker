@@ -15,6 +15,9 @@ const defaultProps = {
 };
 
 class MonthDropdownItem extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return !_.isEqual(this.props, nextProps);
+  }
 
   handleClick = (event) => {
     const { onClick, month, year, date } = this.props;

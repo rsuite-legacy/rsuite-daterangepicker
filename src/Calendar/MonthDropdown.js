@@ -10,6 +10,7 @@ import decorate from '../utils/decorate';
 
 const propTypes = {
   date: PropTypes.instanceOf(moment),
+  dropMonth: PropTypes.bool,
   onClick: PropTypes.func,
   disabledMonth: PropTypes.func
 };
@@ -31,6 +32,10 @@ class MonthDropdown extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.updatePosition(nextProps);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.dropMonth;
   }
 
   updatePosition(props) {
