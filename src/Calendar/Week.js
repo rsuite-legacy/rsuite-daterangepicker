@@ -7,6 +7,7 @@ import _ from 'lodash';
 const propTypes = {
   weekendDate: PropTypes.instanceOf(moment),
   selected: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   onClick: PropTypes.func,
   disabledDate: PropTypes.func,
   inSameMonth: PropTypes.func,
@@ -14,7 +15,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  selected: []
+  selected: [],
+  hoverValue: []
 };
 
 class Week extends React.Component {
@@ -25,6 +27,7 @@ class Week extends React.Component {
       disabledDate,
       inSameMonth,
       selected,
+      hoverValue,
       onClick,
       onMouseMove
     } = this.props;
@@ -50,10 +53,21 @@ class Week extends React.Component {
       }
 
       let unSameMonth = !(inSameMonth && inSameMonth(thisDate));
+
+      const isSelected = !unSameMonth && ((selected[0] && thisDate.isSame(selected[0], 'date')) || (selected[1] && thisDate.isSame(selected[1], 'date')));
+      if (!isSelected && hoverValue[1] && hoverValue[0]) {
+        if (!thisDate.isAfter(hoverValue[1], 'date') && !thisDate.isBefore(hoverValue[0], 'date')) {
+          inRange = true;
+        }
+        if (!thisDate.isAfter(hoverValue[0], 'date') && !thisDate.isBefore(hoverValue[1], 'date')) {
+          inRange = true;
+        }
+      }
+
       let classes = classNames('week-day', {
         'un-same-month': unSameMonth,
         'is-today': isToday,
-        selected: !unSameMonth && ((selected[0] && thisDate.isSame(selected[0], 'date')) || (selected[1] && thisDate.isSame(selected[1], 'date'))),
+        selected: isSelected,
         'in-range': !unSameMonth && inRange,
         disabled
       });
@@ -81,7 +95,7 @@ class Week extends React.Component {
     const {
       className,
       ...props
-     } = this.props;
+    } = this.props;
 
     const classes = classNames('week', className);
     const elementProps = _.omit(props, Object.keys(propTypes));
