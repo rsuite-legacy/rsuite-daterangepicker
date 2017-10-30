@@ -81,7 +81,10 @@ class DateRangePicker extends Component {
       calendarDate,
 
       // 当前应该高亮哪个区间，用于实现选择整周、整月
-      hoverValue: []
+      hoverValue: [],
+
+      // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
+      currentHoverDate: null
     };
 
   }
@@ -315,11 +318,15 @@ class DateRangePicker extends Component {
   }
 
   handleMouseMoveSelectValue = (date) => {
-    const { doneSelected, selectValue, hoverValue } = this.state;
+    const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
+    if (date.isSame(currentHoverDate, 'day')) {
+      return;
+    }
     let nextHoverValue = this.getHoverRange(date);
 
     if (doneSelected) {
       this.setState({
+        currentHoverDate: date,
         hoverValue: nextHoverValue
       });
       return;
@@ -342,6 +349,7 @@ class DateRangePicker extends Component {
     }
 
     this.setState({
+      currentHoverDate: date,
       selectValue: nextValue,
     });
   }
