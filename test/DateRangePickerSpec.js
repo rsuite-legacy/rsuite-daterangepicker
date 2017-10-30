@@ -42,14 +42,13 @@ describe('DateRangePicker', () => {
         done();
       }
     };
+
     const instance = ReactTestUtils.renderIntoDocument(
       <DateRangePicker onToggle={doneOp} />
     );
     const instanceDOM = findDOMNode(instance);
     ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toggle'));
   });
-
-
 
   it('Should have a custom className', () => {
     const instance = ReactTestUtils.renderIntoDocument(
@@ -67,5 +66,24 @@ describe('DateRangePicker', () => {
     assert.equal(findDOMNode(instance).style.fontSize, fontSize);
   });
 
+  it('Should select a whole week', (done) => {
+    const doneOp = (values) => {
+      if (moment().startOf('week').isSame(values[0], 'date') && moment().endOf('week').isSame(values[1], 'date')) {
+        done();
+      }
+    };
+    const instance = ReactTestUtils.renderIntoDocument(
+      <DateRangePicker
+        onOk={doneOp}
+        hoverRange="week"
+      />
+    );
+    const instanceDOM = findDOMNode(instance);
+    const today = instanceDOM.querySelector('.week-day.is-today');
+    ReactTestUtils.Simulate.click(today);
+    ReactTestUtils.Simulate.click(today);
+    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toolbar-right-btn-ok'));
+
+  });
 
 });

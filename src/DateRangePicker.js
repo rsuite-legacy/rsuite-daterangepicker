@@ -26,7 +26,12 @@ const propTypes = {
   locale: PropTypes.object,
   onChange: PropTypes.func,
   onToggle: PropTypes.func,
-  onOk: PropTypes.func
+  onOk: PropTypes.func,
+
+  hoverRange: PropTypes.oneOfType([
+    PropTypes.oneOf(['week', 'month']),
+    PropTypes.func
+  ])
 };
 
 const defaultProps = {
@@ -73,7 +78,13 @@ class DateRangePicker extends Component {
       doneSelected: true,
       calendarState: 'HIDE',
       // display calendar date
-      calendarDate
+      calendarDate,
+
+      // 当前应该高亮哪个区间，用于实现选择整周、整月
+      hoverValue: [],
+
+      // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
+      currentHoverDate: null
     };
 
   }
@@ -97,6 +108,7 @@ class DateRangePicker extends Component {
   get isMounted() {
     return this.mounted;
   }
+
   set isMounted(isMounted) {
     this.mounted = isMounted;
   }
@@ -225,17 +237,62 @@ class DateRangePicker extends Component {
     this.setState({ calendarDate });
   }
 
+  // hover range presets
+  getWeekHoverRange = date => [date.clone().startOf('week'), date.clone().endOf('week')];
+  getMonthHoverRange = date => [date.clone().startOf('month'), date.clone().endOf('month')];
+
+  getHoverRange(date) {
+    const { hoverRange } = this.props;
+    if (!hoverRange) {
+      return [];
+    }
+
+    let hoverRangeFunc = hoverRange;
+    if (hoverRange === 'week') {
+      hoverRangeFunc = this.getWeekHoverRange;
+    }
+    if (hoverRangeFunc === 'month') {
+      hoverRangeFunc = this.getMonthHoverRange;
+    }
+    if (typeof hoverRangeFunc !== 'function') {
+      return [];
+    }
+
+    const hoverValues = hoverRangeFunc(date.clone());
+    const isHoverRangeValid = hoverValues instanceof Array && hoverValues.length === 2;
+    if (!isHoverRangeValid) {
+      return [];
+    }
+    if (hoverValues[0].isAfter(hoverValues[1])) {
+      hoverValues.reverse();
+    }
+    return hoverValues;
+  }
+
   handleChangeSelectValue = (date) => {
     const { selectValue, doneSelected } = this.state;
     let nextValue = [];
+    let nextHoverValue = this.getHoverRange(date);
 
     if (doneSelected) {
-      nextValue = [date, undefined, date];
+      if (nextHoverValue.length) {
+        nextValue = [nextHoverValue[0], nextHoverValue[1], date];
+        nextHoverValue = [nextHoverValue[0], nextHoverValue[1], date];
+      } else {
+        nextValue = [date, undefined, date];
+      }
     } else {
-      nextValue = [
-        selectValue[0],
-        date
-      ];
+      if (nextHoverValue.length) {
+        nextValue = [
+          selectValue[0],
+          selectValue[1]
+        ];
+      } else {
+        nextValue = [
+          selectValue[0],
+          date
+        ];
+      }
 
       if (nextValue[0].isAfter(nextValue[1])) {
         nextValue.reverse();
@@ -254,20 +311,37 @@ class DateRangePicker extends Component {
 
     this.setState({
       doneSelected: !doneSelected,
-      selectValue: nextValue
+      selectValue: nextValue,
+      hoverValue: nextHoverValue
     });
 
   }
 
   handleMouseMoveSelectValue = (date) => {
-    const { doneSelected, selectValue } = this.state;
+    const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
+    if (date.isSame(currentHoverDate, 'day')) {
+      return;
+    }
+    let nextHoverValue = this.getHoverRange(date);
 
     if (doneSelected) {
+      this.setState({
+        currentHoverDate: date,
+        hoverValue: nextHoverValue
+      });
       return;
     }
 
     let nextValue = selectValue;
-    nextValue[1] = date;
+    if (!nextHoverValue.length) {
+      nextValue[1] = date;
+    } else {
+      nextValue = [
+        nextHoverValue[0].isBefore(hoverValue[0]) ? nextHoverValue[0] : hoverValue[0],
+        nextHoverValue[1].isAfter(hoverValue[1]) ? nextHoverValue[1] : hoverValue[1],
+        nextValue[2]
+      ];
+    }
 
     // If `nextValue[0]` is greater than `nextValue[1]` then reverse order
     if (nextValue[0].isAfter(nextValue[1])) {
@@ -275,7 +349,8 @@ class DateRangePicker extends Component {
     }
 
     this.setState({
-      selectValue: nextValue
+      currentHoverDate: date,
+      selectValue: nextValue,
     });
   }
 
@@ -307,9 +382,9 @@ class DateRangePicker extends Component {
     // the button is disabled
     while (start.isBefore(end)) {
       if (disabledDate && disabledDate(start.clone(), [
-        selectValue && selectValue[0] ? selectValue[0].clone() : null,
-        selectValue && selectValue[1] ? selectValue[1].clone() : null,
-      ])) {
+          selectValue && selectValue[0] ? selectValue[0].clone() : null,
+          selectValue && selectValue[1] ? selectValue[1].clone() : null,
+        ])) {
         check = true;
       }
       start.add(1, 'd');
@@ -353,7 +428,8 @@ class DateRangePicker extends Component {
       calendarDate,
       selectValue,
       doneSelected,
-      toggleWidth
+      toggleWidth,
+      hoverValue
     } = this.state;
 
     const value = this.getValue();
@@ -376,6 +452,7 @@ class DateRangePicker extends Component {
           index={0}
           doneSelected={doneSelected}
           value={selectValue}
+          hoverValue={hoverValue}
           disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
           calendarDate={calendarDate}
           onSelect={this.handleChangeSelectValue}
@@ -387,6 +464,7 @@ class DateRangePicker extends Component {
           doneSelected={doneSelected}
           calendarDate={calendarDate}
           value={selectValue}
+          hoverValue={hoverValue}
           disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
           onSelect={this.handleChangeSelectValue}
           onMouseMove={this.handleMouseMoveSelectValue}

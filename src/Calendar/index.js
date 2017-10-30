@@ -15,6 +15,7 @@ const propTypes = {
   index: PropTypes.number,
   calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   onMoveForword: PropTypes.func,
   onMoveBackward: PropTypes.func,
   onSelect: PropTypes.func,
@@ -113,6 +114,7 @@ class Calendar extends React.Component {
       calendarRef,
       className,
       value,
+      hoverValue,
       ...props
     } = this.props;
 
@@ -131,6 +133,7 @@ class Calendar extends React.Component {
         key={'MonthView'}
         activeDate={pageDate}
         value={value}
+        hoverValue={hoverValue}
         onClick={onSelect}
         onMouseMove={onMouseMove}
         disabledDate={disabledDate}

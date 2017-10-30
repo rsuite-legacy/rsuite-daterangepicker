@@ -7,6 +7,7 @@ import decorate from './utils/decorate';
 const propTypes = {
   disabledDate: PropTypes.func,
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   index: PropTypes.number,
   format: PropTypes.string,
@@ -69,6 +70,7 @@ class DatePicker extends Component {
     const {
       format,
       value,
+      hoverValue,
       index,
       calendarDate,
       onSelect,
@@ -83,6 +85,7 @@ class DatePicker extends Component {
         disabledDate={disabledDate}
         format={format}
         value={value}
+        hoverValue={hoverValue}
         calendarState={calendarState}
         calendarDate={calendarDate}
         index={index}

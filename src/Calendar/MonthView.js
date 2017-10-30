@@ -9,6 +9,7 @@ import Weeks from './Weeks';
 const propTypes = {
   activeDate: PropTypes.instanceOf(moment),
   value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
   disabledDate: PropTypes.func
@@ -19,10 +20,10 @@ const defaultProps = {
 };
 
 /**
-  * Get all weeks of this month
-  * @params monthDate
-  * @return date[]
-  */
+ * Get all weeks of this month
+ * @params monthDate
+ * @return date[]
+ */
 function getMonthView(monthDate) {
 
   let firstDayOfMonth = monthDate.day();
@@ -53,6 +54,7 @@ class MonthView extends React.Component {
     const {
       activeDate,
       value,
+      hoverValue,
       onClick,
       onMouseMove,
       disabledDate,
@@ -74,6 +76,7 @@ class MonthView extends React.Component {
           <Weeks
             weeks={getMonthView(thisMonthDate)}
             selected={value}
+            hoverValue={hoverValue}
             onClick={onClick}
             onMouseMove={onMouseMove}
             inSameMonth={date => inSameMonth(date, thisMonthDate)}
