@@ -13,6 +13,7 @@ import DateRangePickerIntl from './example/DateRangePickerIntl';
 import DateRangePickerValue from './example/DateRangePickerValue';
 import DateRangePickerToggle from './example/DateRangePickerToggle';
 import DateRangePickerInModal from './example/DateRangePickerInModal';
+import DateRangePickerHoverRange from './example/DateRangePickerHoverRange';
 
 class App extends Component {
   render() {
@@ -40,8 +41,8 @@ class App extends Component {
             <Col md={2} xsHidden smHidden>
               <Affix
                 offsetTop={70}
-                ref={(ref)=>{
-                  this.affix=ref;
+                ref={(ref) => {
+                  this.affix = ref;
                 }}
               >
                 <Nav className="sidebar">
@@ -49,6 +50,7 @@ class App extends Component {
                   <Nav.Item href="#default">示例</Nav.Item>
                   <Nav.Item href="#default">&nbsp;&nbsp;- 默认</Nav.Item>
                   <Nav.Item href="#disabled">&nbsp;&nbsp;- 禁用</Nav.Item>
+                  <Nav.Item href="#hover-range">&nbsp;&nbsp;- 选择整周、整月</Nav.Item>
                   <Nav.Item href="#custom-toolbar">&nbsp;&nbsp;- 自定义快捷项</Nav.Item>
                   <Nav.Item href="#locale">&nbsp;&nbsp;- 本地化</Nav.Item>
                   <Nav.Item href="#controlled">&nbsp;&nbsp;- 非受控与受控</Nav.Item>
@@ -79,6 +81,13 @@ class App extends Component {
               <DateRangePickerDisabled />
               <Markdown>
                 {require('./md/DateRangePickerDisabled.md')}
+              </Markdown>
+
+              <hr id="hover-range" className="target-fix" />
+              <h3>选择整周、整月</h3>
+              <DateRangePickerHoverRange />
+              <Markdown>
+                {require('./md/DateRangePickerHoverRange.md')}
               </Markdown>
 
               <hr id="custom-toolbar" className="target-fix" />
