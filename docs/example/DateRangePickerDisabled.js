@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import DateRangePicker from '../../src';
+import DateRangePicker, { Type } from '../../src';
 
 const DateRangePickerDefault = props => (
   <div className="field">
@@ -13,7 +13,7 @@ const DateRangePickerDefault = props => (
     />
     <p>- 禁用日期: 控制选择范围 (不能大于今天, 同时时间跨度只能选择 5 天内)</p>
     <DateRangePicker
-      disabledDate={(date, selectValue, selectedDone) => {
+      disabledDate={(date, selectValue, selectedDone, type) => {
 
         // 如果大于今天则禁用
         if (date.isAfter(moment(), 'd')) {
@@ -24,7 +24,7 @@ const DateRangePickerDefault = props => (
          * 当只选择了一个时间时
          * 判断选择的时间前后超过5天的时间都禁用
          */
-        if (selectValue && selectValue[0] && !selectedDone && (
+        if (type === Type.CALENDAR && selectValue && selectValue[0] && !selectedDone && (
           selectValue[0].clone().add(-5, 'd').isAfter(date, 'd') ||
           selectValue[0].clone().add(5, 'd').isBefore(date, 'd')
         )) {
