@@ -93,7 +93,7 @@ class Toolbar extends Component {
                   role="button"
                   tabIndex="-1"
                   className={itemClassName}
-                  onClick={() => {
+                  onClick={(event) => {
                     !disabled && onShortcut(value, item.unclosed, event);
                   }}
                 >
