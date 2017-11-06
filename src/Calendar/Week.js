@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
 import _ from 'lodash';
+import Type from '../Type';
 
 const propTypes = {
   weekendDate: PropTypes.instanceOf(moment),
@@ -39,7 +40,7 @@ class Week extends React.Component {
       let disabled = disabledDate && disabledDate(thisDate.clone(), [
         selected && selected[0] ? selected[0].clone() : null,
         selected && selected[1] ? selected[1].clone() : null
-      ]);
+      ], Type.CALENDAR);
       let isToday = thisDate.isSame(moment(), 'date');
       let inRange = false;
 

@@ -4,6 +4,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import { on, getWidth } from 'dom-lib';
 import _ from 'lodash';
+
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
 import { IntlProvider } from './intl';
@@ -11,6 +12,7 @@ import defaultLocale from './locale';
 import Toolbar from './Toolbar';
 import DatePicker from './DatePicker';
 import setTimingMargin from './utils/setTimingMargin';
+import Type from './Type';
 
 const propTypes = {
   align: PropTypes.oneOf(['right', 'left']),
@@ -372,9 +374,9 @@ class DateRangePicker extends Component {
     this.updateValue([]);
   }
 
-  disabledByBetween(start, end) {
+  disabledByBetween(start, end, type) {
     const { disabledDate } = this.props;
-    const { selectValue } = this.state;
+    const { selectValue, doneSelected } = this.state;
 
     let check = false;
 
@@ -382,9 +384,9 @@ class DateRangePicker extends Component {
     // the button is disabled
     while (start.isBefore(end)) {
       if (disabledDate && disabledDate(start.clone(), [
-          selectValue && selectValue[0] ? selectValue[0].clone() : null,
-          selectValue && selectValue[1] ? selectValue[1].clone() : null,
-        ])) {
+        selectValue && selectValue[0] ? selectValue[0].clone() : null,
+        selectValue && selectValue[1] ? selectValue[1].clone() : null,
+      ], doneSelected, type)) {
         check = true;
       }
       start.add(1, 'd');
@@ -400,14 +402,23 @@ class DateRangePicker extends Component {
       return true;
     }
 
-    return this.disabledByBetween(selectValue[0].clone(), selectValue[1].clone());
+    return this.disabledByBetween(selectValue[0].clone(), selectValue[1].clone(), Type.TOOLBAR_BUTTON_OK);
   }
 
   disabledShortcutButton = (value = []) => {
     if (!value[0] || !value[1]) {
       return true;
     }
-    return this.disabledByBetween(value[0].clone(), value[1].clone());
+    return this.disabledByBetween(value[0].clone(), value[1].clone(), Type.TOOLBAR_SHORTCUT);
+  }
+
+  handleDisabledDate = (date, values, type) => {
+    const { disabledDate } = this.props;
+    const { doneSelected } = this.state;
+    if (disabledDate) {
+      return disabledDate(date, values, doneSelected, type);;
+    }
+    return false;
   }
 
   render() {
@@ -419,17 +430,16 @@ class DateRangePicker extends Component {
       renderPlaceholder,
       disabled,
       ranges,
-      align,
-      disabledDate
+      align
     } = this.props;
 
     const {
       calendarState,
       calendarDate,
       selectValue,
-      doneSelected,
       toggleWidth,
-      hoverValue
+      hoverValue,
+      doneSelected
     } = this.state;
 
     const value = this.getValue();
@@ -450,10 +460,10 @@ class DateRangePicker extends Component {
         </div>
         <DatePicker
           index={0}
-          doneSelected={doneSelected}
           value={selectValue}
+          doneSelected={doneSelected}
           hoverValue={hoverValue}
-          disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
+          disabledDate={this.handleDisabledDate}
           calendarDate={calendarDate}
           onSelect={this.handleChangeSelectValue}
           onMouseMove={this.handleMouseMoveSelectValue}
@@ -461,11 +471,11 @@ class DateRangePicker extends Component {
         />
         <DatePicker
           index={1}
-          doneSelected={doneSelected}
           calendarDate={calendarDate}
           value={selectValue}
+          doneSelected={doneSelected}
           hoverValue={hoverValue}
-          disabledDate={disabledDate ? (a, b) => disabledDate(a, b, doneSelected) : null}
+          disabledDate={this.handleDisabledDate}
           onSelect={this.handleChangeSelectValue}
           onMouseMove={this.handleMouseMoveSelectValue}
           onChangeCalendarDate={this.handleChangeCalendarDate}

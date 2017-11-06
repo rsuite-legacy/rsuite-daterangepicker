@@ -16,9 +16,7 @@ const propTypes = {
   showTime: PropTypes.bool,
   format: PropTypes.string,
   disabledBackward: PropTypes.bool,
-  disabledForword: PropTypes.bool,
-  disabledDate: PropTypes.func,
-  disabledTime: PropTypes.func
+  disabledForword: PropTypes.bool
 };
 
 const defaultProps = {
@@ -72,8 +70,6 @@ class MonthHeader extends Component {
       showMonth,
       className,
       defaultClassName,
-      disabledDate,
-      disabledTime,
       disabledBackward,
       disabledForword,
       ...props

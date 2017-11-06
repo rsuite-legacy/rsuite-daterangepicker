@@ -152,7 +152,6 @@ class Calendar extends React.Component {
           showDate={true}
           disabledBackward={this.disabledBackward()}
           disabledForword={this.disabledForword()}
-          disabledDate={disabledDate}
           onMoveForword={this.handleMoveForword}
           onMoveBackward={this.handleMoveBackward}
           onToggleMonthDropdown={onToggleMonthDropdown}
