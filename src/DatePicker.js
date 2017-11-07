@@ -49,21 +49,21 @@ class DatePicker extends Component {
     });
   }
 
-  showMonthDropdown() {
-    this.setState({ calendarState: 'DROP_MONTH' });
+  showMonthDropdown(callback) {
+    this.setState({ calendarState: 'DROP_MONTH' }, callback);
   }
 
-  hideMonthDropdown() {
-    this.setState({ calendarState: null });
+  hideMonthDropdown(callback) {
+    this.setState({ calendarState: null }, callback);
   }
 
-  toggleMonthDropdown = () => {
+  toggleMonthDropdown = (callback) => {
     const { calendarState } = this.state;
 
     if (calendarState === 'DROP_MONTH') {
-      this.hideMonthDropdown();
+      this.hideMonthDropdown(callback);
     } else {
-      this.showMonthDropdown();
+      this.showMonthDropdown(callback);
     }
   }
   render() {

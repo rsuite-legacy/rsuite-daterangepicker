@@ -33,13 +33,15 @@ const propTypes = {
   hoverRange: PropTypes.oneOfType([
     PropTypes.oneOf(['week', 'month']),
     PropTypes.func
-  ])
+  ]),
+  cleanable: PropTypes.bool,
 };
 
 const defaultProps = {
   align: 'left',
   format: 'YYYY-MM-DD',
   placeholder: '',
+  cleanable: true,
   locale: defaultLocale
 };
 
@@ -430,7 +432,8 @@ class DateRangePicker extends Component {
       renderPlaceholder,
       disabled,
       ranges,
-      align
+      align,
+      cleanable
     } = this.props;
 
     const {
@@ -498,8 +501,8 @@ class DateRangePicker extends Component {
             disabled={disabled}
             placeholder={this.getDateString()}
             onClick={this.handleToggle}
-            showCleanButton={!!value[0] && !!value[1]}
-            onClean={value[0] && value[1] && this.reset}
+            showCleanButton={!!value[0] && !!value[1] && cleanable}
+            onClean={(value[0] && value[1] && cleanable) ? this.reset : null}
             value={value}
             renderPlaceholder={renderPlaceholder}
             toggleRef={(ref) => {
