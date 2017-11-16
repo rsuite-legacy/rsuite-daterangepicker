@@ -40,7 +40,9 @@ class Week extends React.Component {
       let disabled = disabledDate && disabledDate(thisDate.clone(), [
         selected && selected[0] ? selected[0].clone() : null,
         selected && selected[1] ? selected[1].clone() : null
-      ], Type.CALENDAR);
+      ].sort((a, b) => (a ? a.unix() : 0) - (b ? b.unix() : 0)), Type.CALENDAR);
+
+
       let isToday = thisDate.isSame(moment(), 'date');
       let inRange = false;
 
