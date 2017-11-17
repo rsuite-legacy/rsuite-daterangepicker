@@ -11,7 +11,7 @@
 | locale            | object                                                      | `defaultLocale` | 本地化对应的语言描述              |
 | ranges            | array                                                       | `[...]`         | 快捷项配置                   |
 | disabled          | boolean                                                     |                 | 禁用组件                    |
-| disabledDate      | function(`date`:moment, `value`:array(moment, moment))      |                 | 禁用日期                    |
+| disabledDate      | function(`date`:moment, `selectValue`:array(moment, moment), `selectedDone`:boolean, `type`:string )      |                 | 禁用日期                    |
 | align             | string                                                      | `left`          | 对齐方式，选项 `left`, `right` |
 | hoverRange        | "week", "month" or function(`date`: moment)                 |                 | 点击日期时将选中的日期范围           |
 | cleanable         | boolean                                                     | `true`          | 可以清除                    |
