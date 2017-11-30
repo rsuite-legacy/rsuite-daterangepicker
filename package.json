@@ -1,6 +1,6 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "2.0.2-beta.1",
+  "version": "2.0.3",
   "description": "React Daterangepicker Component",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "npm run lint && NODE_ENV=test  karma start --single-run",
     "build": "rm -rf ./lib && babel ./src --out-dir ./lib && cp -R src/less lib",
     "dev": "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 --devtool source-map",
-    "docs": "rm -rf assets &&  NODE_ENV=production webpack ",
+    "docs": "rm -rf assets &&  NODE_ENV=production webpack && cp  -rf ./resources  ./assets",
     "publish-docs": "node docs/gh-pages.js",
     "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls"
   },
@@ -41,7 +41,7 @@
     "lodash": "^4.17.4",
     "moment": ">=2.15.2",
     "prop-types": "^15.5.10",
-    "rsuite-theme": "2.0.9",
+    "rsuite-theme": "^2.0.14",
     "rsuite-utils": "0.0.9"
   },
   "peerDependencies": {
@@ -85,11 +85,12 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "markdown-loader": "2.0.0",
-    "markdownloader": "^1.0.6",
     "mocha": "^3.1.0",
     "react": "15.6.2",
+    "react-code-view": "^1.0.11",
     "react-dom": "15.6.2",
     "react-hot-loader": "^3.0.0-beta.6",
+    "react-markdown-reader": "^1.0.1",
     "rsuite": "^2.0.8",
     "rsuite-affix": "^1.0.3",
     "sinon": "^1.17.4",

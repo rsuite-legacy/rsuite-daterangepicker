@@ -1,23 +1,22 @@
-import React from 'react';
-import { Modal, Button } from 'rsuite';
-import DateRangePicker from '../../src';
+### 在 Modal 中
 
+
+<!--start-code-->
+```js
 class DateRangePickerInModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false
     };
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
-  handleOpen = () => {
-    this.setState({
-      showModal: true
-    });
+  handleOpen () {
+    this.setState({ showModal: true });
   }
-  handleClose = () => {
-    this.setState({
-      showModal: false
-    });
+  handleClose () {
+    this.setState({ showModal: false });
   }
   render() {
     return (
@@ -36,5 +35,6 @@ class DateRangePickerInModal extends React.Component {
   }
 }
 
-export default DateRangePickerInModal;
-
+ReactDOM.render(<DateRangePickerInModal />);
+```
+<!--end-code-->

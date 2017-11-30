@@ -1,27 +1,44 @@
-```html
-<DateRangePicker disabled />
-<DateRangePicker
-  defaultValue={[moment(), moment().add(10, 'd')]}
-  disabledDate={(date) => date.isAfter(moment())}
-/>
-<DateRangePicker
-  disabledDate={(date, selectValue, selectedDone, type) => {
-    if (date.isAfter(moment(), 'd')) {
-      return true;
-    }
-    if (type === Type.CALENDAR && selectValue && selectValue[0] && !selectedDone && (
-      selectValue[0].clone().add(-5, 'd').isAfter(date, 'd') ||
-      selectValue[0].clone().add(5, 'd').isBefore(date, 'd')
-    )) {
-      return true;
-    }
-    return false;
-  }}
-/>
-```
-disabledDate  参数说明:
+### 禁用
 
-- `date`: moment 对象，需要验证的日期
-- `selectValue`: 选择的值，是一个 array， [beginDate,endDate]
-- `selectedDone`: boolean 类型，是否选择完成，如果为 true, 表示开始和结束时间都选择了。
-- `type`:  string 类型， 包括 `CALENDAR`,`TOOLBAR_BUTTON_OK`,`TOOLBAR_SHORTCUT` 分别标识需要禁用的位置
+
+<!--start-code-->
+```js
+
+const DateRangePickerDefault = props => (
+  <div className="field">
+    <p>- 禁用组件: <code>disabled</code></p>
+    <DateRangePicker disabled />
+    <p>- 禁用日期: <code>disabledDate</code></p>
+    <DateRangePicker
+      defaultValue={[moment(), moment().add(10, 'd')]}
+      disabledDate={(date) => date.isAfter(moment())}
+    />
+    <p>- 禁用日期: 控制选择范围 (不能大于今天, 同时时间跨度只能选择 5 天内)</p>
+    <DateRangePicker
+      disabledDate={(date, selectValue, selectedDone, type) => {
+
+        // 如果大于今天则禁用
+        if (date.isAfter(moment(), 'd')) {
+          return true;
+        }
+
+        /**
+         * 当只选择了一个时间时
+         * 判断选择的时间前后超过5天的时间都禁用
+         */
+        if (type === 'CALENDAR' && selectValue && selectValue[0] && !selectedDone && (
+          selectValue[0].clone().add(-5, 'd').isAfter(date, 'd') ||
+          selectValue[0].clone().add(5, 'd').isBefore(date, 'd')
+        )) {
+          return true;
+        }
+
+        return false;
+      }}
+    />
+  </div>
+);
+
+ReactDOM.render(<DateRangePickerDefault />);
+```
+<!--end-code-->

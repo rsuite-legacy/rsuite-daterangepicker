@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Markdown } from 'markdownloader';
-import { Header, Navbar, Nav, Row, Col } from 'rsuite';
+import { Markdown } from 'react-markdown-reader';
+import moment from 'moment';
+import { Header, Navbar, Nav, Row, Col, Button, ButtonToolbar, Modal } from 'rsuite';
 import Affix from 'rsuite-affix';
+import CodeView from 'react-code-view';
 
 
+import 'react-code-view/lib/less/index.less';
 import './less/index.less';
-import DateRangePickerDefault from './example/DateRangePickerDefault';
-import DateRangePickerDisabled from './example/DateRangePickerDisabled';
-import DateRangePickerCustomToolbar from './example/DateRangePickerCustomToolbar';
-import DateRangePickerIntl from './example/DateRangePickerIntl';
-import DateRangePickerValue from './example/DateRangePickerValue';
-import DateRangePickerToggle from './example/DateRangePickerToggle';
-import DateRangePickerInModal from './example/DateRangePickerInModal';
-import DateRangePickerHoverRange from './example/DateRangePickerHoverRange';
+
+
+import DateRangePicker from '../src';
+
 
 class App extends Component {
   render() {
@@ -68,59 +67,84 @@ class App extends Component {
 
               <hr id="default" className="target-fix" />
               <h2>示例</h2>
-              <h3>默认</h3>
-
-              <DateRangePickerDefault />
+              <CodeView
+                source={require('./md/DateRangePickerDefault.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <Markdown>
                 {require('./md/DateRangePickerDefault.md')}
               </Markdown>
 
               <hr id="disabled" className="target-fix" />
-              <h3>禁用</h3>
-              <DateRangePickerDisabled />
-              <Markdown>
-                {require('./md/DateRangePickerDisabled.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerDisabled.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="hover-range" className="target-fix" />
-              <h3>选择整周、整月</h3>
-              <DateRangePickerHoverRange />
-              <Markdown>
-                {require('./md/DateRangePickerHoverRange.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerHoverRange.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="custom-toolbar" className="target-fix" />
-              <h3>自定义快捷项</h3>
-              <DateRangePickerCustomToolbar />
-              <Markdown>
-                {require('./md/DateRangePickerCustomToolbar.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerCustomToolbar.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="locale" className="target-fix" />
-              <h3>本地化</h3>
-              <DateRangePickerIntl />
-              <Markdown>
-                {require('./md/DateRangePickerIntl.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerIntl.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="controlled" className="target-fix" />
-              <h3>非受控与受控</h3>
-              <DateRangePickerValue />
-              <Markdown>
-                {require('./md/DateRangePickerValue.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerValue.md')}
+                dependencies={{
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="toggle" className="target-fix" />
-              <h3>控制展开与关闭</h3>
-              <DateRangePickerToggle />
-              <Markdown>
-                {require('./md/DateRangePickerToggle.md')}
-              </Markdown>
+              <CodeView
+                source={require('./md/DateRangePickerToggle.md')}
+                dependencies={{
+                  Button,
+                  ButtonToolbar,
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="inmodal" className="target-fix" />
-              <h3>在 Modal 中</h3>
-              <DateRangePickerInModal />
+              <CodeView
+                source={require('./md/DateRangePickerInModal.md')}
+                dependencies={{
+                  Button,
+                  Modal,
+                  moment,
+                  DateRangePicker
+                }}
+              />
 
               <hr id="api" className="target-fix" />
               <h3>属性</h3>
