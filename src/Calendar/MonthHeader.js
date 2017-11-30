@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
+import omit from 'lodash/omit';
 import moment from 'moment';
 import classNames from 'classnames';
 import decorate from '../utils/decorate';
@@ -90,7 +91,7 @@ class MonthHeader extends Component {
         onClick={
           !disabledBackward &&
           onMoveBackward &&
-          _.debounce(onMoveBackward, 200)
+          debounce(onMoveBackward, 200)
         }
       />,
       <span
@@ -112,13 +113,13 @@ class MonthHeader extends Component {
         onClick={
           !disabledForword &&
           onMoveForword &&
-          _.debounce(onMoveForword, 200)
+          debounce(onMoveForword, 200)
         }
       />
     ];
 
     const classes = classNames(defaultClassName, className);
-    const elementProps = _.omit(props, Object.keys(propTypes));
+    const elementProps = omit(props, Object.keys(propTypes));
 
     return (
       <div

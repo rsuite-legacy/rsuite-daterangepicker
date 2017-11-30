@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
 import { on, getWidth } from 'dom-lib';
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
+import isUndefined from 'lodash/isUndefined';
+import merge from 'lodash/merge';
+import omit from 'lodash/omit';
 
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
@@ -35,14 +38,14 @@ const propTypes = {
     PropTypes.func
   ]),
   cleanable: PropTypes.bool,
+  isoWeek: PropTypes.bool
 };
 
 const defaultProps = {
   align: 'left',
   format: 'YYYY-MM-DD',
   placeholder: '',
-  cleanable: true,
-  locale: defaultLocale
+  cleanable: true
 };
 
 function getCalendarDate(value = []) {
@@ -71,6 +74,7 @@ class DateRangePicker extends Component {
 
 
     this.state = {
+      locale: merge({}, defaultLocale(props.isoWeek), props.locale),
       value: activeValue,
       selectValue: activeValue,
       toggleWidth: 0,
@@ -99,8 +103,13 @@ class DateRangePicker extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { value } = this.props;
-    if (!_.isEqual(nextProps.value, value)) {
+
+    if (!isEqual(nextProps.value, value)) {
       this.setState({ value: nextProps.value });
+    }
+
+    if (isEqual(nextProps.locale, locale)) {
+      this.setState({ locale: nextProps.locale });
     }
   }
 
@@ -158,7 +167,7 @@ class DateRangePicker extends Component {
   updateValue(nextSelectValue, unclosed) {
     const { value, selectValue } = this.state;
     const { onChange } = this.props;
-    const nextValue = !_.isUndefined(nextSelectValue) ? nextSelectValue : selectValue;
+    const nextValue = !isUndefined(nextSelectValue) ? nextSelectValue : selectValue;
 
     if (!unclosed) {
       this.handleClose();
@@ -169,7 +178,7 @@ class DateRangePicker extends Component {
       value: nextValue
     });
 
-    if (!_.isEqual(nextValue, value)) {
+    if (!isEqual(nextValue, value)) {
       onChange && onChange(nextValue);
     }
 
@@ -242,7 +251,16 @@ class DateRangePicker extends Component {
   }
 
   // hover range presets
-  getWeekHoverRange = date => [date.clone().startOf('week'), date.clone().endOf('week')];
+  getWeekHoverRange = date => {
+    const { isoWeek } = this.props;
+
+    if (isoWeek) {
+      // set to the first day of this week according to ISO 8601, 12:00 am
+      return [date.clone().startOf('isoWeek'), date.clone().endOf('isoWeek')];
+    }
+
+    return [date.clone().startOf('week'), date.clone().endOf('week')];
+  };
   getMonthHoverRange = date => [date.clone().startOf('month'), date.clone().endOf('month')];
 
   getHoverRange(date) {
@@ -428,12 +446,12 @@ class DateRangePicker extends Component {
     const {
       className,
       defaultClassName,
-      locale,
       renderPlaceholder,
       disabled,
       ranges,
       align,
-      cleanable
+      cleanable,
+      isoWeek
     } = this.props;
 
     const {
@@ -442,7 +460,8 @@ class DateRangePicker extends Component {
       selectValue,
       toggleWidth,
       hoverValue,
-      doneSelected
+      doneSelected,
+      locale
     } = this.state;
 
     const value = this.getValue();
@@ -455,7 +474,7 @@ class DateRangePicker extends Component {
       marginLeft: align === 'right' ? toggleWidth - 538 : 0
     };
 
-    const elementProps = _.omit(this.props, Object.keys(propTypes));
+    const elementProps =omit(this.props, Object.keys(propTypes));
     const calendar = (
       <div>
         <div className={this.prefix('header')}>
@@ -463,6 +482,7 @@ class DateRangePicker extends Component {
         </div>
         <DatePicker
           index={0}
+          isoWeek={isoWeek}
           value={selectValue}
           doneSelected={doneSelected}
           hoverValue={hoverValue}
@@ -474,6 +494,7 @@ class DateRangePicker extends Component {
         />
         <DatePicker
           index={1}
+          isoWeek={isoWeek}
           calendarDate={calendarDate}
           value={selectValue}
           doneSelected={doneSelected}

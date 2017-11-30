@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import _ from 'lodash';
+import omit from 'lodash/omit';
+
 import MonthDropdown from './MonthDropdown';
 import MonthView from './MonthView';
 import MonthHeader from './MonthHeader';
@@ -25,7 +26,8 @@ const propTypes = {
   onChangePageDate: PropTypes.func,
   onChangePageTime: PropTypes.func,
   calendarRef: PropTypes.func,
-  format: PropTypes.string
+  format: PropTypes.string,
+  isoWeek: PropTypes.bool
 };
 
 const defaultProps = {
@@ -115,6 +117,7 @@ class Calendar extends React.Component {
       className,
       value,
       hoverValue,
+      isoWeek,
       ...props
     } = this.props;
 
@@ -126,7 +129,7 @@ class Calendar extends React.Component {
       'sliding-right': calendarState === 'SLIDING_R'
     }, className);
 
-    const elementProps = _.omit(props, Object.keys(propTypes));
+    const elementProps = omit(props, Object.keys(propTypes));
     const calendar = [
       <WeekHeader key={'WeekHeader'} />,
       <MonthView
@@ -137,6 +140,7 @@ class Calendar extends React.Component {
         onClick={onSelect}
         onMouseMove={onMouseMove}
         disabledDate={disabledDate}
+        isoWeek={isoWeek}
       />
     ];
 

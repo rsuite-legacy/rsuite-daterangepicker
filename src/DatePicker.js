@@ -13,7 +13,8 @@ const propTypes = {
   format: PropTypes.string,
   onSelect: PropTypes.func,
   onMouseMove: PropTypes.func,
-  onChangeCalendarDate: PropTypes.func
+  onChangeCalendarDate: PropTypes.func,
+  isoWeek: PropTypes.bool
 };
 
 const defaultProps = {
@@ -75,7 +76,8 @@ class DatePicker extends Component {
       calendarDate,
       onSelect,
       onMouseMove,
-      disabledDate
+      disabledDate,
+      isoWeek
     } = this.props;
 
     const { calendarState } = this.state;
@@ -85,6 +87,7 @@ class DatePicker extends Component {
         disabledDate={disabledDate}
         format={format}
         value={value}
+        isoWeek={isoWeek}
         hoverValue={hoverValue}
         calendarState={calendarState}
         calendarDate={calendarDate}

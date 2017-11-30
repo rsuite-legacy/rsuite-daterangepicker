@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import _ from 'lodash';
+import omit from 'lodash/omit';
 import Weeks from './Weeks';
+import getMonthView from '../utils/getMonthView';
 
 
 const propTypes = {
@@ -12,35 +13,13 @@ const propTypes = {
   hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
-  disabledDate: PropTypes.func
+  disabledDate: PropTypes.func,
+  isoWeek: PropTypes.bool
 };
 
 const defaultProps = {
   activeDate: moment()
 };
-
-/**
- * Get all weeks of this month
- * @params monthDate
- * @return date[]
- */
-function getMonthView(monthDate) {
-
-  let firstDayOfMonth = monthDate.day();
-  let distance = 0 - firstDayOfMonth;
-  let firstWeekendDate = monthDate.clone().add(distance, 'days');
-
-  let weeks = [firstWeekendDate];
-  let nextWeekendDate = firstWeekendDate.clone().add(7, 'days');
-
-  weeks.push(nextWeekendDate);
-  while (weeks.length < 6) {
-    nextWeekendDate = nextWeekendDate.clone().add(7, 'days');
-    weeks.push(nextWeekendDate);
-  }
-
-  return weeks;
-}
 
 // is two date in the same month
 function inSameMonth(dateA, dateB) {
@@ -59,12 +38,13 @@ class MonthView extends React.Component {
       onMouseMove,
       disabledDate,
       className,
+      isoWeek,
       ...props
     } = this.props;
 
     const thisMonthDate = activeDate.clone().date(1);
     const classes = classNames('month-view', className);
-    const elementProps = _.omit(props, Object.keys(propTypes));
+    const elementProps = omit(props, Object.keys(propTypes));
 
     return (
       <div
@@ -74,7 +54,7 @@ class MonthView extends React.Component {
         <div className="month-view-weeks-wrapper">
 
           <Weeks
-            weeks={getMonthView(thisMonthDate)}
+            weeks={getMonthView(thisMonthDate, isoWeek)}
             selected={value}
             hoverValue={hoverValue}
             onClick={onClick}
