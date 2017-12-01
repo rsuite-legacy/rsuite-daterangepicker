@@ -102,7 +102,7 @@ class DateRangePicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { value } = this.props;
+    const { value, locale } = this.props;
 
     if (!isEqual(nextProps.value, value)) {
       this.setState({ value: nextProps.value });
@@ -474,7 +474,7 @@ class DateRangePicker extends Component {
       marginLeft: align === 'right' ? toggleWidth - 538 : 0
     };
 
-    const elementProps =omit(this.props, Object.keys(propTypes));
+    const elementProps = omit(this.props, Object.keys(propTypes));
     const calendar = (
       <div>
         <div className={this.prefix('header')}>
