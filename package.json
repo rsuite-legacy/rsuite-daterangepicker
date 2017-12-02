@@ -93,6 +93,7 @@
     "react-markdown-reader": "^1.0.1",
     "rsuite": "^2.0.8",
     "rsuite-affix": "^1.0.3",
+    "rsuite-docs": "^0.1.7",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",

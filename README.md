@@ -33,7 +33,7 @@ npm i rsuite-daterangepicker --save
 ```
 
 
-### 示例
+### 示例代码
 
 ```jsx
 import DateRangePicker from 'rsuite-daterangepicker';
