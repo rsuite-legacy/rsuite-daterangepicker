@@ -1,4 +1,4 @@
-/*! Last update: Sat Dec 02 2017 22:58:48 GMT+0800 (CST) */
+/*! Last update: Mon Dec 04 2017 12:03:45 GMT+0800 (CST) */
 /* BASICS */
 
 .CodeMirror {
@@ -11413,10 +11413,6 @@ https://github.com/rsuite/rsuite-theme/blob/next/src/less/commonly-variables.les
 .doc-page {
   margin: 70px 0;
 }
-.sub-title {
-  font-size: 16px;
-  margin: 10px 0;
-}
 h2 {
   font-size: 20px;
   margin-top: 20px;
@@ -11429,27 +11425,10 @@ h3 {
 blockquote {
   font-size: 14px;
 }
-.rsuite-affix {
-  background: #fff;
-}
-.sidebar {
-  border-right: 1px solid #f1f1f1;
-}
 .field {
   margin-bottom: 10px;
 }
 .field .rsuite-daterangepicker {
   width: 270px;
   margin-bottom: 10px;
-}
-.target-fix {
-  position: relative;
-  top: -70px;
-  display: block;
-  height: 0;
-  border: none;
-}
-.example-item {
-  margin: 10px 0;
-  width: 320px;
 }
