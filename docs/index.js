@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Markdown } from 'react-markdown-reader';
 import moment from 'moment';
-import { Header, Navbar, Nav, Row, Col, Button, ButtonToolbar, Modal } from 'rsuite';
-import Affix from 'rsuite-affix';
+import { Button, ButtonToolbar, Modal } from 'rsuite';
 import CodeView from 'react-code-view';
 import { PageContainer } from 'rsuite-docs';
 
-
 import './less/index.less';
-
 
 import DateRangePicker from '../src';
 
@@ -23,80 +20,86 @@ class App extends Component {
         activeKey="DateRangePicker"
       >
 
-        <hr id="readme" className="target-fix" />
         <Markdown>
           {require('../README.md')}
         </Markdown>
 
-        <hr id="default" className="target-fix" />
         <h2>示例</h2>
         <CodeView
-          source={require('./md/DateRangePickerDefault.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerDefault.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerDisabled.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerDisabled.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerHoverRange.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerHoverRange.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerCustomToolbar.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerCustomToolbar.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerIntl.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerIntl.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerValue.md')}
           dependencies={{
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerValue.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerToggle.md')}
           dependencies={{
             Button,
             ButtonToolbar,
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerToggle.md')}
+        </CodeView>
 
         <CodeView
-          source={require('./md/DateRangePickerInModal.md')}
           dependencies={{
             Button,
             Modal,
             moment,
             DateRangePicker
           }}
-        />
+        >
+          {require('./md/DateRangePickerInModal.md')}
+        </CodeView>
 
         <Markdown>
           {require('./md/props.md')}
