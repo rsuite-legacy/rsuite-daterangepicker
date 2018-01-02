@@ -28,7 +28,7 @@ class App extends Component {
         <CodeView
           dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerDefault.md')}
@@ -37,7 +37,7 @@ class App extends Component {
         <CodeView
           dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerDisabled.md')}
@@ -46,7 +46,7 @@ class App extends Component {
         <CodeView
           dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerHoverRange.md')}
@@ -54,8 +54,16 @@ class App extends Component {
 
         <CodeView
           dependencies={{
+            DateRangePicker,
+          }}
+        >
+          {require('./md/DateRangePickerOneTap.md')}
+        </CodeView>
+
+        <CodeView
+          dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerCustomToolbar.md')}
@@ -64,7 +72,7 @@ class App extends Component {
         <CodeView
           dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerIntl.md')}
@@ -73,7 +81,7 @@ class App extends Component {
         <CodeView
           dependencies={{
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerValue.md')}
@@ -84,7 +92,7 @@ class App extends Component {
             Button,
             ButtonToolbar,
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerToggle.md')}
@@ -95,11 +103,12 @@ class App extends Component {
             Button,
             Modal,
             moment,
-            DateRangePicker
+            DateRangePicker,
           }}
         >
           {require('./md/DateRangePickerInModal.md')}
         </CodeView>
+
 
         <Markdown>
           {require('./md/props.md')}
@@ -111,5 +120,5 @@ class App extends Component {
 }
 
 ReactDOM.render(<App />,
-  document.getElementById('app')
+  document.getElementById('app'),
 );

@@ -86,4 +86,24 @@ describe('DateRangePicker', () => {
 
   });
 
+  it('Should fire onChange if click ok after only select one date in oneTap mode', (done) => {
+    const doneOp = (values) => {
+      if (moment().startOf('week').isSame(values[0], 'date') && moment().endOf('week').isSame(values[1], 'date')) {
+        done();
+      }
+    };
+    const instance = ReactTestUtils.renderIntoDocument(
+      <DateRangePicker
+        onOk={doneOp}
+        hoverRange="week"
+        oneTap
+      />
+    );
+    const instanceDOM = findDOMNode(instance);
+    const today = instanceDOM.querySelector('.week-day.is-today');
+    ReactTestUtils.Simulate.click(today);
+    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toolbar-right-btn-ok'));
+
+  });
+
 });

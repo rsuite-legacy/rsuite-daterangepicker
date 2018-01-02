@@ -35,17 +35,20 @@ const propTypes = {
 
   hoverRange: PropTypes.oneOfType([
     PropTypes.oneOf(['week', 'month']),
-    PropTypes.func
+    PropTypes.func,
   ]),
   cleanable: PropTypes.bool,
-  isoWeek: PropTypes.bool
+  isoWeek: PropTypes.bool,
+  // 单击模式，是否只点选一次就选好值
+  // 用于选择单日，或配合 hoverRange 使用
+  oneTap: PropTypes.bool,
 };
 
 const defaultProps = {
   align: 'left',
   format: 'YYYY-MM-DD',
   placeholder: '',
-  cleanable: true
+  cleanable: true,
 };
 
 function getCalendarDate(value = []) {
@@ -57,7 +60,7 @@ function getCalendarDate(value = []) {
     let isSameMonth = value[0].clone().isSame(value[1], 'month');
     calendarDate = [
       value[0],
-      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()
+      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone(),
     ];
   }
   return calendarDate;
@@ -92,7 +95,7 @@ class DateRangePicker extends Component {
       hoverValue: [],
 
       // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
-      currentHoverDate: null
+      currentHoverDate: null,
     };
 
   }
@@ -175,7 +178,7 @@ class DateRangePicker extends Component {
 
     this.setState({
       selectValue: nextValue || [],
-      value: nextValue
+      value: nextValue,
     });
 
     if (!isEqual(nextValue, value)) {
@@ -196,7 +199,7 @@ class DateRangePicker extends Component {
     const calendarDate = getCalendarDate(selectValue);
     this.setState({
       selectValue,
-      calendarDate
+      calendarDate,
     });
   }
 
@@ -216,7 +219,7 @@ class DateRangePicker extends Component {
     this.resetPageDate();
     this.setState({
       calendarState: 'SHOW',
-      forceOpen
+      forceOpen,
     });
 
     onToggle && onToggle(true);
@@ -230,7 +233,7 @@ class DateRangePicker extends Component {
     this.setState({
       calendarState: 'HIDE',
       doneSelected: true,
-      forceOpen
+      forceOpen,
     });
 
     onToggle && onToggle(false);
@@ -307,12 +310,12 @@ class DateRangePicker extends Component {
       if (nextHoverValue.length) {
         nextValue = [
           selectValue[0],
-          selectValue[1]
+          selectValue[1],
         ];
       } else {
         nextValue = [
           selectValue[0],
-          date
+          date,
         ];
       }
 
@@ -325,7 +328,7 @@ class DateRangePicker extends Component {
 
       this.setState({
         forceOpen: true,
-        calendarDate: getCalendarDate(nextValue)
+        calendarDate: getCalendarDate(nextValue),
       });
 
       this.cleanForce();
@@ -334,7 +337,12 @@ class DateRangePicker extends Component {
     this.setState({
       doneSelected: !doneSelected,
       selectValue: nextValue,
-      hoverValue: nextHoverValue
+      hoverValue: nextHoverValue,
+    }, () => {
+      // 如果是单击模式，并且是第一次点选，再触发一次点击
+      if (this.props.oneTap && !this.state.doneSelected) {
+        this.handleChangeSelectValue(date);
+      }
     });
 
   }
@@ -349,7 +357,7 @@ class DateRangePicker extends Component {
     if (doneSelected) {
       this.setState({
         currentHoverDate: date,
-        hoverValue: nextHoverValue
+        hoverValue: nextHoverValue,
       });
       return;
     }
@@ -361,7 +369,7 @@ class DateRangePicker extends Component {
       nextValue = [
         nextHoverValue[0].isBefore(hoverValue[0]) ? nextHoverValue[0] : hoverValue[0],
         nextHoverValue[1].isAfter(hoverValue[1]) ? nextHoverValue[1] : hoverValue[1],
-        nextValue[2]
+        nextValue[2],
       ];
     }
 
@@ -384,7 +392,7 @@ class DateRangePicker extends Component {
     } else if (calendarState === 'HIDE') {
       this.handleOpen();
       this.setState({
-        toggleWidth: this.toggle ? getWidth(this.toggle) : 0
+        toggleWidth: this.toggle ? getWidth(this.toggle) : 0,
       });
     }
   }
@@ -404,9 +412,9 @@ class DateRangePicker extends Component {
     // the button is disabled
     while (start.isBefore(end)) {
       if (disabledDate && disabledDate(start.clone(), [
-        selectValue && selectValue[0] ? selectValue[0].clone() : null,
-        selectValue && selectValue[1] ? selectValue[1].clone() : null,
-      ], doneSelected, type)) {
+          selectValue && selectValue[0] ? selectValue[0].clone() : null,
+          selectValue && selectValue[1] ? selectValue[1].clone() : null,
+        ], doneSelected, type)) {
         check = true;
       }
       start.add(1, 'd');
@@ -436,7 +444,8 @@ class DateRangePicker extends Component {
     const { disabledDate } = this.props;
     const { doneSelected } = this.state;
     if (disabledDate) {
-      return disabledDate(date, values, doneSelected, type);;
+      return disabledDate(date, values, doneSelected, type);
+      ;
     }
     return false;
   }
@@ -451,7 +460,7 @@ class DateRangePicker extends Component {
       ranges,
       align,
       cleanable,
-      isoWeek
+      isoWeek,
     } = this.props;
 
     const {
@@ -461,17 +470,17 @@ class DateRangePicker extends Component {
       toggleWidth,
       hoverValue,
       doneSelected,
-      locale
+      locale,
     } = this.state;
 
     const value = this.getValue();
     const paneClasses = classNames(this.prefix('pane'), {
-      hide: calendarState === 'HIDE'
+      hide: calendarState === 'HIDE',
     });
 
     // pane width is 538px
     const paneStyles = {
-      marginLeft: align === 'right' ? toggleWidth - 538 : 0
+      marginLeft: align === 'right' ? toggleWidth - 538 : 0,
     };
 
     const elementProps = omit(this.props, Object.keys(propTypes));

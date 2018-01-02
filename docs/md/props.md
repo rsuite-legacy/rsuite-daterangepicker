@@ -15,5 +15,6 @@
 | disabledDate      | function(`date`:moment, `selectValue`:array(moment, moment), `selectedDone`:boolean, `type`:string ) |                 | 禁用日期                              |
 | align             | string                                                                                               | `left`          | 对齐方式，选项 `left`, `right`           |
 | hoverRange        | "week", "month" or function(`date`: moment)                                                          |                 | 点击日期时将选中的日期范围                     |
+| oneTap            | boolean                                                                                              | `false`         | 是否点击一次就选定日期范围，可[配合 hoverRange 使用](#单击模式) |
 | cleanable         | boolean                                                                                              | `true`          | 可以清除                              |
 | isoWeek           | boolean                                                                                              |                 | ISO 8601 标准， 每个日历星期从星期一开始，星期日为第7天 |
