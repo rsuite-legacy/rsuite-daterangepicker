@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import {on, getWidth} from 'dom-lib';
+import { on, getWidth } from 'dom-lib';
 import isEqual from 'lodash/isEqual';
 import isUndefined from 'lodash/isUndefined';
 import merge from 'lodash/merge';
@@ -10,7 +10,7 @@ import omit from 'lodash/omit';
 
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
-import {IntlProvider} from './intl';
+import { IntlProvider } from './intl';
 import defaultLocale from './locale';
 import Toolbar from './Toolbar';
 import DatePicker from './DatePicker';
@@ -71,7 +71,7 @@ class DateRangePicker extends Component {
   constructor(props) {
     super(props);
 
-    const {defaultValue, value} = props;
+    const { defaultValue, value } = props;
     const activeValue = value || defaultValue || [];
     const calendarDate = getCalendarDate(activeValue);
 
@@ -105,14 +105,14 @@ class DateRangePicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {value, locale} = this.props;
+    const { value, locale } = this.props;
 
     if (!isEqual(nextProps.value, value)) {
-      this.setState({value: nextProps.value});
+      this.setState({ value: nextProps.value });
     }
 
     if (isEqual(nextProps.locale, locale)) {
-      this.setState({locale: nextProps.locale});
+      this.setState({ locale: nextProps.locale });
     }
   }
 
@@ -132,7 +132,7 @@ class DateRangePicker extends Component {
   getValue = () => (this.props.value || this.state.value || [])
 
   getDateString(date) {
-    const {placeholder, format} = this.props;
+    const { placeholder, format } = this.props;
     const value = date || this.getValue();
 
     return value[0] && value[1] ?
@@ -162,14 +162,14 @@ class DateRangePicker extends Component {
   }
 
   handleOK = (event) => {
-    const {onOk} = this.props;
+    const { onOk } = this.props;
     this.updateValue();
     onOk && onOk(this.state.selectValue, event);
   }
 
   updateValue(nextSelectValue, unclosed) {
-    const {value, selectValue} = this.state;
-    const {onChange} = this.props;
+    const { value, selectValue } = this.state;
+    const { onChange } = this.props;
     const nextValue = !isUndefined(nextSelectValue) ? nextSelectValue : selectValue;
 
     if (!unclosed) {
@@ -204,18 +204,18 @@ class DateRangePicker extends Component {
   }
 
   show() {
-    const {disabled} = this.props;
+    const { disabled } = this.props;
     !disabled && this.handleOpen(true);
   }
 
   hide() {
-    const {disabled} = this.props;
+    const { disabled } = this.props;
     !disabled && this.handleClose(true);
   }
 
   handleOpen = (forceOpen) => {
 
-    const {onToggle} = this.props;
+    const { onToggle } = this.props;
     this.resetPageDate();
     this.setState({
       calendarState: 'SHOW',
@@ -228,7 +228,7 @@ class DateRangePicker extends Component {
   }
 
   handleClose = (forceOpen) => {
-    const {onToggle} = this.props;
+    const { onToggle } = this.props;
 
     this.setState({
       calendarState: 'HIDE',
@@ -243,19 +243,19 @@ class DateRangePicker extends Component {
 
   cleanForce() {
     setTimeout(() => {
-      this.setState({forceOpen: false});
+      this.setState({ forceOpen: false });
     }, 1000);
   }
 
   handleChangeCalendarDate = (index, date) => {
-    const {calendarDate} = this.state;
+    const { calendarDate } = this.state;
     calendarDate[index] = date;
-    this.setState({calendarDate});
+    this.setState({ calendarDate });
   }
 
   // hover range presets
   getWeekHoverRange = date => {
-    const {isoWeek} = this.props;
+    const { isoWeek } = this.props;
 
     if (isoWeek) {
       // set to the first day of this week according to ISO 8601, 12:00 am
@@ -267,7 +267,7 @@ class DateRangePicker extends Component {
   getMonthHoverRange = date => [date.clone().startOf('month'), date.clone().endOf('month')];
 
   getHoverRange(date) {
-    const {hoverRange} = this.props;
+    const { hoverRange } = this.props;
     if (!hoverRange) {
       return [];
     }
@@ -295,7 +295,7 @@ class DateRangePicker extends Component {
   }
 
   handleChangeSelectValue = (date) => {
-    const {selectValue, doneSelected} = this.state;
+    const { selectValue, doneSelected } = this.state;
     let nextValue = [];
     let nextHoverValue = this.getHoverRange(date);
 
@@ -348,7 +348,7 @@ class DateRangePicker extends Component {
   }
 
   handleMouseMoveSelectValue = (date) => {
-    const {doneSelected, selectValue, hoverValue, currentHoverDate} = this.state;
+    const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
     if (date.isSame(currentHoverDate, 'day')) {
       return;
     }
@@ -385,7 +385,7 @@ class DateRangePicker extends Component {
   }
 
   handleToggle = () => {
-    const {calendarState} = this.state;
+    const { calendarState } = this.state;
 
     if (calendarState === 'SHOW') {
       this.handleClose();
@@ -398,13 +398,13 @@ class DateRangePicker extends Component {
   }
 
   reset = () => {
-    this.setState({calendarDate: [moment(), moment().add(1, 'month')]});
+    this.setState({ calendarDate: [moment(), moment().add(1, 'month')] });
     this.updateValue([]);
   }
 
   disabledByBetween(start, end, type) {
-    const {disabledDate} = this.props;
-    const {selectValue, doneSelected} = this.state;
+    const { disabledDate } = this.props;
+    const { selectValue, doneSelected } = this.state;
 
     let check = false;
 
@@ -424,7 +424,7 @@ class DateRangePicker extends Component {
   }
 
   disabledOkButton = () => {
-    const {selectValue, doneSelected} = this.state;
+    const { selectValue, doneSelected } = this.state;
 
     if (!selectValue[0] || !selectValue[1] || !doneSelected) {
       return true;
@@ -441,8 +441,8 @@ class DateRangePicker extends Component {
   }
 
   handleDisabledDate = (date, values, type) => {
-    const {disabledDate} = this.props;
-    const {doneSelected} = this.state;
+    const { disabledDate } = this.props;
+    const { doneSelected } = this.state;
     if (disabledDate) {
       return disabledDate(date, values, doneSelected, type);
       ;

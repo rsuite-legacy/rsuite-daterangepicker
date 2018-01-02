@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {Markdown} from 'react-markdown-reader';
+import { Markdown } from 'react-markdown-reader';
 import moment from 'moment';
-import {Button, ButtonToolbar, Modal} from 'rsuite';
+import { Button, ButtonToolbar, Modal } from 'rsuite';
 import CodeView from 'react-code-view';
-import {PageContainer} from 'rsuite-docs';
+import { PageContainer } from 'rsuite-docs';
 
 import './less/index.less';
 
@@ -119,6 +119,6 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App/>,
+ReactDOM.render(<App />,
   document.getElementById('app')
 );
