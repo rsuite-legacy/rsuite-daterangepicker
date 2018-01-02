@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import { on, getWidth } from 'dom-lib';
+import {on, getWidth} from 'dom-lib';
 import isEqual from 'lodash/isEqual';
 import isUndefined from 'lodash/isUndefined';
 import merge from 'lodash/merge';
@@ -10,7 +10,7 @@ import omit from 'lodash/omit';
 
 import DateContainer from './DateContainer';
 import decorate from './utils/decorate';
-import { IntlProvider } from './intl';
+import {IntlProvider} from './intl';
 import defaultLocale from './locale';
 import Toolbar from './Toolbar';
 import DatePicker from './DatePicker';
@@ -35,20 +35,20 @@ const propTypes = {
 
   hoverRange: PropTypes.oneOfType([
     PropTypes.oneOf(['week', 'month']),
-    PropTypes.func,
+    PropTypes.func
   ]),
   cleanable: PropTypes.bool,
   isoWeek: PropTypes.bool,
   // 单击模式，是否只点选一次就选好值
   // 用于选择单日，或配合 hoverRange 使用
-  oneTap: PropTypes.bool,
+  oneTap: PropTypes.bool
 };
 
 const defaultProps = {
   align: 'left',
   format: 'YYYY-MM-DD',
   placeholder: '',
-  cleanable: true,
+  cleanable: true
 };
 
 function getCalendarDate(value = []) {
@@ -60,7 +60,7 @@ function getCalendarDate(value = []) {
     let isSameMonth = value[0].clone().isSame(value[1], 'month');
     calendarDate = [
       value[0],
-      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone(),
+      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()
     ];
   }
   return calendarDate;
@@ -71,7 +71,7 @@ class DateRangePicker extends Component {
   constructor(props) {
     super(props);
 
-    const { defaultValue, value } = props;
+    const {defaultValue, value} = props;
     const activeValue = value || defaultValue || [];
     const calendarDate = getCalendarDate(activeValue);
 
@@ -95,7 +95,7 @@ class DateRangePicker extends Component {
       hoverValue: [],
 
       // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
-      currentHoverDate: null,
+      currentHoverDate: null
     };
 
   }
@@ -105,14 +105,14 @@ class DateRangePicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { value, locale } = this.props;
+    const {value, locale} = this.props;
 
     if (!isEqual(nextProps.value, value)) {
-      this.setState({ value: nextProps.value });
+      this.setState({value: nextProps.value});
     }
 
     if (isEqual(nextProps.locale, locale)) {
-      this.setState({ locale: nextProps.locale });
+      this.setState({locale: nextProps.locale});
     }
   }
 
@@ -132,7 +132,7 @@ class DateRangePicker extends Component {
   getValue = () => (this.props.value || this.state.value || [])
 
   getDateString(date) {
-    const { placeholder, format } = this.props;
+    const {placeholder, format} = this.props;
     const value = date || this.getValue();
 
     return value[0] && value[1] ?
@@ -162,14 +162,14 @@ class DateRangePicker extends Component {
   }
 
   handleOK = (event) => {
-    const { onOk } = this.props;
+    const {onOk} = this.props;
     this.updateValue();
     onOk && onOk(this.state.selectValue, event);
   }
 
   updateValue(nextSelectValue, unclosed) {
-    const { value, selectValue } = this.state;
-    const { onChange } = this.props;
+    const {value, selectValue} = this.state;
+    const {onChange} = this.props;
     const nextValue = !isUndefined(nextSelectValue) ? nextSelectValue : selectValue;
 
     if (!unclosed) {
@@ -178,7 +178,7 @@ class DateRangePicker extends Component {
 
     this.setState({
       selectValue: nextValue || [],
-      value: nextValue,
+      value: nextValue
     });
 
     if (!isEqual(nextValue, value)) {
@@ -199,27 +199,27 @@ class DateRangePicker extends Component {
     const calendarDate = getCalendarDate(selectValue);
     this.setState({
       selectValue,
-      calendarDate,
+      calendarDate
     });
   }
 
   show() {
-    const { disabled } = this.props;
+    const {disabled} = this.props;
     !disabled && this.handleOpen(true);
   }
 
   hide() {
-    const { disabled } = this.props;
+    const {disabled} = this.props;
     !disabled && this.handleClose(true);
   }
 
   handleOpen = (forceOpen) => {
 
-    const { onToggle } = this.props;
+    const {onToggle} = this.props;
     this.resetPageDate();
     this.setState({
       calendarState: 'SHOW',
-      forceOpen,
+      forceOpen
     });
 
     onToggle && onToggle(true);
@@ -228,12 +228,12 @@ class DateRangePicker extends Component {
   }
 
   handleClose = (forceOpen) => {
-    const { onToggle } = this.props;
+    const {onToggle} = this.props;
 
     this.setState({
       calendarState: 'HIDE',
       doneSelected: true,
-      forceOpen,
+      forceOpen
     });
 
     onToggle && onToggle(false);
@@ -243,19 +243,19 @@ class DateRangePicker extends Component {
 
   cleanForce() {
     setTimeout(() => {
-      this.setState({ forceOpen: false });
+      this.setState({forceOpen: false});
     }, 1000);
   }
 
   handleChangeCalendarDate = (index, date) => {
-    const { calendarDate } = this.state;
+    const {calendarDate} = this.state;
     calendarDate[index] = date;
-    this.setState({ calendarDate });
+    this.setState({calendarDate});
   }
 
   // hover range presets
   getWeekHoverRange = date => {
-    const { isoWeek } = this.props;
+    const {isoWeek} = this.props;
 
     if (isoWeek) {
       // set to the first day of this week according to ISO 8601, 12:00 am
@@ -267,7 +267,7 @@ class DateRangePicker extends Component {
   getMonthHoverRange = date => [date.clone().startOf('month'), date.clone().endOf('month')];
 
   getHoverRange(date) {
-    const { hoverRange } = this.props;
+    const {hoverRange} = this.props;
     if (!hoverRange) {
       return [];
     }
@@ -295,7 +295,7 @@ class DateRangePicker extends Component {
   }
 
   handleChangeSelectValue = (date) => {
-    const { selectValue, doneSelected } = this.state;
+    const {selectValue, doneSelected} = this.state;
     let nextValue = [];
     let nextHoverValue = this.getHoverRange(date);
 
@@ -310,12 +310,12 @@ class DateRangePicker extends Component {
       if (nextHoverValue.length) {
         nextValue = [
           selectValue[0],
-          selectValue[1],
+          selectValue[1]
         ];
       } else {
         nextValue = [
           selectValue[0],
-          date,
+          date
         ];
       }
 
@@ -328,7 +328,7 @@ class DateRangePicker extends Component {
 
       this.setState({
         forceOpen: true,
-        calendarDate: getCalendarDate(nextValue),
+        calendarDate: getCalendarDate(nextValue)
       });
 
       this.cleanForce();
@@ -337,7 +337,7 @@ class DateRangePicker extends Component {
     this.setState({
       doneSelected: !doneSelected,
       selectValue: nextValue,
-      hoverValue: nextHoverValue,
+      hoverValue: nextHoverValue
     }, () => {
       // 如果是单击模式，并且是第一次点选，再触发一次点击
       if (this.props.oneTap && !this.state.doneSelected) {
@@ -348,7 +348,7 @@ class DateRangePicker extends Component {
   }
 
   handleMouseMoveSelectValue = (date) => {
-    const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
+    const {doneSelected, selectValue, hoverValue, currentHoverDate} = this.state;
     if (date.isSame(currentHoverDate, 'day')) {
       return;
     }
@@ -357,7 +357,7 @@ class DateRangePicker extends Component {
     if (doneSelected) {
       this.setState({
         currentHoverDate: date,
-        hoverValue: nextHoverValue,
+        hoverValue: nextHoverValue
       });
       return;
     }
@@ -369,7 +369,7 @@ class DateRangePicker extends Component {
       nextValue = [
         nextHoverValue[0].isBefore(hoverValue[0]) ? nextHoverValue[0] : hoverValue[0],
         nextHoverValue[1].isAfter(hoverValue[1]) ? nextHoverValue[1] : hoverValue[1],
-        nextValue[2],
+        nextValue[2]
       ];
     }
 
@@ -380,31 +380,31 @@ class DateRangePicker extends Component {
 
     this.setState({
       currentHoverDate: date,
-      selectValue: nextValue,
+      selectValue: nextValue
     });
   }
 
   handleToggle = () => {
-    const { calendarState } = this.state;
+    const {calendarState} = this.state;
 
     if (calendarState === 'SHOW') {
       this.handleClose();
     } else if (calendarState === 'HIDE') {
       this.handleOpen();
       this.setState({
-        toggleWidth: this.toggle ? getWidth(this.toggle) : 0,
+        toggleWidth: this.toggle ? getWidth(this.toggle) : 0
       });
     }
   }
 
   reset = () => {
-    this.setState({ calendarDate: [moment(), moment().add(1, 'month')] });
+    this.setState({calendarDate: [moment(), moment().add(1, 'month')]});
     this.updateValue([]);
   }
 
   disabledByBetween(start, end, type) {
-    const { disabledDate } = this.props;
-    const { selectValue, doneSelected } = this.state;
+    const {disabledDate} = this.props;
+    const {selectValue, doneSelected} = this.state;
 
     let check = false;
 
@@ -413,7 +413,7 @@ class DateRangePicker extends Component {
     while (start.isBefore(end)) {
       if (disabledDate && disabledDate(start.clone(), [
           selectValue && selectValue[0] ? selectValue[0].clone() : null,
-          selectValue && selectValue[1] ? selectValue[1].clone() : null,
+          selectValue && selectValue[1] ? selectValue[1].clone() : null
         ], doneSelected, type)) {
         check = true;
       }
@@ -424,7 +424,7 @@ class DateRangePicker extends Component {
   }
 
   disabledOkButton = () => {
-    const { selectValue, doneSelected } = this.state;
+    const {selectValue, doneSelected} = this.state;
 
     if (!selectValue[0] || !selectValue[1] || !doneSelected) {
       return true;
@@ -441,8 +441,8 @@ class DateRangePicker extends Component {
   }
 
   handleDisabledDate = (date, values, type) => {
-    const { disabledDate } = this.props;
-    const { doneSelected } = this.state;
+    const {disabledDate} = this.props;
+    const {doneSelected} = this.state;
     if (disabledDate) {
       return disabledDate(date, values, doneSelected, type);
       ;
@@ -460,7 +460,7 @@ class DateRangePicker extends Component {
       ranges,
       align,
       cleanable,
-      isoWeek,
+      isoWeek
     } = this.props;
 
     const {
@@ -470,17 +470,17 @@ class DateRangePicker extends Component {
       toggleWidth,
       hoverValue,
       doneSelected,
-      locale,
+      locale
     } = this.state;
 
     const value = this.getValue();
     const paneClasses = classNames(this.prefix('pane'), {
-      hide: calendarState === 'HIDE',
+      hide: calendarState === 'HIDE'
     });
 
     // pane width is 538px
     const paneStyles = {
-      marginLeft: align === 'right' ? toggleWidth - 538 : 0,
+      marginLeft: align === 'right' ? toggleWidth - 538 : 0
     };
 
     const elementProps = omit(this.props, Object.keys(propTypes));
