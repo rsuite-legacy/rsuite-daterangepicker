@@ -38,7 +38,10 @@ const propTypes = {
     PropTypes.func
   ]),
   cleanable: PropTypes.bool,
-  isoWeek: PropTypes.bool
+  isoWeek: PropTypes.bool,
+  // 单击模式，是否只点选一次就选好值
+  // 用于选择单日，或配合 hoverRange 使用
+  oneTap: PropTypes.bool
 };
 
 const defaultProps = {
@@ -335,6 +338,11 @@ class DateRangePicker extends Component {
       doneSelected: !doneSelected,
       selectValue: nextValue,
       hoverValue: nextHoverValue
+    }, () => {
+      // 如果是单击模式，并且是第一次点选，再触发一次点击
+      if (this.props.oneTap && !this.state.doneSelected) {
+        this.handleChangeSelectValue(date);
+      }
     });
 
   }
@@ -372,7 +380,7 @@ class DateRangePicker extends Component {
 
     this.setState({
       currentHoverDate: date,
-      selectValue: nextValue,
+      selectValue: nextValue
     });
   }
 
@@ -404,9 +412,9 @@ class DateRangePicker extends Component {
     // the button is disabled
     while (start.isBefore(end)) {
       if (disabledDate && disabledDate(start.clone(), [
-        selectValue && selectValue[0] ? selectValue[0].clone() : null,
-        selectValue && selectValue[1] ? selectValue[1].clone() : null,
-      ], doneSelected, type)) {
+          selectValue && selectValue[0] ? selectValue[0].clone() : null,
+          selectValue && selectValue[1] ? selectValue[1].clone() : null
+        ], doneSelected, type)) {
         check = true;
       }
       start.add(1, 'd');
@@ -436,7 +444,8 @@ class DateRangePicker extends Component {
     const { disabledDate } = this.props;
     const { doneSelected } = this.state;
     if (disabledDate) {
-      return disabledDate(date, values, doneSelected, type);;
+      return disabledDate(date, values, doneSelected, type);
+      ;
     }
     return false;
   }

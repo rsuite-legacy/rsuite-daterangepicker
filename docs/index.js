@@ -54,6 +54,14 @@ class App extends Component {
 
         <CodeView
           dependencies={{
+            DateRangePicker
+          }}
+        >
+          {require('./md/DateRangePickerOneTap.md')}
+        </CodeView>
+
+        <CodeView
+          dependencies={{
             moment,
             DateRangePicker
           }}
@@ -100,6 +108,7 @@ class App extends Component {
         >
           {require('./md/DateRangePickerInModal.md')}
         </CodeView>
+
 
         <Markdown>
           {require('./md/props.md')}
