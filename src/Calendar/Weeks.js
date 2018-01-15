@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import Week from './Week';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 
 const propTypes = {
   /* eslint-disable */
   weeks: PropTypes.array,
-  selected: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  selected: PropTypes.arrayOf(instanceOfMoment),
+  hoverValue: PropTypes.arrayOf(instanceOfMoment),
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
   disabledDate: PropTypes.func,

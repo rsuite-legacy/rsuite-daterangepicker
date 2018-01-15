@@ -7,6 +7,7 @@ import isFunction from 'lodash/isFunction';
 import decorate from './utils/decorate';
 import { FormattedMessage } from './intl';
 import setTimingMargin from './utils/setTimingMargin';
+import { instanceOfMoment } from './utils/momentPropTypes';
 
 const propTypes = {
   ranges: PropTypes.arrayOf(PropTypes.shape({
@@ -14,12 +15,12 @@ const propTypes = {
     unclosed: PropTypes.bool,
     value: PropTypes.arrayOf(
       PropTypes.oneOfType([
-        PropTypes.instanceOf(moment),
+        instanceOfMoment,
         PropTypes.func
       ])
     )
   })),
-  pageDate: PropTypes.instanceOf(moment),
+  pageDate: instanceOfMoment,
   onShortcut: PropTypes.func,
   onOk: PropTypes.func,
   disabledOkButton: PropTypes.func,

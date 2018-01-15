@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import decorate from './utils/decorate';
+import { instanceOfMoment } from './utils/momentPropTypes';
 
 
 const propTypes = {
@@ -14,7 +14,7 @@ const propTypes = {
   showCleanButton: PropTypes.bool,
   renderPlaceholder: PropTypes.func,
   toggleRef: PropTypes.func,
-  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  value: PropTypes.arrayOf(instanceOfMoment),
 };
 
 class DateContainer extends React.Component {

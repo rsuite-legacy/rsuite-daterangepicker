@@ -4,11 +4,12 @@ import classNames from 'classnames';
 import moment from 'moment';
 import omit from 'lodash/omit';
 import Type from '../Type';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 const propTypes = {
-  weekendDate: PropTypes.instanceOf(moment),
-  selected: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  weekendDate: instanceOfMoment,
+  selected: PropTypes.arrayOf(instanceOfMoment),
+  hoverValue: PropTypes.arrayOf(instanceOfMoment),
   onClick: PropTypes.func,
   disabledDate: PropTypes.func,
   inSameMonth: PropTypes.func,

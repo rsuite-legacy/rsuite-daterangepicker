@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Calendar from './Calendar';
 import decorate from './utils/decorate';
+import { instanceOfMoment } from './utils/momentPropTypes';
 
 const propTypes = {
   disabledDate: PropTypes.func,
-  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  value: PropTypes.arrayOf(instanceOfMoment),
+  hoverValue: PropTypes.arrayOf(instanceOfMoment),
+  calendarDate: PropTypes.arrayOf(instanceOfMoment),
   index: PropTypes.number,
   format: PropTypes.string,
   onSelect: PropTypes.func,
