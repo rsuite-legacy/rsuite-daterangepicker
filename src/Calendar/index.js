@@ -9,14 +9,15 @@ import MonthView from './MonthView';
 import MonthHeader from './MonthHeader';
 import WeekHeader from './WeekHeader';
 import decorate from '../utils/decorate';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 const propTypes = {
   disabledDate: PropTypes.func,
   calendarState: PropTypes.string,
   index: PropTypes.number,
-  calendarDate: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  calendarDate: PropTypes.arrayOf(instanceOfMoment),
+  value: PropTypes.arrayOf(instanceOfMoment),
+  hoverValue: PropTypes.arrayOf(instanceOfMoment),
   onMoveForword: PropTypes.func,
   onMoveBackward: PropTypes.func,
   onSelect: PropTypes.func,

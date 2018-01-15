@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 const propTypes = {
-  date: PropTypes.instanceOf(moment),
+  date: instanceOfMoment,
   onClick: PropTypes.func,
   month: PropTypes.number,
   year: PropTypes.number

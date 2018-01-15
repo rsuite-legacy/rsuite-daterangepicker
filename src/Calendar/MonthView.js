@@ -5,12 +5,13 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import Weeks from './Weeks';
 import getMonthView from '../utils/getMonthView';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 
 const propTypes = {
-  activeDate: PropTypes.instanceOf(moment),
-  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  hoverValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  activeDate: instanceOfMoment,
+  value: PropTypes.arrayOf(instanceOfMoment),
+  hoverValue: PropTypes.arrayOf(instanceOfMoment),
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
   disabledDate: PropTypes.func,

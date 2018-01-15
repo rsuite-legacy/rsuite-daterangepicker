@@ -16,13 +16,14 @@ import Toolbar from './Toolbar';
 import DatePicker from './DatePicker';
 import setTimingMargin from './utils/setTimingMargin';
 import Type from './Type';
+import { instanceOfMoment } from './utils/momentPropTypes';
 
 const propTypes = {
   align: PropTypes.oneOf(['right', 'left']),
   disabledDate: PropTypes.func,
   ranges: Toolbar.propTypes.ranges,
-  value: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
-  defaultValue: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  value: PropTypes.arrayOf(instanceOfMoment),
+  defaultValue: PropTypes.arrayOf(instanceOfMoment),
   placeholder: PropTypes.string,
   renderPlaceholder: PropTypes.func,
   format: PropTypes.string,

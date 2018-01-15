@@ -5,9 +5,10 @@ import omit from 'lodash/omit';
 import moment from 'moment';
 import classNames from 'classnames';
 import decorate from '../utils/decorate';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 const propTypes = {
-  date: PropTypes.instanceOf(moment),
+  date: instanceOfMoment,
   onMoveForword: PropTypes.func,
   onMoveBackward: PropTypes.func,
   onToggleMonthDropdown: PropTypes.func,

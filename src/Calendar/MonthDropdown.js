@@ -8,9 +8,10 @@ import omit from 'lodash/omit';
 import MonthDropdownItem from './MonthDropdownItem';
 import scrollTopAnimation from '../utils/scrollTopAnimation';
 import decorate from '../utils/decorate';
+import { instanceOfMoment } from '../utils/momentPropTypes';
 
 const propTypes = {
-  date: PropTypes.instanceOf(moment),
+  date: instanceOfMoment,
   dropMonth: PropTypes.bool,
   onClick: PropTypes.func,
   disabledMonth: PropTypes.func
