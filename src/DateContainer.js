@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import decorate from './utils/decorate';

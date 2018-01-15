@@ -5,3 +5,5 @@ import moment from 'moment';
 const MomentConstructor = moment.prototype.constructor;
 
 export const instanceOfMoment = PropTypes.instanceOf(MomentConstructor);
+// alias
+export default instanceOfMoment;
