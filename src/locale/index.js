@@ -1,5 +1,17 @@
-const locale = {
-  week: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+// @flow
+
+export type Locale = {
+  [key: string]: string
+}
+
+export default {
+  sunday: 'Su',
+  monday: 'Mo',
+  tuesday: 'Tu',
+  wednesday: 'We',
+  thursday: 'Th',
+  friday: 'Fr',
+  saturday: 'Sa',
   ok: 'OK',
   today: 'Today',
   yesterday: 'Yesterday',
@@ -7,11 +19,4 @@ const locale = {
   hours: 'Hours',
   minutes: 'Minutes',
   seconds: 'Seconds'
-};
-
-export default (isoWeek) => {
-  if (isoWeek) {
-    locale.week = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-  }
-  return locale;
 };

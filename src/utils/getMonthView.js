@@ -12,10 +12,10 @@ export default function getMonthView(monthDate, isoWeek) {
   let weeks = [firstWeekendDate];
   let nextWeekendDate = firstWeekendDate.clone().add(7, 'days');
 
-  weeks.push(nextWeekendDate);
+  weeks.push(nextWeekendDate.format('YYYY-MM-DD'));
   while (weeks.length < 6) {
     nextWeekendDate = nextWeekendDate.clone().add(7, 'days');
-    weeks.push(nextWeekendDate);
+    weeks.push(nextWeekendDate.format('YYYY-MM-DD'));
   }
 
   return weeks;

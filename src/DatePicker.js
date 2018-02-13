@@ -1,71 +1,83 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import moment from 'moment';
 import Calendar from './Calendar';
-import decorate from './utils/decorate';
-import { instanceOfMoment } from './utils/momentPropTypes';
 
-const propTypes = {
-  disabledDate: PropTypes.func,
-  value: PropTypes.arrayOf(instanceOfMoment),
-  hoverValue: PropTypes.arrayOf(instanceOfMoment),
-  calendarDate: PropTypes.arrayOf(instanceOfMoment),
-  index: PropTypes.number,
-  format: PropTypes.string,
-  onSelect: PropTypes.func,
-  onMouseMove: PropTypes.func,
-  onChangeCalendarDate: PropTypes.func,
-  isoWeek: PropTypes.bool
+type Props = {
+  disabledDate?: (
+    date: moment$Moment,
+    selectValue: Array<moment$Moment | null>,
+    type: string
+  ) => boolean,
+  value?: Array<moment$Moment>,
+  hoverValue?: Array<moment$Moment>,
+  calendarDate?: Array<moment$Moment>,
+  index: number,
+  format: string,
+  onSelect?: (date: moment$Moment, event?: SyntheticEvent<*>) => void,
+  onMouseMove?: (date: moment$Moment) => void,
+  onChangeCalendarDate: (index: number, nextPageDate: moment$Moment) => void,
+  isoWeek?: boolean,
+  limitStartYear?: number,
+  limitEndYear?: number,
 };
 
-const defaultProps = {
-  value: [],
-  calendarDate: [moment(), moment().add(1, 'month')],
-  format: 'YYYY-MM-DD',
-  index: 0
-};
 
-class DatePicker extends Component {
-  constructor(props) {
+type State = {
+  calendarState?: 'DROP_MONTH' | 'DROP_TIME',
+}
+
+
+class DatePicker extends React.Component<Props, State> {
+  static defaultProps = {
+    value: [],
+    calendarDate: [moment(), moment().add(1, 'month')],
+    format: 'YYYY-MM-DD',
+    index: 0
+  };
+
+  constructor(props: Props) {
     super(props);
     this.state = {
-      calendarState: null
+      calendarState: undefined
     };
   }
 
-  onMoveForword = (nextPageDate) => {
+  onMoveForword = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
     onChangeCalendarDate(index, nextPageDate);
   }
 
-  onMoveBackward = (nextPageDate) => {
+  onMoveBackward = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
     onChangeCalendarDate(index, nextPageDate);
   }
 
-  handleChangePageDate = (nextPageDate) => {
+  handleChangePageDate = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
     onChangeCalendarDate(index, nextPageDate);
     this.setState({
-      calendarState: null
+      calendarState: undefined
     });
   }
 
-  showMonthDropdown(callback) {
-    this.setState({ calendarState: 'DROP_MONTH' }, callback);
+  showMonthDropdown() {
+    this.setState({ calendarState: 'DROP_MONTH' });
   }
 
-  hideMonthDropdown(callback) {
-    this.setState({ calendarState: null }, callback);
+  hideMonthDropdown() {
+    this.setState({ calendarState: undefined });
   }
 
-  toggleMonthDropdown = (callback) => {
+  toggleMonthDropdown = () => {
+
     const { calendarState } = this.state;
 
     if (calendarState === 'DROP_MONTH') {
-      this.hideMonthDropdown(callback);
+      this.hideMonthDropdown();
     } else {
-      this.showMonthDropdown(callback);
+      this.showMonthDropdown();
     }
   }
   render() {
@@ -78,7 +90,9 @@ class DatePicker extends Component {
       onSelect,
       onMouseMove,
       disabledDate,
-      isoWeek
+      isoWeek,
+      limitStartYear,
+      limitEndYear
     } = this.props;
 
     const { calendarState } = this.state;
@@ -99,16 +113,11 @@ class DatePicker extends Component {
         onMouseMove={onMouseMove}
         onToggleMonthDropdown={this.toggleMonthDropdown}
         onChangePageDate={this.handleChangePageDate}
-        onChangePageTime={this.handleChangePageTime}
-        calendarRef={(ref) => {
-          this.calendar = ref;
-        }}
+        limitStartYear={limitStartYear}
+        limitEndYear={limitEndYear}
       />
     );
   }
 }
 
-DatePicker.propTypes = propTypes;
-DatePicker.defaultProps = defaultProps;
-
-export default decorate()(DatePicker);
+export default DatePicker;

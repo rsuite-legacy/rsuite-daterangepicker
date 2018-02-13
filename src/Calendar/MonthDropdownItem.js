@@ -1,50 +1,72 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import moment from 'moment';
-import isEqual from 'lodash/isEqual';
-import omit from 'lodash/omit';
-import { instanceOfMoment } from '../utils/momentPropTypes';
+import classNames from 'classnames';
+import _ from 'lodash';
+import { constants } from 'rsuite-utils/lib/Picker';
+import { prefix, getUnhandledProps } from 'rsuite-utils/lib/utils';
 
-const propTypes = {
-  date: instanceOfMoment,
-  onClick: PropTypes.func,
-  month: PropTypes.number,
-  year: PropTypes.number
+type Props = {
+  date?: moment$Moment,
+  month?: number,
+  year?: number,
+  onSelect?: (date: moment$Moment, event: SyntheticEvent<*>) => void,
+  classPrefix?: string,
+  className?: string,
+  active?: boolean,
+  disabled?: boolean
 };
 
-const defaultProps = {
-  month: 0
-};
+class MonthDropdownItem extends React.Component<Props> {
 
-class MonthDropdownItem extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
+  static defaultProps = {
+    classPrefix: `${constants.namespace}-calendar-month-dropdown-cell`,
+    month: 0
+  };
+
+  shouldComponentUpdate(nextProps: Props) {
+    return !_.isEqual(this.props, nextProps);
   }
 
-  handleClick = (event) => {
-    const { onClick, month, year, date } = this.props;
-    onClick && onClick(moment(date).year(year).month(month - 1), event);
+  handleClick = (event: SyntheticEvent<*>) => {
+    const { onSelect, month, year, date } = this.props;
+    if (year && month && date) {
+      const nextMonth = moment(date).year(year).month(month - 1);
+      onSelect && onSelect(nextMonth, event);
+    }
   }
 
   render() {
-    const { className, month, ...props } = this.props;
-    const elementProps = omit(props, Object.keys(propTypes));
+    const {
+      className,
+      month,
+      classPrefix,
+      active,
+      disabled,
+      ...rest
+    } = this.props;
+
+    const addPrefix = prefix(classPrefix);
+    const unhandled = getUnhandledProps(MonthDropdownItem, rest);
+    const classes = classNames(classPrefix, {
+      [addPrefix('active')]: active,
+      [addPrefix('disabled')]: disabled
+    }, className);
+
     return (
       <div
-        {...elementProps}
-        className={className}
+        {...unhandled}
+        className={classes}
         onClick={this.handleClick}
         key={month}
         role="button"
         tabIndex="-1"
       >
-        {month}
+        <span className={addPrefix('content')}>{month}</span>
       </div>
     );
   }
 }
-
-MonthDropdownItem.propTypes = propTypes;
-MonthDropdownItem.defaultProps = defaultProps;
 
 export default MonthDropdownItem;

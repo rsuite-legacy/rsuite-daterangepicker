@@ -1,13 +1,16 @@
 @import (optional) "~rsuite-theme/dist/less/commonly-variables";
 @import (optional) "rsuite-theme/dist/less/commonly-variables";
 @import "./functions";
-.rsuite-daterangepicker {
+.rs-picker {
   /* settings */
   @container-bg: #FFF;
   @header-bg: #f5f5f5;
   @container-fg: #333;
   @container-border: 1px solid @B100;
-  @container-padding: 6px 48px 8px 10px;
+  @container-padding-vertical: 7px;
+  @container-padding-right: 26px;
+  @container-padding-left: 18px;
+  @container-padding: 6px 30px 8px 10px;
   @calendar-width: 270px;
   @month-view-width: @calendar-width - 2;
   @clock-width: 210px;
@@ -30,34 +33,36 @@
     text-decoration: none !important;
     cursor: pointer;
   }
-  &-pane {
-    position: absolute;
-    z-index: 999;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    background-color: @container-bg;
-    width: 538px;
-    &.hide {
-      visibility: hidden;
-      display: none;
-      opacity: 0;
-    }
+  &-calendar {
+    display: inline-block;
   }
-  &-header {
+  &-daterange-header {
     padding: 10px;
     background: #f5f5f5;
     text-align: center;
   }
+  &-daterange-menu {
+    position: absolute;
+    box-sizing: border-box;
+    text-align: left;
+    z-index: 100;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.06), 0 4px 4px rgba(0, 0, 0, 0.12);
+    width: 540px;
+  }
   &-toggle {
     position: relative;
     overflow: hidden;
-    height: 36px;
     background-color: @container-bg;
     color: @container-fg;
-    border: @container-border;
-    padding: @container-padding;
+    border: none;
+    padding: @container-padding-vertical @container-padding-right @container-padding-vertical @container-padding-left;
     cursor: pointer;
     outline: none;
-    &.disabled {
+    text-align: left;
+    border-radius: 0;
+    display: inline-block;
+    &-disabled {
       opacity: .4;
       cursor: not-allowed;
       background: #f5f5f5;
@@ -75,14 +80,16 @@
       background: #fff;
       transition: all .15s
     }
-    &:hover {
-      .rsuite-daterangepicker-toggle-clean {
-        opacity: 1;
-      }
+    &:hover &-clean {
+      opacity: 1;
     }
-    .placeholder-text {
-      color: @font-color;
+    &-placeholder {
       opacity: .4;
+      white-space: nowrap;
+      margin-right: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 22px;
     }
     &:before {
       content: "\F073";
@@ -90,11 +97,6 @@
       position: absolute;
       right: 9px;
       opacity: .4;
-    }
-  }
-  &-dropdown {
-    .calendar {
-      float: left;
     }
   }
   &-calendar {
@@ -109,59 +111,37 @@
     overflow: hidden;
     padding-top: 36px;
     min-height: 260px;
-    display: inline-block;
-    margin-left: -1px;
-    .month-view-weeks-wrapper {
-      left: 0;
+    &-show-month-dropdown &-month-dropdown {
+      opacity: 1;
+      top: 32px;
     }
-    &.sliding-left {
-      .month-view-weeks-wrapper {
-        left: -@month-view-width;
-        transition: left .15s cubic-bezier(0.65, 0.05, 0.36, 1);
+    &-show-month-dropdown &-header {
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.28);
+      i {
+        visibility: hidden;
+        opacity: 0;
       }
-    }
-    &.sliding-right {
-      .month-view-weeks-wrapper {
-        left: @month-view-width;
-        transition: left .15s cubic-bezier(0.65, 0.05, 0.36, 1);
+      &-title-date {
+        box-shadow: 0px 0px 1px #999 inset;
+        background: #eee;
       }
     }
-    &.drop-month {
-      .drop-active();
-      .calendar-header {
-        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.28);
+    &-show-time-dropdown &-time-dropdown {
+      opacity: 1;
+      top: 45px;
+    }
+    &-show-time-dropdown &-header {
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.28);
+      i {
+        visibility: hidden;
+        opacity: 0;
       }
-      .month-dropdown {
-        opacity: 1;
-        top: 32px;
-      }
-      .title-date {
-        .drop-active-title();
+      &-title-time {
+        box-shadow: 0px 0px 1px #999 inset;
+        background: #eee;
       }
     }
-    &.drop-time {
-      .drop-active();
-      .time-dropdown {
-        opacity: 1;
-        top: 46px;
-      }
-      .title-time {
-        .drop-active-title();
-      }
-    }
-    .drop-active() {
-      .calendar-header {
-        i {
-          visibility: hidden;
-          opacity: 0;
-        }
-      }
-    }
-    .drop-active-title() {
-      box-shadow: 0px 0px 1px #999 inset;
-      background: #eee;
-    }
-    .calendar-header {
+    &-header {
       position: absolute;
       width: 100%;
       z-index: 1002;
@@ -174,12 +154,16 @@
         font-style: normal;
         transition: visibility .1s, opacity .1s linear;
       }
+      &-month-toolbar, &-time-toolbar {
+        display: inline-block;
+      }
       .icon() {
         position: relative;
         display: inline-block;
         width: 20px;
         height: 20px;
         cursor: pointer;
+        color: #999;
         outline: none;
         top: 4px;
         &:after {
@@ -192,24 +176,24 @@
           background-color: @cell-hover-bg;
           color: darken(#999, 30%)
         }
-        &.disabled {
-          opacity: 0.2;
-          cursor: not-allowed;
-        }
       }
-      .calendar-header-backward {
+      &-backward {
         .icon();
         &:after {
           content: "\2039";
         }
       }
-      .calendar-header-forward {
+      &-forward {
         .icon();
         &:after {
           content: "\203A";
         }
       }
-      .calendar-header-title {
+      &-btn-disabled{
+        opacity: .4;
+        cursor: not-allowed;
+      }
+      &-title {
         line-height: 20px;
         font-size: 16px;
         padding: 2px 6px;
@@ -223,89 +207,85 @@
         &:hover {
           background: #eee;
         }
-        &.error {
-          background: #c40707;
-          color: #fff;
-        }
+      }
+      &-error {
+        background: #c40707;
+        color: #fff;
       }
     }
-    .month-view {
+    &-view {
       position: relative;
       overflow: hidden;
       width: @month-view-width;
-      height: ( @cell-height + @cell-spacing * 2) * 6 + 10;
-      padding: 4px;
-      &-weeks-wrapper {
-        position: absolute
-      }
+      height: ( @cell-height + @cell-spacing * 2) * 7 + 10;
     }
-    .week-header {
+    &-table-header-row {
       @padding: 4px;
       border-bottom: 1px solid #DDD;
       padding: @padding 0;
       background: @header-bg;
       display: table-row;
-      &-day {
-        display: table-cell;
-        width: @month-view-width / 7;
-        line-height: 32px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: .8em;
-        &:first-child, &:last-child {
-          color: #999;
-        }
+    }
+    &-table-header-cell {
+      display: table-cell;
+      width: @month-view-width / 7;
+      line-height: 32px;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: .8em;
+      &:first-child, &:last-child {
+        color: #999;
       }
     }
-    .weeks {
+    &-table {
       position: absolute;
       width: @month-view-width;
       display: table;
-      .week {
-        display: table-row;
-        &-day {
-          display: table-cell;
-          width: @month-view-width / 7 - @cell-spacing * 2;
-          padding: 6px;
-          margin: @cell-spacing;
-          text-align: center;
-          font-size: .9em;
-          cursor: pointer;
-          &.disable {
-            opacity: .2;
-            cursor: default;
-            &:hover {
-              background-color: #eee;
-            }
-          }
-          &.un-same-month {
-            opacity: .5;
-          }
-          &.is-today {
-            background: #faebcc;
-          }
-          &.selected {
-            background: @color-active;
-            color: #EFEFEF;
-            &:hover {
-              background-color: @color-active;
-            }
-          }
-          &:hover, &.in-range {
-            background-color: @cell-hover-bg;
-          }
-          &:first-child {
-            border-left: none;
-          }
-          &.disabled {
-            opacity: .4;
-            background: none;
-            color: @B500;
-            cursor: not-allowed;
-            border-left: 1px solid #eee;
-            text-decoration: line-through;
-          }
+    }
+    &-table-row {
+      display: table-row;
+    }
+    &-table-cell {
+      display: table-cell;
+      width: @month-view-width / 7 - @cell-spacing * 2;
+      padding: 6px;
+      margin: @cell-spacing;
+      text-align: center;
+      font-size: .9em;
+      cursor: pointer;
+      &:hover, &-in-range {
+        background-color: @cell-hover-bg;
+      }
+      &.disable {
+        opacity: .2;
+        cursor: default;
+        &:hover {
+          background-color: #eee;
         }
+      }
+      &-un-same-month {
+        opacity: .5;
+      }
+      &-disabled {
+        opacity: .4;
+        background: none;
+        color: @B500;
+        cursor: not-allowed;
+        border-left: 1px solid #eee;
+      }
+      &-is-today {
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+      }
+      &-selected {
+        background: @color-active;
+        color: #EFEFEF;
+        &:hover {
+          background-color: @color-active;
+        }
+      }
+      &:first-child {
+        border-left: none;
       }
     }
     .dropdown() {
@@ -319,17 +299,17 @@
       height: ( @cell-height + @cell-spacing * 2) * 8;
       transition: top .2s ease-out, opacity .15s ease-out;
     }
-    .month-dropdown {
+    &-month-dropdown {
       .dropdown();
-      &-content {
+      &-scroll {
+        overflow: auto;
         width: 120%;
         height: ( @cell-height + @cell-spacing * 2) * 8;
         padding: 10px 0;
         padding-right: 20%;
-        overflow: auto;
         border-top: 1px solid #eee;
       }
-      &-year-block {
+      &-row {
         @odd-bg: #f5f5f5;
         padding: 10px 0;
         width: @month-view-width;
@@ -337,23 +317,23 @@
           background-color: @odd-bg;
         }
       }
-      &-year-title {
+      &-year {
         float: left;
         height: 100%;
         width: 20%;
         margin-top: 22px;
         text-align: center;
         font-weight: bold;
-        &.selected {
+        &-active {
           color: @color-active;
         }
       }
-      &-month-block {
+      &-list {
         display: inline-block;
         height: 100%;
         width: 80%;
       }
-      &-month-cell {
+      &-cell {
         display: inline-block;
         width: calc(100% / 6.25);
         text-align: center;
@@ -362,68 +342,64 @@
         &:hover {
           background-color: @cell-hover-bg;
         }
-        &.selected {
+        &-active {
           color: #EFEFEF;
           background-color: @color-active;
         }
-        &.disabled {
-          opacity: .4;
-          color: @B500;
-          cursor: not-allowed;
-          background: none;
-        }
       }
     }
-    .time-dropdown {
+    &-time-dropdown {
       .dropdown();
       &-content {
         display: table;
         width: 100%;
-        &-row {
-          display: table-row;
-          .column {
-            display: table-cell;
-            &:last-child ul {
-              border: none;
-            }
-            &-title {
-              text-align: center;
-              background: #f5f5f5;
-              box-shadow: 0 2px 1px rgba(0, 0, 0, 0.28);
-              padding: 4px 0;
-              border-top: 1px solid #eee;
-            }
-            ul {
-              list-style: none;
-              padding: 0;
-              margin: 0;
-              height: ( @cell-height + @cell-spacing * 2) * 6;
-              overflow: auto;
-              border-right: 1px solid #eee;
-              padding-bottom: @cell-height * 7;
-              li a {
-                text-align: center;
-                display: block;
-                cursor: pointer;
-                color: @font-color;
-                padding: 4px;
-                &:hover {
-                  background: @cell-hover-bg;
-                  color: @font-color;
-                }
-                &.disabled {
-                  opacity: .4;
-                  background: none;
-                  color: @B500;
-                  cursor: not-allowed;
-                }
-                &.active {
-                  background: @color-active;
-                  color: #fff;
-                }
-              }
+      }
+      &-row {
+        display: table-row;
+      }
+      &-column {
+        display: table-cell;
+        &:last-child ul {
+          border: none;
+        }
+        &-title {
+          text-align: center;
+          background: #f5f5f5;
+          box-shadow: 0 2px 1px rgba(0, 0, 0, 0.28);
+          padding: 4px 0;
+          border-top: 1px solid #eee;
+          min-width: 80px;
+        }
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          height: ( @cell-height + @cell-spacing * 2) * 6;
+          overflow: auto;
+          border-right: 1px solid #eee;
+          padding-bottom: @cell-height * 7;
+          li a {
+            text-align: center;
+            display: block;
+            cursor: pointer;
+            padding: 4px;
+            &:hover {
+              background: @cell-hover-bg;
+              color: @font-color;
             }
           }
+        }
+      }
+      &-cell {
+        &-disabled {
+          opacity: .4;
+          background: none;
+          color: @B500;
+          cursor: not-allowed;
+        }
+        &-active {
+          background: @color-active;
+          color: #fff !important;
         }
       }
     }
@@ -447,12 +423,17 @@
             margin-left: 0;
           }
         }
-        &.disabled {
-          opacity: .4;
-          color: @B500;
-          cursor: not-allowed;
-        }
       }
+    }
+    &-option-disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      outline: none;
+    }
+    &-btn-disabled {
+      opacity: .4;
+      color: @B500;
+      cursor: not-allowed;
     }
     &-right {
       float: right;
@@ -461,11 +442,6 @@
         background: @color-active;
         padding: 4px 10px;
         color: #fff;
-        &.disabled {
-          opacity: .4;
-          cursor: not-allowed;
-          outline: none;
-        }
       }
     }
   }

@@ -1,95 +1,107 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import classNames from 'classnames';
 import { scrollTop } from 'dom-lib';
 import moment from 'moment';
-import omit from 'lodash/omit';
+import _ from 'lodash';
+import { constants } from 'rsuite-utils/lib/Picker';
+import { prefix, getUnhandledProps } from 'rsuite-utils/lib/utils';
 
 import MonthDropdownItem from './MonthDropdownItem';
 import scrollTopAnimation from '../utils/scrollTopAnimation';
-import decorate from '../utils/decorate';
-import { instanceOfMoment } from '../utils/momentPropTypes';
 
-const propTypes = {
-  date: instanceOfMoment,
-  dropMonth: PropTypes.bool,
-  onClick: PropTypes.func,
-  disabledMonth: PropTypes.func
+type Props = {
+  onSelect?: (month: moment$Moment, event: SyntheticEvent<*>) => void,
+  date: moment$Moment,
+  limitStartYear?: number,
+  limitEndYear?: number,
+  className?: string,
+  classPrefix?: string,
+  disabledMonth?: (date: moment$Moment) => boolean,
+  show: boolean
 };
 
-const defaultProps = {
-  date: moment()
-};
-
-function noop() { }
-
-const startYear = 1950;
+const minYear = 1950;
 const blockHeight = 84;
 
-class MonthDropdown extends React.Component {
+class MonthDropdown extends React.Component<Props> {
+
+  static defaultProps = {
+    classPrefix: `${constants.namespace}-calendar-month-dropdown`,
+    limitStartYear: 5,
+    limitEndYear: 5,
+    show: false,
+    date: moment()
+  };
 
   componentDidMount() {
     this.updatePosition();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updatePosition(nextProps);
+  shouldComponentUpdate(nextProps: Props) {
+    return nextProps.show && !_.isEqual(this.props, nextProps);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.dropMonth;
+  componentDidUpdate() {
+    this.updatePosition();
   }
-
-  updatePosition(props) {
+  getStartYear() {
+    const { date, limitStartYear = 5 } = this.props;
+    const startYear = date.year() - limitStartYear;
+    return Math.max(startYear, minYear);
+  }
+  updatePosition(props?: Props) {
     const { date } = props || this.props;
     date && this.scrollTo(date);
   }
 
-  scrollTo = (date) => {
+  scrollTo = (date: moment$Moment) => {
     const year = date.year();
-    const top = ((year - startYear) * blockHeight);
+    const top = ((year - this.getStartYear()) * blockHeight);
 
-    scrollTopAnimation(this.content, top, scrollTop(this.content) !== 0);
-  }
+    scrollTopAnimation(this.scroll, top, scrollTop(this.scroll) !== 0);
+  };
+
+  scroll = null;
+
+  addPrefix = (name: string) => prefix(this.props.classPrefix)(name)
 
   renderBlock() {
 
-    const { date, onClick, disabledMonth } = this.props;
+    const { date, onSelect, limitEndYear, disabledMonth } = this.props;
 
-    let ret = [];
-    let selectedMonth = date.month();
-    let selectedYear = date.year();
+    const ret = [];
+    const selectedMonth = date.month();
+    const selectedYear = date.year();
+    const startYear = this.getStartYear();
     let nextYear = 0;
 
-    for (let i = 0; i < 100 && nextYear < selectedYear + 5; i += 1) {
+    for (let i = 0; i < 100 && nextYear < (selectedYear + limitEndYear); i += 1) {
 
       nextYear = startYear + i;
 
       let isSelectedYear = nextYear === selectedYear;
-
-      let titleClasses = classNames(this.prefix('year-title'), {
-        selected: isSelectedYear
+      let titleClasses = classNames(this.addPrefix('year'), {
+        [this.addPrefix('year-active')]: isSelectedYear
       });
 
       ret.push(
-        <div className={this.prefix('year-block')} key={i}>
+        <div className={this.addPrefix('row')} key={i}>
           <div className={titleClasses}>{nextYear}</div>
-          <div className={this.prefix('month-block')}>
+          <div className={this.addPrefix('list')}>
             {
               /* eslint-disable */
               [...Array(12)].map((i, month) => {
 
                 let disabled = disabledMonth && disabledMonth(moment().year(nextYear).month(month));
-                let cellCalsses = classNames(this.prefix('month-cell'), {
-                  selected: isSelectedYear && month === selectedMonth,
-                  disabled
-                });
 
                 return (
                   <MonthDropdownItem
                     date={date}
-                    className={cellCalsses}
-                    onClick={!disabled ? onClick : noop}
+                    onSelect={onSelect}
+                    disabled={disabled}
+                    active={isSelectedYear && month === selectedMonth}
                     key={month}
                     month={month + 1}
                     year={nextYear}
@@ -107,21 +119,21 @@ class MonthDropdown extends React.Component {
 
   render() {
 
-    const { defaultClassName, className, ...props } = this.props;
-    const classes = classNames(defaultClassName, className);
-    const elementProps = omit(props, Object.keys(propTypes));
+    const { classPrefix, className, ...rest } = this.props;
+    const classes = classNames(classPrefix, className);
+    const unhandled = getUnhandledProps(MonthDropdown, rest);
     return (
       <div
-        {...elementProps}
+        {...unhandled}
         className={classes}
       >
-        <div
-          className={this.prefix('content')}
-          ref={(ref) => {
-            this.content = ref;
-          }}
-        >
-          <div className={this.prefix('scroll')}>
+        <div className={this.addPrefix('content')}>
+          <div
+            className={this.addPrefix('scroll')}
+            ref={(ref) => {
+              this.scroll = ref;
+            }}
+          >
             {this.renderBlock()}
           </div>
         </div>
@@ -130,9 +142,4 @@ class MonthDropdown extends React.Component {
   }
 }
 
-MonthDropdown.propTypes = propTypes;
-MonthDropdown.defaultProps = defaultProps;
-
-export default decorate({
-  prefixClass: 'month-dropdown'
-})(MonthDropdown);
+export default MonthDropdown;

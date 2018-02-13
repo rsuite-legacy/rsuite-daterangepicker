@@ -1,47 +1,62 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import omit from 'lodash/omit';
-import isFunction from 'lodash/isFunction';
-import decorate from './utils/decorate';
-import { FormattedMessage } from './intl';
+import _ from 'lodash';
+import { FormattedMessage } from 'rsuite-intl';
+import { constants } from 'rsuite-utils/lib/Picker';
+import { getUnhandledProps, prefix } from 'rsuite-utils/lib/utils';
+
 import setTimingMargin from './utils/setTimingMargin';
-import { instanceOfMoment } from './utils/momentPropTypes';
 
-const propTypes = {
-  ranges: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.node,
-    unclosed: PropTypes.bool,
-    value: PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        instanceOfMoment,
-        PropTypes.func
-      ])
-    )
-  })),
-  pageDate: instanceOfMoment,
-  onShortcut: PropTypes.func,
-  onOk: PropTypes.func,
-  disabledOkButton: PropTypes.func,
-  disabledShortcutButton: PropTypes.func
+const { namespace } = constants;
+
+type Range = {
+  label: React.Node,
+  closeOverlay?: boolean,
+  value: Array<moment$Moment> | (value?: Array<moment$Moment>)=> Array<moment$Moment>,
 };
 
-const defaultProps = {
-  ranges: [{
-    label: 'today',
-    value: [setTimingMargin(moment()), setTimingMargin(moment(), 'right')]
-  }, {
-    label: 'yesterday',
-    value: [setTimingMargin(moment().add(-1, 'd')), setTimingMargin(moment().add(-1, 'd'), 'right')]
-  }, {
-    label: 'last7Days',
-    value: [setTimingMargin(moment().subtract(6, 'days')), setTimingMargin(moment(), 'right')]
-  }]
+type Props = {
+  ranges: Array<Range>,
+  className?: string,
+  classPrefix?: string,
+  pageDate?: Array<moment$Moment>,
+  onShortcut: (
+    value: Array<moment$Moment>,
+    closeOverlay?: boolean,
+    event?: SyntheticEvent<*>
+  ) => void,
+  onOk?: (event: SyntheticEvent<*>) => void,
+  disabledOkButton?: (value?: Array<moment$Moment>) => boolean,
+  disabledShortcutButton: (value?: Array<moment$Moment>) => boolean,
+  selectValue?: Array<moment$Moment>,
 };
 
 
-class Toolbar extends Component {
+class Toolbar extends React.Component<Props> {
+
+  static defaultProps = {
+    classPrefix: `${namespace}-toolbar`,
+    ranges: [{
+      label: 'today',
+      value: [setTimingMargin(moment()), setTimingMargin(moment(), 'right')]
+    }, {
+      label: 'yesterday',
+      value: [setTimingMargin(moment().add(-1, 'd')), setTimingMargin(moment().add(-1, 'd'), 'right')]
+    }, {
+      label: 'last7Days',
+      value: [setTimingMargin(moment().subtract(6, 'days')), setTimingMargin(moment(), 'right')]
+    }]
+  };
+
+  shouldComponentUpdate(nextProps: Props) {
+    return !_.isEqual(this.props.selectValue, nextProps.selectValue);
+  }
+
+  addPrefix = (name: string) => prefix(this.props.classPrefix)(name);
+
   renderOkButton() {
     const {
       disabledOkButton,
@@ -50,12 +65,14 @@ class Toolbar extends Component {
     } = this.props;
 
     const disabled = disabledOkButton && disabledOkButton(pageDate);
-    const classes = classNames(this.prefix('toolbar-right-btn-ok'), { disabled });
+    const classes = classNames(this.addPrefix('right-btn-ok'), {
+      [this.addPrefix('btn-disabled')]: disabled
+    });
     return (
-      <div className={this.prefix('toolbar-right')}>
+      <div className={this.addPrefix('right')}>
         <button
           className={classes}
-          onClick={!disabled && onOk}
+          onClick={disabled ? undefined : onOk}
         >
           <FormattedMessage id="ok" />
         </button>
@@ -70,24 +87,27 @@ class Toolbar extends Component {
       disabledShortcutButton,
       className,
       pageDate,
-      ...props
+      classPrefix,
+      ...rest
 
     } = this.props;
 
-    const classes = classNames(this.prefix('toolbar'), className);
-    const elementProps = omit(props, Object.keys(propTypes));
+    const classes = classNames(classPrefix, className);
+    const unhandled = getUnhandledProps(Toolbar, rest);
 
     return (
       <div
-        {...elementProps}
+        {...unhandled}
         className={classes}
       >
-        <div className={this.prefix('toolbar-ranges')}>
+        <div className={this.addPrefix('ranges')}>
           {
             ranges.map((item, index) => {
-              let value = isFunction(item.value) ? item.value(pageDate) : item.value;
+              let value: any = typeof item.value === 'function' ? item.value(pageDate) : item.value;
               let disabled = disabledShortcutButton && disabledShortcutButton(value);
-              let itemClassName = classNames({ disabled });
+              let itemClassName = classNames(this.addPrefix('option'), {
+                [this.addPrefix('option-disabled')]: disabled
+              });
               return (
                 <a
                   /* eslint-disable */
@@ -96,7 +116,7 @@ class Toolbar extends Component {
                   tabIndex="-1"
                   className={itemClassName}
                   onClick={(event) => {
-                    !disabled && onShortcut(value, item.unclosed, event);
+                    !disabled && onShortcut(value, item.closeOverlay, event);
                   }}
                 >
                   <FormattedMessage id={item.label} />
@@ -112,8 +132,6 @@ class Toolbar extends Component {
   }
 }
 
-Toolbar.propTypes = propTypes;
-Toolbar.defaultProps = defaultProps;
 
-export default decorate()(Toolbar);
+export default Toolbar;
 
