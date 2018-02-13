@@ -13,7 +13,7 @@ class DateRangePickerToggle extends React.Component {
           <Button
             shape="default"
             onClick={() => {
-              this.picker.show(true);
+              this.picker.open();
             }}
           >
             展开
@@ -21,7 +21,7 @@ class DateRangePickerToggle extends React.Component {
           <Button
             shape="default"
             onClick={() => {
-              this.picker.hide(true);
+              this.picker.close(true);
             }}
           >
             关闭
