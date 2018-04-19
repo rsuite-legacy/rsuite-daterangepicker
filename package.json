@@ -1,14 +1,16 @@
 {
   "name": "rsuite-daterangepicker",
-  "version": "3.0.0-next",
+  "version": "3.0.0",
   "description": "React Daterangepicker Component",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src  *.js",
     "tdd": "karma start",
     "test": "npm run lint && NODE_ENV=test  karma start --single-run",
-    "build": "rm -rf ./lib && babel ./src --out-dir ./lib && cp -R src/less lib",
-    "dev": "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 --devtool source-map",
+    "build":
+      "rm -rf ./lib && babel ./src --out-dir ./lib && cp -R src/less lib",
+    "dev":
+      "NODE_ENV=development webpack-dev-server  --inline --progress --colors --port 3100 --host 0.0.0.0 --devtool source-map",
     "docs": "rm -rf assets &&  NODE_ENV=production webpack",
     "publish-docs": "node docs/gh-pages.js",
     "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls"
@@ -17,34 +19,24 @@
     "type": "git",
     "url": "git+https://github.com/rsuite/rsuite-daterangepicker.git"
   },
-  "keywords": [
-    "react-component",
-    "react",
-    "daterangepicker"
-  ],
-  "contributors": [
-    "A2ZH",
-    "Simon Guo <simonguo.2009@gmail.com>"
-  ],
+  "keywords": ["react-component", "react", "daterangepicker"],
+  "contributors": ["A2ZH", "Simon Guo <simonguo.2009@gmail.com>"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rsuite/rsuite-daterangepicker/issues"
   },
   "homepage": "https://github.com/rsuite/rsuite-daterangepicker#readme",
-  "files": [
-    "CHANGELOG.md",
-    "lib"
-  ],
+  "files": ["CHANGELOG.md", "lib", "src"],
   "dependencies": {
     "classnames": ">=2.0.0",
-    "dom-lib": "0.2.5",
+    "dom-lib": "^1.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "prop-types": "^15.5.10",
-    "rsuite-intl": "^1.0.4",
-    "rsuite-utils": "^1.0.0-next.8"
+    "rsuite-intl": "^1.0.4"
   },
   "peerDependencies": {
+    "rsuite-utils": "^1.0.0",
     "react": "^0.14.9 || >=15.3.0",
     "react-dom": "^0.14.9 || >=15.3.0"
   },
@@ -103,6 +95,7 @@
     "rsuite-affix": "^1.0.3",
     "rsuite-docs": "^0.1.11",
     "rsuite-theme": "^2.0.16",
+    "rsuite-utils": "^1.0.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
