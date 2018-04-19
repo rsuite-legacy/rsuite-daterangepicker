@@ -1,53 +1,47 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import moment from 'moment';
-import ReactTestUtils from 'react-dom/lib/ReactTestUtils';
+import ReactTestUtils from 'react-dom/test-utils';
 
 import Toolbar from '../src/Toolbar';
 
 describe('Toolbar', () => {
-
-  it('Should render a div with `rsuite-daterangepicker-toolbar` class', () => {
+  it('Should render a div with `rs-picker-toolbar` class', () => {
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toolbar />
+      <Toolbar onShortcut={() => {}} disabledShortcutButton={() => {}} />
     );
 
     const instanceDOM = findDOMNode(instance);
     assert.equal(instanceDOM.nodeName, 'DIV');
-    assert.ok(instanceDOM.className.match(/\brsuite-daterangepicker-toolbar\b/));
+    assert.ok(instanceDOM.className.match(/\brs-picker-toolbar\b/));
   });
 
-
-  it('Should call `onOk` callback', (done) => {
-
+  it('Should call `onOk` callback', done => {
     const doneOp = () => {
       done();
     };
 
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toolbar onOk={doneOp} />
+      <Toolbar onOk={doneOp} onShortcut={() => {}} disabledShortcutButton={() => {}} />
     );
     const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toolbar-right-btn-ok'));
+    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rs-picker-toolbar-right-btn-ok'));
   });
 
-  it('Should call `onShortcut` callback', (done) => {
-
+  it('Should call `onShortcut` callback', done => {
     const doneOp = () => {
       done();
     };
 
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toolbar onShortcut={doneOp} />
+      <Toolbar onShortcut={doneOp} disabledShortcutButton={() => {}} />
     );
     const instanceDOM = findDOMNode(instance);
-    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rsuite-daterangepicker-toolbar-ranges a'));
+    ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rs-picker-toolbar-ranges a'));
   });
-
 
   it('Should have a custom className', () => {
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toolbar className="custom" />
+      <Toolbar className="custom" onShortcut={() => {}} disabledShortcutButton={() => {}} />
     );
     assert.ok(findDOMNode(instance).className.match(/\bcustom\b/));
   });
@@ -55,10 +49,8 @@ describe('Toolbar', () => {
   it('Should have a custom style', () => {
     const fontSize = '12px';
     const instance = ReactTestUtils.renderIntoDocument(
-      <Toolbar style={{ fontSize }} />
+      <Toolbar style={{ fontSize }} onShortcut={() => {}} disabledShortcutButton={() => {}} />
     );
     assert.equal(findDOMNode(instance).style.fontSize, fontSize);
   });
-
-
 });
