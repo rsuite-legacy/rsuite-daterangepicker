@@ -21,18 +21,18 @@ const { namespace } = constants;
 type Range = {
   label: React.Node,
   closeOverlay?: boolean,
-  value: Array<moment$Moment> | (value?: Array<moment$Moment>)=> Array<moment$Moment>,
+  value: Array<moment$Moment> | ((value?: Array<moment$Moment>) => Array<moment$Moment>)
 };
 
 type PlacementEighPoints =
-  'bottomLeft' |
-  'bottomRight' |
-  'topLeft' |
-  'topRight' |
-  'leftTop' |
-  'rightTop' |
-  'leftBottom' |
-  'rightBottom';
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topRight'
+  | 'leftTop'
+  | 'rightTop'
+  | 'leftBottom'
+  | 'rightBottom';
 
 type Props = {
   disabledDate?: (
@@ -66,25 +66,21 @@ type Props = {
   open?: boolean,
   defaultOpen?: boolean,
   placement?: PlacementEighPoints,
+  onSelect?: (date: moment$Moment) => void,
   onOpen?: () => void,
   onClose?: () => void
 };
 
 function getCalendarDate(value: Array<moment$Moment> = []) {
-
   let calendarDate = [moment(), moment().add(1, 'month')];
 
   // Update calendarDate if the value is not null
   if (value[0] && value[1]) {
     let isSameMonth = value[0].clone().isSame(value[1], 'month');
-    calendarDate = [
-      value[0],
-      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()
-    ];
+    calendarDate = [value[0], isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()];
   }
   return calendarDate;
 }
-
 
 type State = {
   value?: Array<moment$Moment>,
@@ -101,10 +97,9 @@ type State = {
 
   // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
   currentHoverDate?: moment$Moment | null
-}
+};
 
 class DateRangePicker extends React.Component<Props, State> {
-
   static defaultProps = {
     classPrefix: `${namespace}-daterange`,
     placement: 'bottomLeft',
@@ -131,19 +126,16 @@ class DateRangePicker extends React.Component<Props, State> {
       hoverValue: [],
       currentHoverDate: null
     };
-
   }
 
   componentWillReceiveProps(nextProps: Props) {
-
     const { value } = this.props;
     if (!_.isEqual(nextProps.value, value)) {
       this.setState({ value: nextProps.value });
     }
-
   }
 
-  getValue = (): Array<moment$Moment> => (this.props.value || this.state.value || [])
+  getValue = (): Array<moment$Moment> => this.props.value || this.state.value || [];
 
   getDateString(value?: Array<moment$Moment>) {
     const { placeholder, format } = this.props;
@@ -158,7 +150,6 @@ class DateRangePicker extends React.Component<Props, State> {
     return placeholder || `${format} ~ ${format}`;
   }
 
-
   // hover range presets
   getWeekHoverRange = (date: moment$Moment) => {
     const { isoWeek } = this.props;
@@ -170,9 +161,10 @@ class DateRangePicker extends React.Component<Props, State> {
 
     return [date.clone().startOf('week'), date.clone().endOf('week')];
   };
-  getMonthHoverRange = (date: moment$Moment) => (
-    [date.clone().startOf('month'), date.clone().endOf('month')]
-  );
+  getMonthHoverRange = (date: moment$Moment) => [
+    date.clone().startOf('month'),
+    date.clone().endOf('month')
+  ];
 
   getHoverRange(date: moment$Moment) {
     const { hoverRange } = this.props;
@@ -204,12 +196,12 @@ class DateRangePicker extends React.Component<Props, State> {
     return hoverValues;
   }
 
-
   handleChangeCalendarDate = (index: number, date: moment$Moment) => {
     const { calendarDate } = this.state;
     calendarDate[index] = date;
+
     this.setState({ calendarDate });
-  }
+  };
 
   open() {
     if (this.trigger) {
@@ -235,13 +227,9 @@ class DateRangePicker extends React.Component<Props, State> {
   /**
    * Toolbar operation callback function
    */
-  handleShortcutPageDate = (
-    value: Array<moment$Moment>,
-    closeOverlay?: boolean
-  ) => {
+  handleShortcutPageDate = (value: Array<moment$Moment>, closeOverlay?: boolean) => {
     this.updateValue(value, closeOverlay);
-  }
-
+  };
 
   updateValue(nextSelectValue?: Array<moment$Moment>, closeOverlay?: boolean = true) {
     const { value, selectValue } = this.state;
@@ -261,19 +249,17 @@ class DateRangePicker extends React.Component<Props, State> {
     if (closeOverlay !== false) {
       this.close();
     }
-
   }
-
 
   handleOK = (event: SyntheticEvent<*>) => {
     const { onOk } = this.props;
     this.updateValue();
     onOk && onOk(this.state.selectValue, event);
-  }
+  };
 
   handleChangeSelectValue = (date: moment$Moment) => {
-
     const { selectValue, doneSelected } = this.state;
+    const { onSelect } = this.props;
     let nextValue = [];
     let nextHoverValue = this.getHoverRange(date);
 
@@ -285,19 +271,11 @@ class DateRangePicker extends React.Component<Props, State> {
         nextValue = [date, undefined, date];
       }
     } else {
-
       if (nextHoverValue.length) {
-        nextValue = [
-          selectValue[0],
-          selectValue[1]
-        ];
+        nextValue = [selectValue[0], selectValue[1]];
       } else {
-        nextValue = [
-          selectValue[0],
-          date
-        ];
+        nextValue = [selectValue[0], date];
       }
-
 
       if (nextValue[0].isAfter(nextValue[1])) {
         nextValue.reverse();
@@ -309,30 +287,26 @@ class DateRangePicker extends React.Component<Props, State> {
       this.setState({
         calendarDate: getCalendarDate(nextValue)
       });
-
     }
 
-    this.setState({
-      doneSelected: !doneSelected,
-      selectValue: nextValue,
-      hoverValue: nextHoverValue
-    }, () => {
-      // 如果是单击模式，并且是第一次点选，再触发一次点击
-      if (this.props.oneTap && !this.state.doneSelected) {
-        this.handleChangeSelectValue(date);
+    this.setState(
+      {
+        doneSelected: !doneSelected,
+        selectValue: nextValue,
+        hoverValue: nextHoverValue
+      },
+      () => {
+        // 如果是单击模式，并且是第一次点选，再触发一次点击
+        if (this.props.oneTap && !this.state.doneSelected) {
+          this.handleChangeSelectValue(date);
+        }
+        onSelect && onSelect(date);
       }
-    });
-
-  }
+    );
+  };
 
   handleMouseMoveSelectValue = (date: moment$Moment) => {
-
-    const {
-      doneSelected,
-      selectValue,
-      hoverValue,
-      currentHoverDate
-    } = this.state;
+    const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
 
     const { hoverRange } = this.props;
 
@@ -371,14 +345,14 @@ class DateRangePicker extends React.Component<Props, State> {
 
     this.setState({
       currentHoverDate: date,
-      selectValue: nextValue,
+      selectValue: nextValue
     });
-  }
+  };
 
   handleClean = () => {
     this.setState({ calendarDate: [moment(), moment().add(1, 'month')] });
     this.updateValue([]);
-  }
+  };
 
   disabledByBetween(start: moment$Moment, end: moment$Moment, type: string) {
     const { disabledDate } = this.props;
@@ -386,10 +360,7 @@ class DateRangePicker extends React.Component<Props, State> {
     const date = start.clone();
     const selectStartDate = selectValue[0] ? selectValue[0].clone() : null;
     const selectEndDate = selectValue[1] ? selectValue[1].clone() : null;
-    const nextSelectValue = [
-      selectStartDate,
-      selectEndDate
-    ];
+    const nextSelectValue = [selectStartDate, selectEndDate];
 
     // If the date is between the start and the end
     // the button is disabled
@@ -415,18 +386,14 @@ class DateRangePicker extends React.Component<Props, State> {
       selectValue[1].clone(),
       Type.TOOLBAR_BUTTON_OK
     );
-  }
+  };
 
   disabledShortcutButton = (value: Array<moment$Moment> = []) => {
     if (!value[0] || !value[1]) {
       return true;
     }
-    return this.disabledByBetween(
-      value[0].clone(),
-      value[1].clone(),
-      Type.TOOLBAR_SHORTCUT
-    );
-  }
+    return this.disabledByBetween(value[0].clone(), value[1].clone(), Type.TOOLBAR_SHORTCUT);
+  };
 
   handleDisabledDate = (date: moment$Moment, values: Array<moment$Moment | null>, type: string) => {
     const { disabledDate } = this.props;
@@ -435,7 +402,7 @@ class DateRangePicker extends React.Component<Props, State> {
       return disabledDate(date, values, doneSelected, type);
     }
     return false;
-  }
+  };
   addPrefix = (name: string) => prefix(this.props.classPrefix)(name);
 
   trigger = null;
@@ -443,27 +410,14 @@ class DateRangePicker extends React.Component<Props, State> {
   container = null;
 
   renderDropdownMenu() {
+    const { placement, ranges, isoWeek, limitStartYear, limitEndYear } = this.props;
 
-    const {
-      placement,
-      ranges,
-      isoWeek,
-      limitStartYear,
-      limitEndYear
-    } = this.props;
-
-    const {
-      calendarDate,
-      selectValue,
-      hoverValue,
-      doneSelected
-    } = this.state;
+    const { calendarDate, selectValue, hoverValue, doneSelected } = this.state;
 
     const classes = classNames(
       this.addPrefix('menu'),
       `${namespace}-placement-${_.kebabCase(placement)}`
     );
-
 
     const pickerProps = {
       isoWeek,
@@ -480,20 +434,16 @@ class DateRangePicker extends React.Component<Props, State> {
     };
 
     return (
-      <MenuWrapper
-        className={classes}
-      >
+      <MenuWrapper className={classes}>
         <div
           className={this.addPrefix('panel')}
-          ref={(ref) => {
+          ref={ref => {
             // for test
             this.menuContainer = ref;
           }}
         >
-          <div className={this.addPrefix('content')} >
-            <div className={this.addPrefix('header')}>
-              {this.getDateString(selectValue)}
-            </div>
+          <div className={this.addPrefix('content')}>
+            <div className={this.addPrefix('header')}>{this.getDateString(selectValue)}</div>
             <div className={this.addPrefix('calendar-group')}>
               <DatePicker index={0} {...pickerProps} />
               <DatePicker index={1} {...pickerProps} />
@@ -512,7 +462,6 @@ class DateRangePicker extends React.Component<Props, State> {
     );
   }
   render() {
-
     const {
       className,
       disabled,
@@ -531,23 +480,26 @@ class DateRangePicker extends React.Component<Props, State> {
 
     const value = this.getValue();
     const unhandled = getUnhandledProps(DateRangePicker, rest);
-    const classes = classNames(classPrefix, {
-      [this.addPrefix('disabled')]: disabled,
-    }, `${namespace}-placement-${_.kebabCase(placement)}`, className);
-
+    const classes = classNames(
+      classPrefix,
+      {
+        [this.addPrefix('disabled')]: disabled
+      },
+      `${namespace}-placement-${_.kebabCase(placement)}`,
+      className
+    );
 
     return (
       <IntlProvider locale={locale}>
         <div
           {...unhandled}
           className={classes}
-          ref={(ref) => {
+          ref={ref => {
             this.container = ref;
           }}
         >
-
           <OverlayTrigger
-            ref={(ref) => {
+            ref={ref => {
               this.trigger = ref;
             }}
             open={open}
@@ -559,17 +511,14 @@ class DateRangePicker extends React.Component<Props, State> {
             onExited={onClose}
             speaker={this.renderDropdownMenu()}
           >
-
             <Toggle
-              onClean={(value[0] && value[1] && cleanable) ? this.handleClean : undefined}
+              onClean={value[0] && value[1] && cleanable ? this.handleClean : undefined}
               cleanable={!!value[0] && !!value[1] && cleanable}
               hasValue={!!value}
             >
               {this.getDateString()}
             </Toggle>
-
           </OverlayTrigger>
-
         </div>
       </IntlProvider>
     );

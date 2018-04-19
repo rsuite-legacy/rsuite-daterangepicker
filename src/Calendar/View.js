@@ -4,7 +4,6 @@ import * as React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import { constants } from 'rsuite-utils/lib/Picker';
-import _ from 'lodash';
 
 import Table from './Table';
 import getMonthView from '../utils/getMonthView';
