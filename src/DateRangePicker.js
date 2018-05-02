@@ -62,6 +62,7 @@ type Props = {
   limitStartYear?: number,
   limitEndYear?: number,
   className?: string,
+  menuClassName?: string,
   classPrefix?: string,
   open?: boolean,
   defaultOpen?: boolean,
@@ -410,12 +411,12 @@ class DateRangePicker extends React.Component<Props, State> {
   container = null;
 
   renderDropdownMenu() {
-    const { placement, ranges, isoWeek, limitStartYear, limitEndYear } = this.props;
-
+    const { placement, menuClassName, ranges, isoWeek, limitStartYear, limitEndYear } = this.props;
     const { calendarDate, selectValue, hoverValue, doneSelected } = this.state;
 
     const classes = classNames(
       this.addPrefix('menu'),
+      menuClassName,
       `${namespace}-placement-${_.kebabCase(placement)}`
     );
 
@@ -434,14 +435,14 @@ class DateRangePicker extends React.Component<Props, State> {
     };
 
     return (
-      <MenuWrapper className={classes}>
-        <div
-          className={this.addPrefix('panel')}
-          ref={ref => {
-            // for test
-            this.menuContainer = ref;
-          }}
-        >
+      <MenuWrapper
+        className={classes}
+        ref={ref => {
+          // for test
+          this.menuContainer = ref;
+        }}
+      >
+        <div className={this.addPrefix('panel')}>
           <div className={this.addPrefix('content')}>
             <div className={this.addPrefix('header')}>{this.getDateString(selectValue)}</div>
             <div className={this.addPrefix('calendar-group')}>

@@ -1,7 +1,3 @@
-# 2.0.0
-- 全新的交互方式
-- 支持快捷选项
-- 支持自定义 placeholder
-- 支持受控与非受控，可以放在 form-lib 中使用
-- 支持禁用
-- 支持选择整周、整月
+# 3.0.1
+
+* Added new property `menuClassName`

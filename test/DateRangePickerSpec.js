@@ -42,7 +42,14 @@ describe('DateRangePicker', () => {
 
   it('Should have a custom className', () => {
     const instance = ReactTestUtils.renderIntoDocument(<DateRangePicker className="custom" />);
-    assert.ok(findDOMNode(instance).className.match(/\bcustom\b/));
+    assert.include(findDOMNode(instance).className, 'custom');
+  });
+
+  it('Should have a menuClassName in Menu', () => {
+    const instance = ReactTestUtils.renderIntoDocument(
+      <DateRangePicker menuClassName="custom" open />
+    );
+    assert.include(findDOMNode(instance.menuContainer).className, 'custom');
   });
 
   it('Should have a custom style', () => {
@@ -73,7 +80,7 @@ describe('DateRangePicker', () => {
         ReactTestUtils.Simulate.click(today);
       } else if (count === 1) {
         ReactTestUtils.Simulate.click(
-          instance.menuContainer.querySelector('.rs-picker-toolbar-right-btn-ok')
+          findDOMNode(instance.menuContainer).querySelector('.rs-picker-toolbar-right-btn-ok')
         );
       }
       count += 1;
@@ -82,7 +89,10 @@ describe('DateRangePicker', () => {
     instance = ReactTestUtils.renderIntoDocument(
       <DateRangePicker onSelect={handleSelect} onOk={doneOp} hoverRange="week" open />
     );
-    today = instance.menuContainer.querySelector('.rs-picker-calendar-table-cell-is-today');
+
+    today = findDOMNode(instance.menuContainer).querySelector(
+      '.rs-picker-calendar-table-cell-is-today'
+    );
     ReactTestUtils.Simulate.click(today);
   });
 
@@ -103,7 +113,7 @@ describe('DateRangePicker', () => {
       <DateRangePicker
         onSelect={() => {
           ReactTestUtils.Simulate.click(
-            instance.menuContainer.querySelector('.rs-picker-toolbar-right-btn-ok')
+            findDOMNode(instance.menuContainer).querySelector('.rs-picker-toolbar-right-btn-ok')
           );
         }}
         onOk={doneOp}
@@ -112,7 +122,9 @@ describe('DateRangePicker', () => {
         open
       />
     );
-    const today = instance.menuContainer.querySelector('.rs-picker-calendar-table-cell-is-today');
+    const today = findDOMNode(instance.menuContainer).querySelector(
+      '.rs-picker-calendar-table-cell-is-today'
+    );
     ReactTestUtils.Simulate.click(today);
   });
 });
