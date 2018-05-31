@@ -64,6 +64,9 @@ type Props = {
   className?: string,
   menuClassName?: string,
   classPrefix?: string,
+  block?: boolean,
+  toggleComponentClass?: React.ElementType,
+  style?: Object,
   open?: boolean,
   defaultOpen?: boolean,
   placement?: PlacementEighPoints,
@@ -476,14 +479,20 @@ class DateRangePicker extends React.Component<Props, State> {
       onOpen,
       onClose,
       classPrefix,
+      toggleComponentClass,
+      block,
+      style,
       ...rest
     } = this.props;
 
     const value = this.getValue();
     const unhandled = getUnhandledProps(DateRangePicker, rest);
+    const hasValue = value && value.length > 1;
     const classes = classNames(
       classPrefix,
       {
+        [this.addPrefix('block')]: block,
+        [this.addPrefix('has-value')]: hasValue,
         [this.addPrefix('disabled')]: disabled
       },
       `${namespace}-placement-${_.kebabCase(placement)}`,
@@ -493,8 +502,8 @@ class DateRangePicker extends React.Component<Props, State> {
     return (
       <IntlProvider locale={locale}>
         <div
-          {...unhandled}
           className={classes}
+          style={style}
           ref={ref => {
             this.container = ref;
           }}
@@ -513,9 +522,11 @@ class DateRangePicker extends React.Component<Props, State> {
             speaker={this.renderDropdownMenu()}
           >
             <Toggle
-              onClean={value[0] && value[1] && cleanable ? this.handleClean : undefined}
-              cleanable={!!value[0] && !!value[1] && cleanable}
-              hasValue={!!value}
+              {...unhandled}
+              componentClass={toggleComponentClass}
+              onClean={this.handleClean}
+              cleanable={cleanable && !disabled}
+              hasValue={hasValue}
             >
               {this.getDateString()}
             </Toggle>
