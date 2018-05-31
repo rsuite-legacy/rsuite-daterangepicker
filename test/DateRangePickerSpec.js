@@ -40,6 +40,17 @@ describe('DateRangePicker', () => {
     ReactTestUtils.Simulate.click(instanceDOM.querySelector('.rs-picker-toggle'));
   });
 
+  it('Should output a button', () => {
+    const instance = ReactTestUtils.renderIntoDocument(<DateRangePicker toggleComponentClass="button" />);
+    assert.ok(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'button'));
+  });
+
+  it('Should be block', () => {
+    const instance = ReactTestUtils.renderIntoDocument(<DateRangePicker block />);
+    const instanceDom = findDOMNode(instance);
+    assert.ok(instanceDom.className.match(/\bblock\b/));
+  });
+
   it('Should have a custom className', () => {
     const instance = ReactTestUtils.renderIntoDocument(<DateRangePicker className="custom" />);
     assert.include(findDOMNode(instance).className, 'custom');

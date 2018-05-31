@@ -47,7 +47,7 @@
   "peerDependencies": {
     "react": "^0.14.9 || >=15.3.0",
     "react-dom": "^0.14.9 || >=15.3.0",
-    "rsuite-utils": "^1.0.0"
+    "rsuite-utils": ">=1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.18.0",
@@ -104,7 +104,7 @@
     "rsuite-affix": "^1.0.3",
     "rsuite-docs": "^0.1.11",
     "rsuite-theme": "^2.0.16",
-    "rsuite-utils": "^1.0.1",
+    "rsuite-utils": "^1.0.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
