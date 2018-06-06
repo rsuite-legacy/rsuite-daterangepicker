@@ -7,7 +7,7 @@ import { IntlProvider } from 'rsuite-intl';
 import OverlayTrigger from 'rsuite-utils/lib/Overlay/OverlayTrigger';
 import _ from 'lodash';
 
-import { getUnhandledProps, prefix } from 'rsuite-utils/lib/utils';
+import { getUnhandledProps, prefix, createChainedFunction } from 'rsuite-utils/lib/utils';
 import { MenuWrapper, Toggle, constants } from 'rsuite-utils/lib/Picker';
 
 import defaultLocale from './locale';
@@ -24,7 +24,7 @@ type Range = {
   value: Array<moment$Moment> | ((value?: Array<moment$Moment>) => Array<moment$Moment>)
 };
 
-type PlacementEighPoints =
+type Placement =
   | 'bottomLeft'
   | 'bottomRight'
   | 'topLeft'
@@ -32,7 +32,12 @@ type PlacementEighPoints =
   | 'leftTop'
   | 'rightTop'
   | 'leftBottom'
-  | 'rightBottom';
+  | 'rightBottom'
+  | 'auto'
+  | 'autoVerticalLeft'
+  | 'autoVerticalRight'
+  | 'autoHorizontalTop'
+  | 'autoHorizontalBottom';
 
 type Props = {
   disabledDate?: (
@@ -64,15 +69,23 @@ type Props = {
   className?: string,
   menuClassName?: string,
   classPrefix?: string,
+  container?: HTMLElement | (() => HTMLElement),
+  containerPadding?: number,
   block?: boolean,
   toggleComponentClass?: React.ElementType,
   style?: Object,
   open?: boolean,
   defaultOpen?: boolean,
-  placement?: PlacementEighPoints,
+  placement?: Placement,
   onSelect?: (date: moment$Moment) => void,
   onOpen?: () => void,
-  onClose?: () => void
+  onClose?: () => void,
+  onEnter?: Function,
+  onEntering?: Function,
+  onEntered?: Function,
+  onExit?: Function,
+  onExiting?: Function,
+  onExited?: Function
 };
 
 function getCalendarDate(value: Array<moment$Moment> = []) {
@@ -358,6 +371,16 @@ class DateRangePicker extends React.Component<Props, State> {
     this.updateValue([]);
   };
 
+  handleEntered = () => {
+    const { onOpen } = this.props;
+    onOpen && onOpen();
+  };
+
+  handleExited = () => {
+    const { onClose } = this.props;
+    onClose && onClose();
+  };
+
   disabledByBetween(start: moment$Moment, end: moment$Moment, type: string) {
     const { disabledDate } = this.props;
     const { selectValue, doneSelected } = this.state;
@@ -476,12 +499,18 @@ class DateRangePicker extends React.Component<Props, State> {
       open,
       placement,
       defaultOpen,
-      onOpen,
-      onClose,
       classPrefix,
       toggleComponentClass,
       block,
       style,
+      container,
+      containerPadding,
+      onEnter,
+      onEntering,
+      onEntered,
+      onExit,
+      onExiting,
+      onExited,
       ...rest
     } = this.props;
 
@@ -490,13 +519,13 @@ class DateRangePicker extends React.Component<Props, State> {
     const hasValue = value && value.length > 1;
     const classes = classNames(
       classPrefix,
+      `${namespace}-placement-${_.kebabCase(placement)}`,
+      className,
       {
         [this.addPrefix('block')]: block,
         [this.addPrefix('has-value')]: hasValue,
         [this.addPrefix('disabled')]: disabled
-      },
-      `${namespace}-placement-${_.kebabCase(placement)}`,
-      className
+      }
     );
 
     return (
@@ -517,9 +546,15 @@ class DateRangePicker extends React.Component<Props, State> {
             disabled={disabled}
             trigger="click"
             placement={placement}
-            onEntered={onOpen}
-            onExited={onClose}
+            onEnter={onEnter}
+            onEntering={onEntering}
+            onEntered={createChainedFunction(this.handleEntered, onEntered)}
+            onExit={onExit}
+            onExiting={onExiting}
+            onExited={createChainedFunction(this.handleExited, onExited)}
             speaker={this.renderDropdownMenu()}
+            container={container}
+            containerPadding={containerPadding}
           >
             <Toggle
               {...unhandled}
