@@ -1,7 +1,7 @@
 ### 在 Modal 中
 
-
 <!--start-code-->
+
 ```js
 class DateRangePickerInModal extends React.Component {
   constructor(props) {
@@ -12,10 +12,10 @@ class DateRangePickerInModal extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
-  handleOpen () {
+  handleOpen() {
     this.setState({ showModal: true });
   }
-  handleClose () {
+  handleClose() {
     this.setState({ showModal: false });
   }
   render() {
@@ -27,7 +27,18 @@ class DateRangePickerInModal extends React.Component {
             <Modal.Title>DateRangePicker in Modal</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <DateRangePicker format="YYYY-MM-DD" />
+            <div
+              ref={ref => {
+                this.container = ref;
+              }}
+            >
+              <DateRangePicker
+                format="YYYY-MM-DD"
+                container={() => {
+                  return this.container;
+                }}
+              />
+            </div>
           </Modal.Body>
         </Modal>
       </div>
@@ -37,4 +48,5 @@ class DateRangePickerInModal extends React.Component {
 
 ReactDOM.render(<DateRangePickerInModal />);
 ```
+
 <!--end-code-->
