@@ -14,6 +14,7 @@ import defaultLocale from './locale';
 import Toolbar from './Toolbar';
 import DatePicker from './DatePicker';
 import setTimingMargin from './utils/setTimingMargin';
+import equalMoment from './utils/equalMoment';
 import Type from './Type';
 
 const { namespace } = constants;
@@ -100,7 +101,7 @@ function getCalendarDate(value: Array<moment$Moment> = []) {
 }
 
 type State = {
-  value?: Array<moment$Moment>,
+  value: Array<moment$Moment>,
   selectValue: Array<moment$Moment | any>,
 
   // Two clicks, the second click ends
@@ -144,14 +145,6 @@ class DateRangePicker extends React.Component<Props, State> {
       currentHoverDate: null
     };
   }
-
-  componentWillReceiveProps(nextProps: Props) {
-    const { value } = this.props;
-    if (!_.isEqual(nextProps.value, value)) {
-      this.setState({ value: nextProps.value });
-    }
-  }
-
   getValue = (): Array<moment$Moment> => this.props.value || this.state.value || [];
 
   getDateString(value?: Array<moment$Moment>) {
@@ -258,8 +251,11 @@ class DateRangePicker extends React.Component<Props, State> {
       value: nextValue
     });
 
-    if (!_.isEqual(nextValue, value)) {
-      onChange && onChange(nextValue);
+    if (
+      onChange &&
+      (!equalMoment(nextValue[0], value[0]) || !equalMoment(nextValue[1], value[1]))
+    ) {
+      onChange(nextValue);
     }
 
     // `closeOverlay` default value is `true`
@@ -306,25 +302,23 @@ class DateRangePicker extends React.Component<Props, State> {
       });
     }
 
-    this.setState(
-      {
-        doneSelected: !doneSelected,
-        selectValue: nextValue,
-        hoverValue: nextHoverValue
-      },
-      () => {
-        // 如果是单击模式，并且是第一次点选，再触发一次点击
-        if (this.props.oneTap && !this.state.doneSelected) {
-          this.handleChangeSelectValue(date);
-        }
-        onSelect && onSelect(date);
+    const nextState = {
+      doneSelected: !doneSelected,
+      selectValue: nextValue,
+      hoverValue: nextHoverValue
+    };
+
+    this.setState(nextState, () => {
+      // 如果是单击模式，并且是第一次点选，再触发一次点击
+      if (this.props.oneTap && !this.state.doneSelected) {
+        this.handleChangeSelectValue(date);
       }
-    );
+      onSelect && onSelect(date);
+    });
   };
 
   handleMouseMoveSelectValue = (date: moment$Moment) => {
     const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
-
     const { hoverRange } = this.props;
 
     if (currentHoverDate && date.isSame(currentHoverDate, 'day')) {
@@ -519,8 +513,8 @@ class DateRangePicker extends React.Component<Props, State> {
     const hasValue = value && value.length > 1;
     const classes = classNames(
       classPrefix,
-      `${namespace}-placement-${_.kebabCase(placement)}`,
       className,
+      `${namespace}-placement-${_.kebabCase(placement)}`,
       {
         [this.addPrefix('block')]: block,
         [this.addPrefix('has-value')]: hasValue,

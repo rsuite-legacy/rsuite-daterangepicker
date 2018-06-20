@@ -10,19 +10,14 @@ import './less/index.less';
 
 import DateRangePicker from '../src';
 
-
 class App extends Component {
   render() {
     return (
-
       <PageContainer
         githubURL="https://github.com/rsuite/rsuite-daterangepicker"
         activeKey="DateRangePicker"
       >
-
-        <Markdown>
-          {require('../README.md')}
-        </Markdown>
+        <Markdown>{require('../README.md')}</Markdown>
 
         <h2>示例</h2>
         <CodeView
@@ -109,16 +104,16 @@ class App extends Component {
           {require('./md/DateRangePickerInModal.md')}
         </CodeView>
 
-
-        <Markdown>
-          {require('./md/props.md')}
-        </Markdown>
-
+        <Markdown>{require('./md/props.md')}</Markdown>
       </PageContainer>
     );
   }
 }
 
-ReactDOM.render(<App />,
-  document.getElementById('app')
-);
+ReactDOM.render(<App />, document.getElementById('app'));
+
+
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
+}

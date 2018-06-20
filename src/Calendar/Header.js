@@ -3,7 +3,6 @@
 import * as React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
-import _ from 'lodash';
 import { constants } from 'rsuite-utils/lib/Picker';
 import { prefix } from 'rsuite-utils/lib/utils';
 
@@ -25,10 +24,6 @@ class Header extends React.Component<Props> {
     date: moment()
   };
 
-  shouldComponentUpdate(nextProps: Props) {
-    return !_.isEqual(this.props, nextProps);
-  }
-
   render() {
     const {
       date,
@@ -44,9 +39,9 @@ class Header extends React.Component<Props> {
     } = this.props;
 
     const addPrefix = prefix(classPrefix);
-    const dateTitleClasses = classNames(addPrefix('title'), {
+    const dateTitleClasses = classNames(addPrefix('title'), addPrefix('title-date'), {
       error: disabledDate && disabledDate(date)
-    }, addPrefix('title-date'));
+    });
 
     const classes = classNames(classPrefix, className);
     const backwardClass = classNames(addPrefix('backward'), {
@@ -57,10 +52,7 @@ class Header extends React.Component<Props> {
       [addPrefix('btn-disabled')]: disabledForword
     });
     return (
-      <div
-        {...rest}
-        className={classes}
-      >
+      <div {...rest} className={classes}>
         <div className={addPrefix('month-toolbar')}>
           <i
             className={backwardClass}

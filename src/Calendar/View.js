@@ -28,21 +28,17 @@ type Props = {
 const inSameMonth = (dateA: moment$Moment, dateB: moment$Moment) => dateA.month() === dateB.month();
 const getThisMonthDate = (date: moment$Moment) => date.clone().date(1);
 
-
 class MonthView extends React.Component<Props> {
-
   static defaultProps = {
     classPrefix: `${constants.namespace}-calendar-view`,
     activeDate: moment()
   };
 
-
   inSameThisMonthDate = (date: moment$Moment) => {
     const thisMonthDate = getThisMonthDate(this.props.activeDate);
     return inSameMonth(date, thisMonthDate);
-  }
+  };
   render() {
-
     const {
       activeDate,
       value,
@@ -60,10 +56,7 @@ class MonthView extends React.Component<Props> {
     const classes = classNames(classPrefix, className);
 
     return (
-      <div
-        {...rest}
-        className={classes}
-      >
+      <div {...rest} className={classes}>
         <Table
           rows={getMonthView(thisMonthDate, isoWeek)}
           isoWeek={isoWeek}
@@ -78,6 +71,5 @@ class MonthView extends React.Component<Props> {
     );
   }
 }
-
 
 export default MonthView;
