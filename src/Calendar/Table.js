@@ -24,9 +24,7 @@ type Props = {
   classPrefix?: string
 };
 
-
 class Table extends React.Component<Props> {
-
   static defaultProps = {
     classPrefix: `${constants.namespace}-calendar-table`,
     rows: []
@@ -50,30 +48,24 @@ class Table extends React.Component<Props> {
     const classes = classNames(classPrefix, className);
 
     return (
-      <div
-        {...rest}
-        className={classes}
-      >
+      <div {...rest} className={classes}>
         <TableHeaderRow isoWeek={isoWeek} />
-        {
-          rows.map((week, index) => (
-            <TableRow
-              /* eslint-disable */
-              key={index}
-              weekendDate={week}
-              selected={selected}
-              hoverValue={hoverValue}
-              onSelect={onSelect}
-              onMouseMove={onMouseMove}
-              inSameMonth={inSameMonth}
-              disabledDate={disabledDate}
-            />
-          ))
-        }
+        {rows.map((week, index) => (
+          <TableRow
+            /* eslint-disable */
+            key={index}
+            weekendDate={week}
+            selected={selected}
+            hoverValue={hoverValue}
+            onSelect={onSelect}
+            onMouseMove={onMouseMove}
+            inSameMonth={inSameMonth}
+            disabledDate={disabledDate}
+          />
+        ))}
       </div>
     );
   }
 }
-
 
 export default Table;

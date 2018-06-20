@@ -3,7 +3,6 @@
 import * as React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
-import _ from 'lodash';
 import { constants } from 'rsuite-utils/lib/Picker';
 import { prefix, getUnhandledProps } from 'rsuite-utils/lib/utils';
 
@@ -18,41 +17,31 @@ type Props = {
   disabled?: boolean
 };
 
-class MonthDropdownItem extends React.Component<Props> {
-
+class MonthDropdownItem extends React.PureComponent<Props> {
   static defaultProps = {
     classPrefix: `${constants.namespace}-calendar-month-dropdown-cell`,
     month: 0
   };
 
-  shouldComponentUpdate(nextProps: Props) {
-    return !_.isEqual(this.props, nextProps);
-  }
-
   handleClick = (event: SyntheticEvent<*>) => {
     const { onSelect, month, year, date } = this.props;
     if (year && month && date) {
-      const nextMonth = moment(date).year(year).month(month - 1);
+      const nextMonth = moment(date)
+        .year(year)
+        .month(month - 1);
       onSelect && onSelect(nextMonth, event);
     }
-  }
+  };
 
   render() {
-    const {
-      className,
-      month,
-      classPrefix,
-      active,
-      disabled,
-      ...rest
-    } = this.props;
+    const { className, month, classPrefix, active, disabled, ...rest } = this.props;
 
     const addPrefix = prefix(classPrefix);
     const unhandled = getUnhandledProps(MonthDropdownItem, rest);
-    const classes = classNames(classPrefix, {
+    const classes = classNames(classPrefix, className, {
       [addPrefix('active')]: active,
       [addPrefix('disabled')]: disabled
-    }, className);
+    });
 
     return (
       <div

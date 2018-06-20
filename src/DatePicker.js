@@ -20,14 +20,12 @@ type Props = {
   onChangeCalendarDate: (index: number, nextPageDate: moment$Moment) => void,
   isoWeek?: boolean,
   limitStartYear?: number,
-  limitEndYear?: number,
+  limitEndYear?: number
 };
 
-
 type State = {
-  calendarState?: 'DROP_MONTH' | 'DROP_TIME',
-}
-
+  calendarState?: 'DROP_MONTH' | 'DROP_TIME'
+};
 
 class DatePicker extends React.Component<Props, State> {
   static defaultProps = {
@@ -47,12 +45,12 @@ class DatePicker extends React.Component<Props, State> {
   onMoveForword = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
     onChangeCalendarDate(index, nextPageDate);
-  }
+  };
 
   onMoveBackward = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
     onChangeCalendarDate(index, nextPageDate);
-  }
+  };
 
   handleChangePageDate = (nextPageDate: moment$Moment) => {
     const { onChangeCalendarDate, index } = this.props;
@@ -60,7 +58,7 @@ class DatePicker extends React.Component<Props, State> {
     this.setState({
       calendarState: undefined
     });
-  }
+  };
 
   showMonthDropdown() {
     this.setState({ calendarState: 'DROP_MONTH' });
@@ -71,7 +69,6 @@ class DatePicker extends React.Component<Props, State> {
   }
 
   toggleMonthDropdown = () => {
-
     const { calendarState } = this.state;
 
     if (calendarState === 'DROP_MONTH') {
@@ -79,7 +76,7 @@ class DatePicker extends React.Component<Props, State> {
     } else {
       this.showMonthDropdown();
     }
-  }
+  };
   render() {
     const {
       format,

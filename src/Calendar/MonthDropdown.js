@@ -4,7 +4,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { scrollTop } from 'dom-lib';
 import moment from 'moment';
-import _ from 'lodash';
 import { constants } from 'rsuite-utils/lib/Picker';
 import { prefix, getUnhandledProps } from 'rsuite-utils/lib/utils';
 
@@ -25,8 +24,7 @@ type Props = {
 const minYear = 1950;
 const blockHeight = 84;
 
-class MonthDropdown extends React.Component<Props> {
-
+class MonthDropdown extends React.PureComponent<Props> {
   static defaultProps = {
     classPrefix: `${constants.namespace}-calendar-month-dropdown`,
     limitStartYear: 5,
@@ -40,7 +38,7 @@ class MonthDropdown extends React.Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    return nextProps.show && !_.isEqual(this.props, nextProps);
+    return nextProps.show;
   }
 
   componentDidUpdate() {
@@ -58,17 +56,16 @@ class MonthDropdown extends React.Component<Props> {
 
   scrollTo = (date: moment$Moment) => {
     const year = date.year();
-    const top = ((year - this.getStartYear()) * blockHeight);
+    const top = (year - this.getStartYear()) * blockHeight;
 
     scrollTopAnimation(this.scroll, top, scrollTop(this.scroll) !== 0);
   };
 
   scroll = null;
 
-  addPrefix = (name: string) => prefix(this.props.classPrefix)(name)
+  addPrefix = (name: string) => prefix(this.props.classPrefix)(name);
 
   renderBlock() {
-
     const { date, onSelect, limitEndYear, disabledMonth } = this.props;
 
     const ret = [];
@@ -77,8 +74,7 @@ class MonthDropdown extends React.Component<Props> {
     const startYear = this.getStartYear();
     let nextYear = 0;
 
-    for (let i = 0; i < 100 && nextYear < (selectedYear + limitEndYear); i += 1) {
-
+    for (let i = 0; i < 100 && nextYear < selectedYear + limitEndYear; i += 1) {
       nextYear = startYear + i;
 
       let isSelectedYear = nextYear === selectedYear;
@@ -90,25 +86,28 @@ class MonthDropdown extends React.Component<Props> {
         <div className={this.addPrefix('row')} key={i}>
           <div className={titleClasses}>{nextYear}</div>
           <div className={this.addPrefix('list')}>
-            {
-              /* eslint-disable */
-              [...Array(12)].map((i, month) => {
-
-                let disabled = disabledMonth && disabledMonth(moment().year(nextYear).month(month));
-
-                return (
-                  <MonthDropdownItem
-                    date={date}
-                    onSelect={onSelect}
-                    disabled={disabled}
-                    active={isSelectedYear && month === selectedMonth}
-                    key={month}
-                    month={month + 1}
-                    year={nextYear}
-                  />
+            {/* eslint-disable */
+            [...Array(12)].map((i, month) => {
+              let disabled =
+                disabledMonth &&
+                disabledMonth(
+                  moment()
+                    .year(nextYear)
+                    .month(month)
                 );
-              })
-            }
+
+              return (
+                <MonthDropdownItem
+                  date={date}
+                  onSelect={onSelect}
+                  disabled={disabled}
+                  active={isSelectedYear && month === selectedMonth}
+                  key={month}
+                  month={month + 1}
+                  year={nextYear}
+                />
+              );
+            })}
           </div>
         </div>
       );
@@ -118,19 +117,15 @@ class MonthDropdown extends React.Component<Props> {
   }
 
   render() {
-
     const { classPrefix, className, ...rest } = this.props;
     const classes = classNames(classPrefix, className);
     const unhandled = getUnhandledProps(MonthDropdown, rest);
     return (
-      <div
-        {...unhandled}
-        className={classes}
-      >
+      <div {...unhandled} className={classes}>
         <div className={this.addPrefix('content')}>
           <div
             className={this.addPrefix('scroll')}
-            ref={(ref) => {
+            ref={ref => {
               this.scroll = ref;
             }}
           >

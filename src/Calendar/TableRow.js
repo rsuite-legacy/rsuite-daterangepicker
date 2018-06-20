@@ -28,16 +28,14 @@ type Props = {
 const { namespace } = constants;
 
 class TableRow extends React.Component<Props> {
-
   static defaultProps = {
     classPrefix: `${namespace}-calendar-table`,
     selected: [],
     hoverValue: []
   };
 
-  addPrefix = (name: string) => prefix(this.props.classPrefix)(name)
+  addPrefix = (name: string) => prefix(this.props.classPrefix)(name);
   renderDays() {
-
     const {
       weekendDate,
       disabledDate,
@@ -55,14 +53,10 @@ class TableRow extends React.Component<Props> {
     const hoverEndDate = hoverValue[1] || null;
 
     for (let i = 0; i < 7; i += 1) {
-
       let thisDate = moment(weekendDate).add(i, 'd');
-      let selectValue = [
-        selectedStartDate,
-        selectedEndDate
-      ].sort((a, b) => (
-        (a ? a.unix() : 0) - (b ? b.unix() : 0)
-      ));
+      let selectValue = [selectedStartDate, selectedEndDate].sort(
+        (a, b) => (a ? a.unix() : 0) - (b ? b.unix() : 0)
+      );
 
       let disabled = disabledDate && disabledDate(thisDate.clone(), selectValue, Type.CALENDAR);
       let isToday = thisDate.isSame(moment(), 'date');
@@ -70,36 +64,38 @@ class TableRow extends React.Component<Props> {
 
       let unSameMonth = !(inSameMonth && inSameMonth(thisDate));
 
-
-      const isStartSelected = !unSameMonth && selectedStartDate && thisDate.isSame(selectedStartDate, 'date');
-      const isEndSelected = !unSameMonth && selectedEndDate && thisDate.isSame(selectedEndDate, 'date');
+      const isStartSelected =
+        !unSameMonth && selectedStartDate && thisDate.isSame(selectedStartDate, 'date');
+      const isEndSelected =
+        !unSameMonth && selectedEndDate && thisDate.isSame(selectedEndDate, 'date');
 
       const isSelected = isStartSelected || isEndSelected;
 
       // for Selected
       if (selectedStartDate && selectedEndDate) {
-        if (thisDate.isBefore(selectedEndDate, 'date')
-          && thisDate.isAfter(selectedStartDate, 'date')) {
+        if (
+          thisDate.isBefore(selectedEndDate, 'date') &&
+          thisDate.isAfter(selectedStartDate, 'date')
+        ) {
           inRange = true;
         }
-        if (thisDate.isBefore(selectedStartDate, 'date')
-          && thisDate.isAfter(selectedEndDate, 'date')) {
+        if (
+          thisDate.isBefore(selectedStartDate, 'date') &&
+          thisDate.isAfter(selectedEndDate, 'date')
+        ) {
           inRange = true;
         }
       }
 
       // for Hovering
       if (!isSelected && hoverEndDate && hoverStartDate) {
-        if (!thisDate.isAfter(hoverEndDate, 'date')
-          && !thisDate.isBefore(hoverStartDate, 'date')) {
+        if (!thisDate.isAfter(hoverEndDate, 'date') && !thisDate.isBefore(hoverStartDate, 'date')) {
           inRange = true;
         }
-        if (!thisDate.isAfter(hoverStartDate, 'date')
-          && !thisDate.isBefore(hoverEndDate, 'date')) {
+        if (!thisDate.isAfter(hoverStartDate, 'date') && !thisDate.isBefore(hoverEndDate, 'date')) {
           inRange = true;
         }
       }
-
 
       let classes = classNames(this.addPrefix('cell'), {
         [this.addPrefix('cell-un-same-month')]: unSameMonth,
@@ -119,10 +115,9 @@ class TableRow extends React.Component<Props> {
           role="menu"
           tabIndex="-1"
           title={isToday ? `${title} (Today)` : title}
-          onMouseMove={(!disabled && onMouseMove) ? onMouseMove.bind(null, thisDate) : undefined}
+          onMouseEnter={!disabled && onMouseMove ? onMouseMove.bind(null, thisDate) : undefined}
           onClick={
-            (!disabled && onSelect) ?
-              _.debounce(onSelect.bind(null, thisDate), 100) : undefined
+            !disabled && onSelect ? _.debounce(onSelect.bind(null, thisDate), 100) : undefined
           }
           key={title}
         >
@@ -134,24 +129,16 @@ class TableRow extends React.Component<Props> {
   }
 
   render() {
-    const {
-      className,
-      ...rest
-    } = this.props;
-
+    const { className, ...rest } = this.props;
     const classes = classNames(this.addPrefix('row'), className);
     const unhandled = getUnhandledProps(TableRow, rest);
 
     return (
-      <div
-        {...unhandled}
-        className={classes}
-      >
+      <div {...unhandled} className={classes}>
         {this.renderDays()}
       </div>
     );
   }
 }
-
 
 export default TableRow;
