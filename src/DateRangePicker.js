@@ -402,7 +402,7 @@ class DateRangePicker extends Component {
 
     // If the date is between the start and the end
     // the button is disabled
-    while (start.isBefore(end)) {
+    while (start.isBefore(end) || start.isSame(end,'day') ) {
       if (disabledDate && disabledDate(start.clone(), [
         selectValue && selectValue[0] ? selectValue[0].clone() : null,
         selectValue && selectValue[1] ? selectValue[1].clone() : null,
