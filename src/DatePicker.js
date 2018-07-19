@@ -51,11 +51,11 @@ class DatePicker extends Component {
   }
 
   showMonthDropdown(callback) {
-    this.setState({ calendarState: 'DROP_MONTH' }, callback);
+    this.setState({ calendarState: 'DROP_MONTH' }, typeof callback === 'function' ? callback : undefined);
   }
 
   hideMonthDropdown(callback) {
-    this.setState({ calendarState: null }, callback);
+    this.setState({ calendarState: null }, typeof callback === 'function' ? callback : undefined);
   }
 
   toggleMonthDropdown = (callback) => {
