@@ -76,7 +76,6 @@ class Toolbar extends Component {
           {ranges.map((item, index) => {
             let value = isFunction(item.value) ? item.value(pageDate) : item.value;
             let disabled = disabledShortcutButton && disabledShortcutButton(value);
-            console.log(disabled, value[0].format('YYYY-MM-DD'), value[1].format('YYYY-MM-DD'));
             let itemClassName = classNames({ disabled });
             return (
               <a
