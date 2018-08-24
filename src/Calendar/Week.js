@@ -21,7 +21,6 @@ const defaultProps = {
 };
 
 class Week extends React.Component {
-
   renderDays() {
     const {
       weekendDate,
@@ -35,13 +34,17 @@ class Week extends React.Component {
 
     let days = [];
     for (let i = 0; i < 7; i += 1) {
-
       let thisDate = moment(weekendDate).add(i, 'd');
-      let disabled = disabledDate && disabledDate(thisDate.clone(), [
-        selected && selected[0] ? selected[0].clone() : null,
-        selected && selected[1] ? selected[1].clone() : null
-      ].sort((a, b) => (a ? a.unix() : 0) - (b ? b.unix() : 0)), Type.CALENDAR);
-
+      let disabled =
+        disabledDate &&
+        disabledDate(
+          thisDate.clone(),
+          [
+            selected && selected[0] ? selected[0].clone() : null,
+            selected && selected[1] ? selected[1].clone() : null
+          ],
+          Type.CALENDAR
+        );
 
       let isToday = thisDate.isSame(moment(), 'date');
       let inRange = false;
@@ -57,7 +60,10 @@ class Week extends React.Component {
 
       let unSameMonth = !(inSameMonth && inSameMonth(thisDate));
 
-      const isSelected = !unSameMonth && ((selected[0] && thisDate.isSame(selected[0], 'date')) || (selected[1] && thisDate.isSame(selected[1], 'date')));
+      const isSelected =
+        !unSameMonth &&
+        ((selected[0] && thisDate.isSame(selected[0], 'date')) ||
+          (selected[1] && thisDate.isSame(selected[1], 'date')));
       if (!isSelected && hoverValue[1] && hoverValue[0]) {
         if (!thisDate.isAfter(hoverValue[1], 'date') && !thisDate.isBefore(hoverValue[0], 'date')) {
           inRange = true;
@@ -95,19 +101,13 @@ class Week extends React.Component {
   }
 
   render() {
-    const {
-      className,
-      ...props
-    } = this.props;
+    const { className, ...props } = this.props;
 
     const classes = classNames('week', className);
     const elementProps = omit(props, Object.keys(propTypes));
 
     return (
-      <div
-        {...elementProps}
-        className={classes}
-      >
+      <div {...elementProps} className={classes}>
         {this.renderDays()}
       </div>
     );

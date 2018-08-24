@@ -33,10 +33,7 @@ const propTypes = {
   onToggle: PropTypes.func,
   onOk: PropTypes.func,
 
-  hoverRange: PropTypes.oneOfType([
-    PropTypes.oneOf(['week', 'month']),
-    PropTypes.func
-  ]),
+  hoverRange: PropTypes.oneOfType([PropTypes.oneOf(['week', 'month']), PropTypes.func]),
   cleanable: PropTypes.bool,
   isoWeek: PropTypes.bool
 };
@@ -49,20 +46,15 @@ const defaultProps = {
 };
 
 function getCalendarDate(value = []) {
-
   let calendarDate = [moment(), moment().add(1, 'month')];
 
   // Update calendarDate if the value is not null
   if (value[0] && value[1]) {
     let isSameMonth = value[0].clone().isSame(value[1], 'month');
-    calendarDate = [
-      value[0],
-      isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()
-    ];
+    calendarDate = [value[0], isSameMonth ? value[1].clone().add(1, 'month') : value[1].clone()];
   }
   return calendarDate;
 }
-
 
 class DateRangePicker extends Component {
   constructor(props) {
@@ -71,7 +63,6 @@ class DateRangePicker extends Component {
     const { defaultValue, value } = props;
     const activeValue = value || defaultValue || [];
     const calendarDate = getCalendarDate(activeValue);
-
 
     this.state = {
       locale: merge({}, defaultLocale(props.isoWeek), props.locale),
@@ -94,7 +85,6 @@ class DateRangePicker extends Component {
       // 当前 hover 的 date，用来减少 handleMouseMoveSelectValue 的计算
       currentHoverDate: null
     };
-
   }
 
   componentDidMount() {
@@ -126,19 +116,20 @@ class DateRangePicker extends Component {
     this.mounted = isMounted;
   }
 
-  getValue = () => (this.props.value || this.state.value || [])
+  getValue = () => this.props.value || this.state.value || [];
 
   getDateString(date) {
     const { placeholder, format } = this.props;
     const value = date || this.getValue();
 
-    return value[0] && value[1] ?
-      `${value[0].format(format)} ~ ${value[1].format(format)}` :
-      (
-        <div className="placeholder-text">
-          {placeholder || `${format} ~ ${format}`}
-        </div>
+    if (value[0] && value[1]) {
+      const nextValue = [value[0].clone(), value[1].clone()].sort(
+        (a, b) => (a ? a.unix() : 0) - (b ? b.unix() : 0)
       );
+      return `${nextValue[0].format(format)} ~ ${nextValue[1].format(format)}`;
+    }
+
+    return <div className="placeholder-text">{placeholder || `${format} ~ ${format}`}</div>;
   }
 
   bindEvent() {
@@ -152,17 +143,17 @@ class DateRangePicker extends Component {
   /**
    * Close menu when click document
    */
-  handleDocumentClick = (event) => {
+  handleDocumentClick = event => {
     if (this.isMounted && !this.container.contains(event.target) && !this.state.forceOpen) {
       this.handleClose();
     }
-  }
+  };
 
-  handleOK = (event) => {
+  handleOK = event => {
     const { onOk } = this.props;
     this.updateValue();
     onOk && onOk(this.state.selectValue, event);
-  }
+  };
 
   updateValue(nextSelectValue, unclosed) {
     const { value, selectValue } = this.state;
@@ -181,7 +172,6 @@ class DateRangePicker extends Component {
     if (!isEqual(nextValue, value)) {
       onChange && onChange(nextValue);
     }
-
   }
 
   /**
@@ -189,7 +179,7 @@ class DateRangePicker extends Component {
    */
   handleShortcutPageDate = (selectValue, unclosed) => {
     this.updateValue(selectValue, unclosed);
-  }
+  };
 
   resetPageDate() {
     const selectValue = this.getValue();
@@ -210,8 +200,7 @@ class DateRangePicker extends Component {
     !disabled && this.handleClose(true);
   }
 
-  handleOpen = (forceOpen) => {
-
+  handleOpen = forceOpen => {
     const { onToggle } = this.props;
     this.resetPageDate();
     this.setState({
@@ -222,9 +211,9 @@ class DateRangePicker extends Component {
     onToggle && onToggle(true);
     forceOpen && this.cleanForce();
     this.bindEvent();
-  }
+  };
 
-  handleClose = (forceOpen) => {
+  handleClose = forceOpen => {
     const { onToggle } = this.props;
 
     this.setState({
@@ -236,7 +225,7 @@ class DateRangePicker extends Component {
     onToggle && onToggle(false);
     forceOpen && this.cleanForce();
     this.unbindEvent();
-  }
+  };
 
   cleanForce() {
     setTimeout(() => {
@@ -248,7 +237,7 @@ class DateRangePicker extends Component {
     const { calendarDate } = this.state;
     calendarDate[index] = date;
     this.setState({ calendarDate });
-  }
+  };
 
   // hover range presets
   getWeekHoverRange = date => {
@@ -291,7 +280,7 @@ class DateRangePicker extends Component {
     return hoverValues;
   }
 
-  handleChangeSelectValue = (date) => {
+  handleChangeSelectValue = date => {
     const { selectValue, doneSelected } = this.state;
     let nextValue = [];
     let nextHoverValue = this.getHoverRange(date);
@@ -305,15 +294,9 @@ class DateRangePicker extends Component {
       }
     } else {
       if (nextHoverValue.length) {
-        nextValue = [
-          selectValue[0],
-          selectValue[1]
-        ];
+        nextValue = [selectValue[0], selectValue[1]];
       } else {
-        nextValue = [
-          selectValue[0],
-          date
-        ];
+        nextValue = [selectValue[0], date];
       }
 
       if (nextValue[0].isAfter(nextValue[1])) {
@@ -336,10 +319,9 @@ class DateRangePicker extends Component {
       selectValue: nextValue,
       hoverValue: nextHoverValue
     });
+  };
 
-  }
-
-  handleMouseMoveSelectValue = (date) => {
+  handleMouseMoveSelectValue = date => {
     const { doneSelected, selectValue, hoverValue, currentHoverDate } = this.state;
     if (date.isSame(currentHoverDate, 'day')) {
       return;
@@ -372,9 +354,9 @@ class DateRangePicker extends Component {
 
     this.setState({
       currentHoverDate: date,
-      selectValue: nextValue,
+      selectValue: nextValue
     });
-  }
+  };
 
   handleToggle = () => {
     const { calendarState } = this.state;
@@ -387,12 +369,12 @@ class DateRangePicker extends Component {
         toggleWidth: this.toggle ? getWidth(this.toggle) : 0
       });
     }
-  }
+  };
 
   reset = () => {
     this.setState({ calendarDate: [moment(), moment().add(1, 'month')] });
     this.updateValue([]);
-  }
+  };
 
   disabledByBetween(start, end, type) {
     const { disabledDate } = this.props;
@@ -402,11 +384,19 @@ class DateRangePicker extends Component {
 
     // If the date is between the start and the end
     // the button is disabled
-    while (start.isBefore(end) || start.isSame(end,'day') ) {
-      if (disabledDate && disabledDate(start.clone(), [
-        selectValue && selectValue[0] ? selectValue[0].clone() : null,
-        selectValue && selectValue[1] ? selectValue[1].clone() : null,
-      ], doneSelected, type)) {
+    while (start.isBefore(end) || start.isSame(end, 'day')) {
+      if (
+        disabledDate &&
+        disabledDate(
+          start.clone(),
+          [
+            selectValue && selectValue[0] ? selectValue[0].clone() : null,
+            selectValue && selectValue[1] ? selectValue[1].clone() : null
+          ],
+          doneSelected,
+          type
+        )
+      ) {
         check = true;
       }
       start.add(1, 'd');
@@ -422,27 +412,30 @@ class DateRangePicker extends Component {
       return true;
     }
 
-    return this.disabledByBetween(selectValue[0].clone(), selectValue[1].clone(), Type.TOOLBAR_BUTTON_OK);
-  }
+    return this.disabledByBetween(
+      selectValue[0].clone(),
+      selectValue[1].clone(),
+      Type.TOOLBAR_BUTTON_OK
+    );
+  };
 
   disabledShortcutButton = (value = []) => {
     if (!value[0] || !value[1]) {
       return true;
     }
     return this.disabledByBetween(value[0].clone(), value[1].clone(), Type.TOOLBAR_SHORTCUT);
-  }
+  };
 
   handleDisabledDate = (date, values, type) => {
     const { disabledDate } = this.props;
     const { doneSelected } = this.state;
     if (disabledDate) {
-      return disabledDate(date, values, doneSelected, type);;
+      return disabledDate(date, values, doneSelected, type);
     }
     return false;
-  }
+  };
 
   render() {
-
     const {
       className,
       defaultClassName,
@@ -477,9 +470,7 @@ class DateRangePicker extends Component {
     const elementProps = omit(this.props, Object.keys(propTypes));
     const calendar = (
       <div>
-        <div className={this.prefix('header')}>
-          {this.getDateString(selectValue)}
-        </div>
+        <div className={this.prefix('header')}>{this.getDateString(selectValue)}</div>
         <DatePicker
           index={0}
           isoWeek={isoWeek}
@@ -507,14 +498,13 @@ class DateRangePicker extends Component {
       </div>
     );
 
-
     const classes = classNames(defaultClassName, this.prefix('dropdown'), className);
     return (
       <IntlProvider locale={locale}>
         <div
           {...elementProps}
           className={classes}
-          ref={(ref) => {
+          ref={ref => {
             this.container = ref;
           }}
         >
@@ -523,17 +513,14 @@ class DateRangePicker extends Component {
             placeholder={this.getDateString()}
             onClick={this.handleToggle}
             showCleanButton={!!value[0] && !!value[1] && cleanable}
-            onClean={(value[0] && value[1] && cleanable) ? this.reset : null}
+            onClean={value[0] && value[1] && cleanable ? this.reset : null}
             value={value}
             renderPlaceholder={renderPlaceholder}
-            toggleRef={(ref) => {
+            toggleRef={ref => {
               this.toggle = ref;
             }}
           />
-          <div
-            className={paneClasses}
-            style={paneStyles}
-          >
+          <div className={paneClasses} style={paneStyles}>
             {calendar}
             <Toolbar
               ranges={ranges}
